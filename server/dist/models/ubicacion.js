@@ -1,0 +1,28 @@
+"use strict";
+// models/Ubicacion.ts
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const connection_1 = __importDefault(require("../db/connection")); // Ajusta la ruta según tu estructura de archivos
+const Ubicacion = connection_1.default.define('Ubicacion', {
+    LocationID: {
+        type: sequelize_1.DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    NombreUbicacion: {
+        type: sequelize_1.DataTypes.STRING(255),
+    },
+    Latitud: {
+        type: sequelize_1.DataTypes.DECIMAL(10, 6),
+    },
+    Longitud: {
+        type: sequelize_1.DataTypes.DECIMAL(10, 6),
+    },
+    Direccion: {
+        type: sequelize_1.DataTypes.STRING(255),
+    }
+}, {});
+exports.default = Ubicacion;
