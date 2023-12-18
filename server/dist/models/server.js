@@ -17,9 +17,14 @@ const express_1 = __importDefault(require("express"));
 const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const rol_1 = require("./rol");
-const users_1 = require("./users");
+const users_1 = __importDefault(require("./users"));
 const bicicleta_1 = __importDefault(require("./bicicleta"));
 const ubicacion_1 = __importDefault(require("./ubicacion"));
+const alquiler_1 = __importDefault(require("./alquiler"));
+const transaccion_1 = __importDefault(require("./transaccion"));
+const propietarioBicicletas_1 = __importDefault(require("./propietarioBicicletas"));
+const mantenimiento_1 = __importDefault(require("./mantenimiento"));
+const controlCalidad_1 = __importDefault(require("./controlCalidad"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -45,9 +50,14 @@ class Server {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield rol_1.Rol.sync();
-                yield users_1.Usuario.sync({ alter: true });
+                yield users_1.default.sync({ alter: true });
                 yield ubicacion_1.default.sync({ alter: true });
                 yield bicicleta_1.default.sync({ alter: true });
+                yield alquiler_1.default.sync({ alter: true });
+                yield transaccion_1.default.sync({ alter: true });
+                yield propietarioBicicletas_1.default.sync({ alter: true });
+                yield mantenimiento_1.default.sync({ alter: true });
+                yield controlCalidad_1.default.sync({ alter: true });
                 console.log("Connect");
             }
             catch (error) {

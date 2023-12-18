@@ -1,41 +1,41 @@
 // models/users.ts
 import { DataTypes } from "sequelize";
 import sequelize from "../db/connection";
-import { Rol } from './rol';  
-export const Usuario = sequelize.define('Usuario', {
+import { Rol } from './rol';
+const Usuario = sequelize.define('Usuario', {
     Cedula: {
         type: DataTypes.STRING(20),
         primaryKey: true,
     },
     Nombre: {
         type: DataTypes.STRING(255),
-        allowNull:false
+        allowNull: false
 
     },
     Apellido: {
         type: DataTypes.STRING(255),
-        allowNull:false
+        allowNull: false
 
     },
     CorreoElectronico: {
         type: DataTypes.STRING(255),
         unique: true,
-        allowNull:false
+        allowNull: false
 
     },
     Contraseña: {
         type: DataTypes.STRING(255),
-        allowNull:false
+        allowNull: false
 
     },
     Direccion: {
         type: DataTypes.STRING(255),
-        allowNull:false
+        allowNull: false
 
     },
     Telefono: {
         type: DataTypes.STRING(15),
-        allowNull:false
+        allowNull: false
     },
     Estado: {
         type: DataTypes.BOOLEAN,
@@ -49,3 +49,4 @@ export const Usuario = sequelize.define('Usuario', {
 
 Usuario.belongsTo(Rol, { foreignKey: 'RolID' });
 Rol.hasMany(Usuario, { foreignKey: 'RolID' });
+export default Usuario;
