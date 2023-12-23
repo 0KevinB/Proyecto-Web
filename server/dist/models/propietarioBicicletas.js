@@ -21,7 +21,7 @@ const PropietarioBicicletas = connection_1.default.define('PropietarioBicicletas
         type: sequelize_1.DataTypes.INTEGER,
     },
 }, {
-    timestamps: false,
+    timestamps: false, freezeTableName: true
 });
 PropietarioBicicletas.belongsTo(usuario_1.default, { foreignKey: 'Cedula' });
 usuario_1.default.hasMany(PropietarioBicicletas, { foreignKey: 'Cedula' });

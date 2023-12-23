@@ -35,7 +35,7 @@ const Alquiler = sequelize.define('Alquiler', {
     }
 },
 {
-    timestamps: false,
+    timestamps: false, freezeTableName: true
 });
 
 Alquiler.belongsTo(Usuario, { foreignKey: 'Cedula' });

@@ -37,7 +37,7 @@ const Alquiler = connection_1.default.define('Alquiler', {
         type: sequelize_1.DataTypes.INTEGER,
     }
 }, {
-    timestamps: false,
+    timestamps: false, freezeTableName: true
 });
 Alquiler.belongsTo(usuario_1.default, { foreignKey: 'Cedula' });
 usuario_1.default.hasMany(Alquiler, { foreignKey: 'Cedula' });

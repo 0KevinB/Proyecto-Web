@@ -45,6 +45,9 @@ const Usuario = connection_1.default.define('Usuario', {
         type: sequelize_1.DataTypes.INTEGER,
         defaultValue: 1,
     }
+}, {
+    timestamps: true,
+    freezeTableName: false
 });
 Usuario.belongsTo(rol_1.Rol, { foreignKey: 'RolID' });
 rol_1.Rol.hasMany(Usuario, { foreignKey: 'RolID' });

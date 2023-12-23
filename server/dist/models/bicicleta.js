@@ -6,7 +6,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection")); // Ajusta la ruta según tu estructura de archivos
-const ubicacion_1 = __importDefault(require("./ubicacion"));
 const Bicicleta = connection_1.default.define('Bicicleta', {
     BikeID: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -28,12 +27,7 @@ const Bicicleta = connection_1.default.define('Bicicleta', {
     Descripcion: {
         type: sequelize_1.DataTypes.TEXT,
     },
-    LocationID: {
-        type: sequelize_1.DataTypes.INTEGER,
-    }
 }, {
-    timestamps: false,
+    freezeTableName: false
 });
-Bicicleta.belongsTo(ubicacion_1.default, { foreignKey: 'LocationID' });
-ubicacion_1.default.hasMany(Bicicleta, { foreignKey: 'LocationID' });
 exports.default = Bicicleta;

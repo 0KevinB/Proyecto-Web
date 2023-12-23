@@ -28,7 +28,7 @@ const Transaccion = sequelize.define('Transaccion', {
     }
 },
     {
-        timestamps: false,
+        timestamps: false, freezeTableName:true
     });
 
 Transaccion.belongsTo(Usuario, { foreignKey: 'Cedula' });

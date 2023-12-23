@@ -19,7 +19,7 @@ const PropietarioBicicletas = sequelize.define('PropietarioBicicletas', {
     },
 },
     {
-        timestamps: false,
+        timestamps: false, freezeTableName:true
     });
 
 PropietarioBicicletas.belongsTo(Usuario, { foreignKey: 'Cedula' });

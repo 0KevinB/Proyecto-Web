@@ -30,7 +30,7 @@ const Mantenimiento = sequelize.define('Mantenimiento', {
     },
 },
     {
-        timestamps: false,
+        timestamps: false, freezeTableName:true
     });
 
 Mantenimiento.belongsTo(Bicicleta, { foreignKey: 'BikeID' });

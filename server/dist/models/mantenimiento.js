@@ -32,7 +32,7 @@ const Mantenimiento = connection_1.default.define('Mantenimiento', {
         type: sequelize_1.DataTypes.STRING(50),
     },
 }, {
-    timestamps: false,
+    timestamps: false, freezeTableName: true
 });
 Mantenimiento.belongsTo(bicicleta_1.default, { foreignKey: 'BikeID' });
 bicicleta_1.default.hasMany(Mantenimiento, { foreignKey: 'BikeID' });

@@ -26,7 +26,7 @@ const ControlCalidad = connection_1.default.define('ControlCalidad', {
         type: sequelize_1.DataTypes.STRING(50),
     },
 }, {
-    timestamps: false,
+    timestamps: false, freezeTableName: true
 });
 ControlCalidad.belongsTo(bicicleta_1.default, { foreignKey: 'BikeID' });
 exports.default = ControlCalidad;

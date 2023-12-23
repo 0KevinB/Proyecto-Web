@@ -1,0 +1,90 @@
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+img {
+    align-self: center;
+}
+
+* {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: justify;
+    line-height: 1.5;
+}
+
+* a {
+    text-decoration: none;
+    color: #fff;
+}
+
+h1 {
+    color: #be0f30;
+    font-weight: bold;
+}
+
+* h2 {
+    color: #3f3c3c;
+    font-weight: bold;
+}
+
+/* Por ejemplo, si tienes algo como esto en tu styles.css */
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+
+.container p {
+    font-size: 25px;
+}
+
+.container img {
+    width: 720px;
+}
+
+
+.navbar-nav a:hover {
+    background: rgb(207, 129, 129);
+}
+
+.navbar-brand img {
+    width: 70px;
+    margin-left: 10px;
+}
+
+.puntos img {
+    width: 20px;
+}
+
+.centrado {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.custom-table {
+    border: 5px solid #fff;
+    /* Color del borde blanco */
+    font-size: 14px;
+    /* Tamaño de fuente personalizado */
+}
+
+.custom-table th,
+.custom-table td {
+    border: 2px solid #fff;
+    /* Color del borde blanco */
+}
+
+/* Estilo adicional para la tabla en pantallas más pequeñas */
+@media (max-width: 71px) {
+    .custom-table {
+        font-size: 12px;
+        /* Ajusta el tamaño de la fuente para pantallas más pequeñas si es necesario */
+    }
+}

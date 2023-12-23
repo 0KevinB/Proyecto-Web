@@ -2,7 +2,6 @@
 
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/connection'; // Ajusta la ruta según tu estructura de archivos
-import Ubicacion from './ubicacion';
 
 const Bicicleta = sequelize.define('Bicicleta', {
     BikeID: {
@@ -25,15 +24,8 @@ const Bicicleta = sequelize.define('Bicicleta', {
     Descripcion: {
         type: DataTypes.TEXT,
     },
-    LocationID: {
-        type: DataTypes.INTEGER,
-    }
-},
-    {
-        timestamps: false,
-    });
-
-Bicicleta.belongsTo(Ubicacion, { foreignKey: 'LocationID' });
-Ubicacion.hasMany(Bicicleta, { foreignKey: 'LocationID' });
+}, {
+    freezeTableName: false
+});
 
 export default Bicicleta;

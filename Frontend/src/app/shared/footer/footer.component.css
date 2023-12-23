@@ -1,0 +1,13 @@
+/* footer.component.css */
+footer {
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    /* Color de fondo del pie de página, ajusta según sea necesario */
+    color: white;
+    /* Color del texto en el pie de página, ajusta según sea necesario */
+    padding: 1rem;
+    /* Espaciado interno en el pie de página, ajusta según sea necesario */
+    z-index: 1;
+    /* Ajusta según sea necesario */
+}

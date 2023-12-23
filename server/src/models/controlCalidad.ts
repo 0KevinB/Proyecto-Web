@@ -24,7 +24,7 @@ const ControlCalidad = sequelize.define('ControlCalidad', {
     },
 },
     {
-        timestamps: false,
+        timestamps: false, freezeTableName: true
     });
 
 ControlCalidad.belongsTo(Bicicleta, { foreignKey: 'BikeID' });

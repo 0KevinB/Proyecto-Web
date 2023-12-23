@@ -13,6 +13,9 @@ export const Rol = sequelize.define('rol', {
         unique: true,
     }
 },
-    { timestamps: false }
+    {
+        timestamps: false,
+        freezeTableName: true
+    }
 );
 

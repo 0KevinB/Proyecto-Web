@@ -17,4 +17,7 @@ exports.Rol = connection_1.default.define('rol', {
         type: sequelize_1.DataTypes.STRING(20),
         unique: true,
     }
-}, { timestamps: false });
+}, {
+    timestamps: false,
+    freezeTableName: true
+});

@@ -30,7 +30,7 @@ const Transaccion = connection_1.default.define('Transaccion', {
         type: sequelize_1.DataTypes.DATE,
     }
 }, {
-    timestamps: false,
+    timestamps: false, freezeTableName: true
 });
 Transaccion.belongsTo(usuario_1.default, { foreignKey: 'Cedula' });
 usuario_1.default.hasMany(Transaccion, { foreignKey: 'Cedula' });

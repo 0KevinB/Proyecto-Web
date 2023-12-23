@@ -10,6 +10,7 @@ import Transaccion from "./transaccion"
 import PropietarioBicicletas from "./propietarioBicicletas"
 import Mantenimiento from "./mantenimiento"
 import ControlCalidad from "./controlCalidad"
+import Bicicleta_Ubicacion from "./Bicicleta_Ubicacion"
 
 
 export class Server {
@@ -46,6 +47,7 @@ export class Server {
             await Usuario.sync({ alter: true });
             await Ubicacion.sync({ alter: true });
             await Bicicleta.sync({ alter: true });
+            await Bicicleta_Ubicacion.sync({ alter: true });
             await Alquiler.sync({ alter: true });
             await Transaccion.sync({ alter: true });
             await PropietarioBicicletas.sync({ alter: true });

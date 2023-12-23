@@ -45,6 +45,9 @@ const Usuario = sequelize.define('Usuario', {
         type: DataTypes.INTEGER,
         defaultValue: 1,
     }
+}, {
+    timestamps: true,
+    freezeTableName: false
 });
 
 Usuario.belongsTo(Rol, { foreignKey: 'RolID' });
