@@ -6,7 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection")); // Ajusta la ruta según tu estructura de archivos
-const users_1 = __importDefault(require("./users"));
+const usuario_1 = __importDefault(require("./usuario"));
 const alquiler_1 = __importDefault(require("./alquiler"));
 const Transaccion = connection_1.default.define('Transaccion', {
     TransactionID: {
@@ -32,8 +32,8 @@ const Transaccion = connection_1.default.define('Transaccion', {
 }, {
     timestamps: false,
 });
-Transaccion.belongsTo(users_1.default, { foreignKey: 'Cedula' });
-users_1.default.hasMany(Transaccion, { foreignKey: 'Cedula' });
+Transaccion.belongsTo(usuario_1.default, { foreignKey: 'Cedula' });
+usuario_1.default.hasMany(Transaccion, { foreignKey: 'Cedula' });
 Transaccion.belongsTo(alquiler_1.default, { foreignKey: 'RentalID' });
 alquiler_1.default.hasMany(Transaccion, { foreignKey: 'RentalID' });
 exports.default = Transaccion;

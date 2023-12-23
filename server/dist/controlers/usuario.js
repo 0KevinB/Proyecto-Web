@@ -14,17 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserInfo = exports.forgotPassword = exports.login = exports.newUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const users_1 = __importDefault(require("../models/users"));
+const usuario_1 = __importDefault(require("../models/usuario"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const newUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Cedula, Nombre, Apellido, CorreoElectronico, Contraseña, Direccion, Telefono } = req.body;
     try {
-        const existingUser = yield users_1.default.findOne({ where: { CorreoElectronico: CorreoElectronico } });
+        const existingUser = yield usuario_1.default.findOne({ where: { CorreoElectronico: CorreoElectronico } });
         if (existingUser) {
             return res.status(400).json({ message: "Usuario ya registrado" });
         }
         const hashedPass = yield bcrypt_1.default.hash(Contraseña, 10);
-        yield users_1.default.create({
+        yield usuario_1.default.create({
             Cedula: Cedula,
             Nombre: Nombre,
             Apellido: Apellido,
@@ -46,7 +46,7 @@ exports.newUser = newUser;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { CorreoElectronico, Contraseña } = req.body;
     try {
-        const user = yield users_1.default.findOne({ where: { CorreoElectronico: CorreoElectronico } });
+        const user = yield usuario_1.default.findOne({ where: { CorreoElectronico: CorreoElectronico } });
         if (!user) {
             return res.status(400).json({ msg: "Usuario no registrado" });
         }
@@ -66,7 +66,7 @@ exports.login = login;
 const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { CorreoElectronico } = req.body;
     try {
-        const user = yield users_1.default.findOne({ where: { CorreoElectronico: CorreoElectronico } });
+        const user = yield usuario_1.default.findOne({ where: { CorreoElectronico: CorreoElectronico } });
         if (!user) {
             return res.status(404).json({ msg: "Usuario no encontrado" });
         }
@@ -83,7 +83,7 @@ const updateUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const { Cedula } = req.params;
     const { Nombre, Apellido, Direccion, Telefono } = req.body;
     try {
-        const user = yield users_1.default.findByPk(Cedula);
+        const user = yield usuario_1.default.findByPk(Cedula);
         if (!user) {
             return res.status(404).json({ msg: "Usuario no encontrado" });
         }

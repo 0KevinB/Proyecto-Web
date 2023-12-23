@@ -2,7 +2,7 @@
 
 import { DataTypes } from 'sequelize';
 import sequelize from '../db/connection'; // Ajusta la ruta según tu estructura de archivos
-import Usuario from './users';
+import Usuario from './usuario';
 import Bicicleta from './bicicleta';
 import Ubicacion from './ubicacion';
 

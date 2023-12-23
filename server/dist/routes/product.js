@@ -7,5 +7,5 @@ const express_1 = require("express");
 const bicicleta_1 = require("../controlers/bicicleta");
 const validate_token_1 = __importDefault(require("./validate-token"));
 const router = (0, express_1.Router)();
-router.get('/', validate_token_1.default, bicicleta_1.getProducts);
+router.get('/', validate_token_1.default, bicicleta_1.obtenerBicicletas);
 exports.default = router;

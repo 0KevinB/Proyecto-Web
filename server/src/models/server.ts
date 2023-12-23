@@ -2,7 +2,7 @@ import express from "express"
 import routesProduct from '../routes/product'
 import routesUser from '../routes/user'
 import { Rol } from "./rol"
-import  Usuario  from "./users"
+import Usuario from "./usuario"
 import Bicicleta from "./bicicleta"
 import Ubicacion from "./ubicacion"
 import Alquiler from "./alquiler"
@@ -51,10 +51,9 @@ export class Server {
             await PropietarioBicicletas.sync({ alter: true });
             await Mantenimiento.sync({ alter: true })
             await ControlCalidad.sync({ alter: true });
-
             console.log("Connect");
         } catch (error) {
-            console.log("Unable to connect: " + error);
+            console.log("Unable to connect: ", error);
         }
     }
 }

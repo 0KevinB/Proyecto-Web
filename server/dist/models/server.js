@@ -17,7 +17,7 @@ const express_1 = __importDefault(require("express"));
 const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const rol_1 = require("./rol");
-const users_1 = __importDefault(require("./users"));
+const usuario_1 = __importDefault(require("./usuario"));
 const bicicleta_1 = __importDefault(require("./bicicleta"));
 const ubicacion_1 = __importDefault(require("./ubicacion"));
 const alquiler_1 = __importDefault(require("./alquiler"));
@@ -50,7 +50,7 @@ class Server {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield rol_1.Rol.sync();
-                yield users_1.default.sync({ alter: true });
+                yield usuario_1.default.sync({ alter: true });
                 yield ubicacion_1.default.sync({ alter: true });
                 yield bicicleta_1.default.sync({ alter: true });
                 yield alquiler_1.default.sync({ alter: true });
@@ -61,7 +61,7 @@ class Server {
                 console.log("Connect");
             }
             catch (error) {
-                console.log("Unable to connect: " + error);
+                console.log("Unable to connect: ", error);
             }
         });
     }

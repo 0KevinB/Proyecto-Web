@@ -3,7 +3,7 @@
 import { Request, Response } from 'express';
 import Alquiler from '../models/alquiler';
 import Bicicleta from '../models/bicicleta';
-import Usuario from '../models/users';
+import Usuario from '../models/usuario';
 import Ubicacion from '../models/ubicacion';
 /*
 export const alquilerAutomatico = async (req: Request, res: Response) => {
