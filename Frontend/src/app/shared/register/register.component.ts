@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidatorsService } from 'src/app/services/auth/validators.service';
-import { EmailValidator } from 'src/app/services/auth/email-validator.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
-import { CedulaValidatorService } from 'src/app/services/auth/cedula-validator';
+import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-register',
@@ -14,27 +13,30 @@ import { CedulaValidatorService } from 'src/app/services/auth/cedula-validator';
   styleUrl: './register.component.css',
   imports: [CommonModule, ReactiveFormsModule, RouterLink, FooterComponent]
 })
+
+
 export class RegisterComponent {
+
   public myForm: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2)]],
+    nombre: ['', [Validators.required, Validators.minLength(2)]],
     apellidos: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required]],
+    CorreoElectronico: ['', [Validators.required]],
     telefono: ['', [Validators.required, Validators.minLength(10)]],
     emailConfirm: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    Contraseña: ['', [Validators.required, Validators.minLength(6)]],
     passwordConfirm: ['', [Validators.required]],
     provincia: ['', [Validators.required]],
     terminos: ['', [Validators.required]],
-    codigoPostal: ['', [Validators.required]],
+    Direccion: ['', [Validators.required]],
 
-    cedula: ['', [Validators.required]],  // Agrega la validación según tus requisitos para la cédula
-    // ... otros campos
+    cedula: ['', [Validators.required]],
   });
 
   constructor(
+    private _userService: UserService,
     private fb: FormBuilder,
-    private emailValidator: EmailValidator,
-    private cedulaValidator: CedulaValidatorService,
+    private router: Router
+
   ) { }
 
   isValidField(field: string) {
@@ -44,11 +46,28 @@ export class RegisterComponent {
 
 
   onSubmit() {
-    this.myForm.markAllAsTouched();
-    if (this.myForm.valid) {
-      // Realiza cualquier lógica adicional al enviar el formulario
-      console.log('Formulario válido. Datos:', this.myForm.value);
+    const user: User = {
+      Cedula: this.myForm.value.cedula,
+      Nombre: this.myForm.value.nombre,
+      Apellido: this.myForm.value.apellidos,
+      CorreoElectronico: this.myForm.value.CorreoElectronico,
+      Contraseña: this.myForm.value.Contraseña,
+      Direccion: this.myForm.value.Direccion,
+      Telefono: this.myForm.value.telefono,
     }
+
+    if (this.myForm.value.Contraseña != this.myForm.value.passwordConfirm ||
+      this.myForm.value.CorreoElectronico != this.myForm.value.emailConfirm
+    ) {
+      return
+    }
+
+    console.log('Formulario válido. Datos:', user);
+    this._userService.singin(user).subscribe(data => {
+      console.log('Se registro correctamente')
+      this.router.navigate(['/login'])
+    })
+
   }
 
 }

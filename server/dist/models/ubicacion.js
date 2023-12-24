@@ -30,11 +30,11 @@ const Ubicacion = connection_1.default.define('Ubicacion', {
     freezeTableName: true
 });
 Ubicacion.belongsToMany(bicicleta_1.default, {
-    through: 'Bicicleta_Ubicacion', // Nombre de la tabla intermedia
+    through: 'Bicicleta_Ubicacion',
     foreignKey: 'LocationID',
 });
 bicicleta_1.default.belongsToMany(Ubicacion, {
-    through: 'Bicicleta_Ubicacion', // Nombre de la tabla intermedia
+    through: 'Bicicleta_Ubicacion',
     foreignKey: 'BikeID',
 });
 exports.default = Ubicacion;

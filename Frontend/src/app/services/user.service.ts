@@ -16,7 +16,9 @@ export class UserService {
     this.myAppUrl = environment.endpoint
     this.myApiUrl = '/api/users/'
   }
-
+  singin(user: User): Observable<String> {
+    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}`, user)
+  }
   login(user: User): Observable<String> {
     return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}login`, user)
   }

@@ -1,28 +1,73 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, Validators } from '@angular/forms';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { LoginService } from 'src/app/services/auth/login.service';
-import { LoginRequest } from 'src/app/services/auth/loginRequest';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { NavComponent } from "../nav/nav.component";
 import { NewpasswordComponent } from "../newpassword/newpassword.component";
-import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from 'src/app/shared/register/register.component';
+import { User } from 'src/app/interfaces/user';
+import { CommonModule } from '@angular/common';
+import { UserService } from 'src/app/services/user.service';
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  imports: [CommonModule, RouterOutlet, RouterLink, ReactiveFormsModule, LoginComponent, NavComponent, NewpasswordComponent, HttpClientModule, RegisterComponent]
+  imports: [RouterLink, LoginComponent, NavComponent,
+    NewpasswordComponent, RegisterComponent, CommonModule,
+    ReactiveFormsModule,
+  ]
 })
+
 export class LoginComponent implements OnInit {
   CorreoElectronico: string = ''
   Contraseña: string = ''
+  loading: boolean = false;
+  loginForm: FormGroup;
+
+  constructor(
+    private _userService: UserService,
+    private formBuilder: FormBuilder,
+    private router: Router
+  ) {
+    this.loginForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required])
+    })
+  }
 
   ngOnInit(): void {
   }
 
-}
+  login() {
+    {
+      if (this.loginForm.invalid) {
+        return;
+      }
 
+      this.CorreoElectronico = this.loginForm.value.email;
+      this.Contraseña = this.loginForm.value.password;
+      // Campos vacios
+      if (this.CorreoElectronico == '' || this.Contraseña == '') {
+      }
+
+      // Body
+      const user: User = {
+        CorreoElectronico: this.CorreoElectronico,
+        Contraseña: this.Contraseña
+      }
+      console.log('Datos a enviar:', user);
+
+      this.loading = true;
+      this._userService.login(user).subscribe({
+        next: (data: any)  => {
+          this.router.navigate(['/bicicletas'])
+          localStorage.setItem('token', data)
+          console.log(data)
+        }
+      })
+    }
+
+  }
+
+}
