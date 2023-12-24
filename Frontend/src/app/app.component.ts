@@ -20,7 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./app.component.css'],
   imports: [CommonModule, RouterOutlet, FooterComponent, HeaderComponent, 
     DashboardComponent, NavComponent, NewpasswordComponent, HttpClientModule, 
-    RouterLink, SectionComponent, RegisterComponent,ReactiveFormsModule]
+    RouterLink, SectionComponent, RegisterComponent,ReactiveFormsModule,
+    ]
 })
 
 export class AppComponent {

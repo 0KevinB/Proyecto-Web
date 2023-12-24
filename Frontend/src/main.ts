@@ -6,9 +6,10 @@ import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { BrowserModule } from '@angular/platform-browser';
 
 if (environment.production) {
-  platformBrowserDynamic();
+  platformBrowserDynamic().bootstrapModule(BrowserModule);
   enableProdMode();
 }
 

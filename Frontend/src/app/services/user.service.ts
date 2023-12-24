@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -15,10 +14,10 @@ export class UserService {
 
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint
-    this.myApiUrl = 'api/users/'
+    this.myApiUrl = '/api/users/'
   }
 
   login(user: User): Observable<String> {
-    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}/login`, user)
+    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}login`, user)
   }
 }

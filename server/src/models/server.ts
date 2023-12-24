@@ -1,4 +1,5 @@
 import express from "express"
+import cors from "cors";
 import routesProduct from '../routes/product'
 import routesUser from '../routes/user'
 import { Rol } from "./rol"
@@ -39,6 +40,11 @@ export class Server {
 
     middlewares() {
         this.app.use(express.json());
+        this.app.use(cors({
+            origin: 'http://localhost:4200',
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+            credentials: true,
+        }));
     }
 
     async dbConnect() {

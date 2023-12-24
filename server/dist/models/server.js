@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const rol_1 = require("./rol");
@@ -46,6 +47,11 @@ class Server {
     }
     middlewares() {
         this.app.use(express_1.default.json());
+        this.app.use((0, cors_1.default)({
+            origin: 'http://localhost:4200',
+            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+            credentials: true,
+        }));
     }
     dbConnect() {
         return __awaiter(this, void 0, void 0, function* () {
