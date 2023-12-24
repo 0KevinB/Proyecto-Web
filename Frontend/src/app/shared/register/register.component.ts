@@ -6,7 +6,6 @@ import { EmailValidator } from 'src/app/services/auth/email-validator.service';
 import { RouterLink } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
 import { CedulaValidatorService } from 'src/app/services/auth/cedula-validator';
-import { UsersService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -36,7 +35,6 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private emailValidator: EmailValidator,
     private cedulaValidator: CedulaValidatorService,
-    private service: UsersService
   ) { }
 
   isValidField(field: string) {
@@ -50,7 +48,6 @@ export class RegisterComponent {
     if (this.myForm.valid) {
       // Realiza cualquier lógica adicional al enviar el formulario
       console.log('Formulario válido. Datos:', this.myForm.value);
-      this.service.signup(this.myForm.value)
     }
   }
 

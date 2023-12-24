@@ -1,43 +1,24 @@
-// users.service.ts
 
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
-  constructor(private http: HttpClient) { }
 
-  // Definimos la URL base del API
-  baseUrl = 'http://localhost:8080';
+export class UserService {
+  private myAppUrl: string
+  private myApiUrl: string
 
-  signup(user: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/signup`, user).pipe(
-      catchError((error) => {
-        console.error('Error en la petición de signup:', error);
-        return throwError(error);
-      })
-    );
+  constructor(private http: HttpClient) {
+    this.myAppUrl = environment.endpoint
+    this.myApiUrl = 'api/users/'
   }
 
-  login(user: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/login`, user).pipe(
-      catchError((error) => {
-        console.error('Error en la petición de login:', error);
-        return throwError(error);
-      })
-    );
-  }
-
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/get`).pipe(
-      catchError((error) => {
-        console.error('Error en la petición de getUsers:', error);
-        return throwError(error);
-      })
-    );
+  login(user: User): Observable<String> {
+    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}/login`, user)
   }
 }

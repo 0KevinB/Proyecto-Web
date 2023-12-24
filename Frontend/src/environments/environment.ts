@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
+  endpoint: 'http://localhost/3001',
   urlHost: 'http://localhost:4200',
-  utlApi: 'localhost:8080/',
-  userId:1
 }
 
 /*
