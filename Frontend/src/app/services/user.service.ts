@@ -9,6 +9,7 @@ import { User } from '../interfaces/user';
 })
 
 export class UserService {
+
   private myAppUrl: string
   private myApiUrl: string
 
@@ -21,5 +22,15 @@ export class UserService {
   }
   login(user: User): Observable<String> {
     return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}login`, user)
+  }
+
+  sendResetEmail(email: string): Observable<any> {
+    const data = { CorreoElectronico: email };
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}forgotPassword`, data);
+  }
+
+  resetPassword(token: string, newPassword: string): Observable<String> {
+    const body = { token, newPassword };
+    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}resetPassword`, body);
   }
 }
