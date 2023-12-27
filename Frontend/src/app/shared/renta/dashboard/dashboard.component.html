@@ -1,116 +1,46 @@
-<div id="featured-products-1408627" class="container">
+<!-- dashboard.component.html -->
+
+<div class="container">
+
     <div class="row">
 
         <div class="col-12">
-            <h2 class="page-header">Catalogo de Bicicletas</h2>
+            <h2>Catálogo de Bicicletas</h2>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/62/d1/48/62d148c3d027d3f6d01c9e07ee64c9fc.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h4 class="card-title"><a>Bicicleta Urbana</a></h4>
-                    <p class="card-text">Luces integradas, Neumaticos anchos y resistentes, transmision de golpe o de
-                        buje interno</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
-                </div>
-            </div>
-        </div>
+        <div *ngFor="let product of listProduct" class="col-md-4 mb-4">
 
-        <div class="col-md-4 mb-4">
             <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/6b/e2/0b/6be20bb01b2adb551723a367e3808e62.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h4 class="card-title"><a>Bicicleta Montaña</a></h4>
-                    <p class="card-text">Suspension, Neumaticos todo terreno, Cuadro resistente, frenos de disco,
-                        geometria especifica</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/4f/d0/67/4fd067f819c7d65258c36c2f1055e2e9.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h4 class="card-title"><a>Bicicleta Electrica</a></h4>
-                    <p class="card-text">Motor Electrico, Bateria Recargable, Sistema de asistencia al pedaleo, pantalla
-                        u controles</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/2c/07/8a/2c078af7c739a0887ef5cf5d7f2eab53.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h4 class="card-title"><a>Trek Fuel EX</a></h4>
-                    <p class="card-text">Una bicicleta de trail con suspensión completa, diseñada para enfrentar
-                        terrenos variados con eficiencia y comodidad.</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/23/62/85/236285154860a2bbaaf94243899de386.jpg" alt="Card image cap">
                 <div class="card-body">
-                    <h4 class="card-title"><a>Trek Remedy</a></h4>
-                    <p class="card-text">Una bicicleta all-mountain con suspensión completa, ideal para aquellos que
-                        buscan versatilidad en descensos y ascensos más agresivos.</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
+
+                    <h4><a>{{ product.Modelo }}</a></h4>
+
+                    <p>{{ product.Descripcion }}</p>
+
+                    <p>Estado: {{ product.Estado }}</p>
+
+                    <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
+
+                    <button>
+                        Reservar
+                    </button>
+
+                    <button (click)="updateProduct(product.BikeID, product)">
+                        Editar
+                    </button>
+
+                    <button (click)="deleteProduct(product.BikeID)">
+                        Eliminar
+                    </button>
+
                 </div>
+
             </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/08/97/bb/0897bbdec099293bbe5a139f4c79a80a.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h4 class="card-title"><a>Cube Aim</a></h4>
-                    <p class="card-text">Una bicicleta de montaña hardtail (suspensión delantera) diseñada para
-                        principiantes y ciclistas que buscan una opción versátil y asequible.</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/f3/fb/f7/f3fbf7b2896aec6a844f0305f491b1b9.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h4 class="card-title"><a>Cube Stereo</a></h4>
-                    <p class="card-text">Una bicicleta de montaña con suspensión total diseñada para terrenos más
-                        técnicos y descensos agresivos.</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card catalogo">
-                <img class="card-img-top my-2"
-                    src="https://i.pinimg.com/564x/c6/d9/8f/c6d98f8107af76607f5d999df76e8b14.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h4 class="card-title"><a>Cube Reaction Hybrid</a></h4>
-                    <p class="card-text">Una bicicleta eléctrica de montaña hardtail que combina la asistencia eléctrica
-                        con la versatilidad de una MTB para explorar terrenos variados.</p>
-                    <p class="card-text">Disponible</p>
-                    <a href="#" class="btn btn-danger">Reservar</a>
-                </div>
-            </div>
+
         </div>
 
     </div>
+
+</div>

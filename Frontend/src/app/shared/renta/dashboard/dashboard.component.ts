@@ -1,24 +1,47 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  constructor(private _productService: ProductService){
+  listProduct: Product[] = []
 
-  }
+  constructor(private _productService: ProductService) { }
+
   ngOnInit(): void {
-    this.getProducts()
+    this.getProducts();
   }
 
-  getProducts(){
-    this._productService.getProduct().subscribe(data => {
-      console.log(data)
+  getProducts() {
+    this._productService.getProducts().subscribe(data => {
+      this.listProduct = data;
     })
+  }
+
+  createProduct(newProduct: Product) {
+    this._productService.createProduct(newProduct).subscribe(createdProduct => {
+      // Lógica adicional si es necesario
+      this.getProducts(); // Recargar la lista después de crear un nuevo producto
+    });
+  }
+
+  updateProduct(productId: number, updatedProduct: Product) {
+    this._productService.updateProduct(productId, updatedProduct).subscribe(() => {
+      // Lógica adicional si es necesario
+      this.getProducts(); // Recargar la lista después de actualizar el producto
+    });
+  }
+
+  deleteProduct(productId: number) {
+    this._productService.deleteProduct(productId).subscribe(() => {
+      // Lógica adicional si es necesario
+      this.getProducts(); // Recargar la lista después de eliminar el producto
+    });
   }
 }
