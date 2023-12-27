@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { NavComponent } from "./../nav/nav.component";
+import { DashboardComponent } from "./../dashboard/dashboard.component";
 
 @Component({
     selector: 'app-catalogo',
     standalone: true,
     templateUrl: './catalogo.component.html',
     styleUrl: './catalogo.component.css',
-    imports: [NavComponent]
+    imports: [NavComponent, DashboardComponent]
 })
 export class CatalogoComponent {
 

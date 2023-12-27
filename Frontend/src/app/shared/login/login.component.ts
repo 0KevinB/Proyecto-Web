@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NavComponent } from "../lamding/nav/nav.component";
-import { NewpasswordComponent } from "../newpassword/newpassword.component";
+import { NewpasswordComponent } from "../forgot-password/newpassword/newpassword.component";
 import { RegisterComponent } from 'src/app/shared/register/register.component';
 import { User } from 'src/app/interfaces/user';
 import { CommonModule } from '@angular/common';
@@ -61,9 +61,8 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this._userService.login(user).subscribe({
         next: (data: any)  => {
-          this.router.navigate(['/bicicletas'])
+          this.router.navigate(['/catalogo'])
           localStorage.setItem('token', data)
-          console.log(data)
         }
       })
     }

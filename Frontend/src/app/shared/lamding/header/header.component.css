@@ -52,7 +52,7 @@ h1 {
 
 .background-image-container {
     position: absolute;
-    background-image: url('../../../assets/img/Bici_2.png');
+    background-image: url('../../../../assets/img/Bici_2.png');
     background-size: cover;
     background-position: center;
     width: 450px;

@@ -7,7 +7,7 @@ import { DashboardComponent } from "./shared/lamding/dashboard/dashboard.compone
 import { NavComponent } from "./shared/lamding/nav/nav.component";
 import { HttpClientModule } from '@angular/common/http'
 import { SectionComponent } from "./shared/lamding/section/section.component";
-import { NewpasswordComponent } from './shared/newpassword/newpassword.component';
+import { NewpasswordComponent } from './shared/forgot-password/newpassword/newpassword.component';
 import { RegisterComponent } from "./shared/register/register.component";
 import { routes } from './app-routing';
 import { ReactiveFormsModule } from '@angular/forms';

@@ -7,7 +7,7 @@ import { LoginComponent } from "../../login/login.component";
 import { SectionComponent } from "../section/section.component";
 import { FooterComponent } from "../../footer/footer.component";
 import { HeaderComponent } from "../header/header.component";
-import { NewpasswordComponent } from 'src/app/shared/newpassword/newpassword.component';
+import { NewpasswordComponent } from 'src/app/shared/forgot-password/newpassword/newpassword.component';
 
 @Component({
   selector: 'app-dashboard',

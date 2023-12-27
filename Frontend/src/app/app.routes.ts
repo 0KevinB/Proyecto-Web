@@ -3,7 +3,7 @@ import { LoginComponent } from './shared/login/login.component';
 import { DashboardComponent } from './shared/lamding/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
 import { RegisterComponent } from './shared/register/register.component';
-import { NewpasswordComponent } from './shared/newpassword/newpassword.component';
+import { NewpasswordComponent } from './shared/forgot-password/newpassword/newpassword.component';
 import { CatalogoComponent } from './shared/renta/catalogo/catalogo.component';
 
 
