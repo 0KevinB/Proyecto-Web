@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './shared/login/login.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { DashboardComponent } from './shared/lamding/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './shared/forgot-password/forgot-password.component';
 import { RegisterComponent } from './shared/register/register.component';
 import { NewpasswordComponent } from './shared/newpassword/newpassword.component';
+import { CatalogoComponent } from './shared/renta/catalogo/catalogo.component';
 
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: NewpasswordComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'register', redirectTo: '/register', pathMatch: 'full' },
+  { path: 'catalogo', component: CatalogoComponent },
   { path: '**', redirectTo: '/inicio', pathMatch: 'full' }
 ];
 

@@ -1,0 +1,24 @@
+<nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between 
+    py-3 mb-4 border-bottom bg-dark">
+  <div class="col-md-3  mb-2 mb-md-0">
+    <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none ">
+      <img src="../../../assets/img/nodo.png" aria-label="Bootstrap" class="bi my-auto mx-5" width="45" role="img"
+        alt="">
+    </a>
+  </div>
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+  </form>
+  <div></div>
+  <div></div><!-- Small modal -->
+  <button class="btn btn-primary" data-target=".bs-example-modal-sm" data-toggle="modal">Logout modal</button>
+
+  <div tabindex="-1" class="modal bs-example-modal-sm" role="dialog" aria-hidden="true">
+    <!-- Botón para abrir el modal de logout -->
+    <button class="btn btn-primary" (click)="openLogoutModal()">Logout</button>
+
+    <!-- Componente del modal de logout -->
+    <app-logout-modal (logoutConfirmed)="onLogoutConfirmed()"></app-logout-modal>
+  </div>
+
+</nav>
