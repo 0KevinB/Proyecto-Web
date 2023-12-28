@@ -85,7 +85,7 @@ export const eliminarBicicleta = async (req: Request, res: Response) => {
 };
 
 
-
+/*
 export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
@@ -117,8 +117,8 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
         res.status(500).json({ msg: 'Ocurrió un error al agregar bicicleta al usuario' });
     }
 };
+*/
 
-/*
 // Agregar bicicleta a un usuario
 export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     const { Cedula } = req.params; // ID del usuario obtenido de la URL
@@ -156,7 +156,7 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
         res.status(500).json({ msg: 'Ocurrió un error al agregar bicicleta al usuario' });
     }
 }
-*/
+
 export const obtenerBicicletasConImagen = async (req: Request, res: Response) => {
     try {
         const bicicletas = await Bicicleta.findAll({

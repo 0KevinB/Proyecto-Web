@@ -70,7 +70,7 @@ export class AlquilarBicicletaComponent {
           console.error('Error al agregar bicicleta:', error);
         }
       );
-      
+
     }
   }
 }
