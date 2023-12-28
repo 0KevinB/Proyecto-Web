@@ -3,6 +3,8 @@ export interface Product {
     Modelo: string;
     Tipo: string;
     Estado: string;
+    imagenReferencia: any;
     PrecioPorHora: number;
     Descripcion: string;
+    PropietarioBicicletas: any
 }

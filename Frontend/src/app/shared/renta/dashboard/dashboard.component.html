@@ -12,14 +12,16 @@
 
             <div class="card catalogo">
 
+                <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0 && product.PropietarioBicicletas[0].imagenReferencia"
+                    [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)" alt="Imagen de la bicicleta">
 
                 <div class="card-body">
 
-                    <h4><a>{{ product.Modelo }}</a></h4>
+                    <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
 
-                    <p>{{ product.Descripcion }}</p>
+                    <p>{{ product.Descripcion || 'N/A' }}</p>
 
-                    <p>Estado: {{ product.Estado }}</p>
+                    <p>Estado: {{ product.Estado || 'N/A' }}</p>
 
                     <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
 
@@ -31,9 +33,12 @@
                         Editar
                     </button>
 
-                    <button (click)="deleteProduct(product.BikeID)">
-                        Eliminar
-                    </button>
+                    <ng-container *ngIf="product.BikeID !== undefined && product.BikeID !== null">
+                        <button (click)="deleteProduct(product.BikeID)">
+                            Eliminar
+                        </button>
+                    </ng-container>
+
 
                 </div>
 

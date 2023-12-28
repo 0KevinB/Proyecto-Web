@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { SafeResourceUrl } from '@angular/platform-browser';
 import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
 @Component({
@@ -11,17 +12,31 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class DashboardComponent implements OnInit {
   listProduct: Product[] = []
+  sanitizer: any;
+  serverBaseUrl = 'http://localhost:3001'; // Reemplaza con la URL base de tu servidor
 
   constructor(private _productService: ProductService) { }
 
   ngOnInit(): void {
-    this.getProducts();
+    this.getProductsWI();
   }
 
   getProducts() {
     this._productService.getProducts().subscribe(data => {
+      console.log('Datos recibidos:', data);
       this.listProduct = data;
-    })
+    });
+  }
+  getProductsWI() {
+    this._productService.getProductsWithImages().subscribe(data => {
+      console.log('Datos recibidos:', data);
+      this.listProduct = data;
+    });
+  }
+  // Método para obtener la URL segura de la imagen
+  getImageUrl(imageName: string): string {
+    // Usa el nombre de la imagen directamente, ya que ya contiene la ruta completa
+    return `http://localhost:3001/imagenes/${imageName}`;
   }
 
   createProduct(newProduct: Product) {
@@ -39,9 +54,13 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteProduct(productId: number) {
-    this._productService.deleteProduct(productId).subscribe(() => {
-      // Lógica adicional si es necesario
-      this.getProducts(); // Recargar la lista después de eliminar el producto
-    });
+    if (productId !== undefined && productId !== null) {
+      this._productService.deleteProduct(productId).subscribe(() => {
+        this.getProducts();
+      });
+    } else {
+      console.error('El ID del producto es indefinido o nulo.');
+    }
   }
+
 }

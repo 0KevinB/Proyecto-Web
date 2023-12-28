@@ -19,6 +19,9 @@ const PropietarioBicicletas = connection_1.default.define('PropietarioBicicletas
     },
     BikeID: {
         type: sequelize_1.DataTypes.INTEGER,
+    }, imagenReferencia: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
     },
 }, {
     timestamps: false, freezeTableName: true

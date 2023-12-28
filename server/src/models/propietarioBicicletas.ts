@@ -16,10 +16,13 @@ const PropietarioBicicletas = sequelize.define('PropietarioBicicletas', {
     },
     BikeID: {
         type: DataTypes.INTEGER,
+    }, imagenReferencia: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
 },
     {
-        timestamps: false, freezeTableName:true
+        timestamps: false, freezeTableName: true
     });
 
 PropietarioBicicletas.belongsTo(Usuario, { foreignKey: 'Cedula' });

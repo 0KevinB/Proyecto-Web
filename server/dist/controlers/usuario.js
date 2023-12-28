@@ -57,7 +57,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!passwordValid) {
             return res.status(400).json({ msg: "Contraseña incorrecta" });
         }
-        const token = jsonwebtoken_1.default.sign({ CorreoElectronico: CorreoElectronico }, process.env.SECRET_KEY || '123');
+        const token = jsonwebtoken_1.default.sign({ CorreoElectronico: CorreoElectronico, Cedula: user.Cedula, }, process.env.SECRET_KEY || '123');
         res.json(token);
     }
     catch (error) {
