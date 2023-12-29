@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
 
@@ -32,5 +32,19 @@ export class UserService {
   resetPassword(token: string, newPassword: string): Observable<String> {
     const body = { token, newPassword };
     return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}resetPassword`, body);
+  }
+
+  getCedulaUsuario(): Observable<string | null> {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken: any = this.decodeToken(token);
+      return of(decodedToken ? decodedToken.Cedula : null);
+    }
+    return of(null);
+  }
+  private decodeToken(token: string): any {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(base64));
   }
 }

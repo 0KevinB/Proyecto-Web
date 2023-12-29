@@ -14,8 +14,18 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class NavComponent implements OnInit {
   userLoginOn: boolean = false;
+  showDropdown: boolean = false;
 
   constructor(private router: Router) { }
+  toggleDropdown(event: Event) {
+    event.preventDefault();  // Evita la acción predeterminada, por ejemplo, seguir el enlace en la imagen
+    event.stopPropagation();  // Evita que el evento llegue a otros elementos, como el documento
+    this.showDropdown = !this.showDropdown;
+  }
+
+  closeDropdown() {
+    this.showDropdown = false;
+  }
 
   ngOnInit(): void {
   }

@@ -1,16 +1,25 @@
 <nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between 
-    py-3 mb-4 border-bottom bg-dark">
+    py-3 mb-4 me border-bottom bg-dark ">
   <div class="col-md-3  mb-2 mb-md-0">
-    <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none ">
+    <a href="/catalogo" class="d-inline-flex link-body-emphasis text-decoration-none ">
       <img src="../../../assets/img/nodo.png" aria-label="Bootstrap" class="bi my-auto mx-5" width="45" role="img"
         alt="">
     </a>
   </div>
-  <form class="form-inline">
-    <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+  <form class="form-inline me-4">
+    <input class="form-control form-control-lg" type="search" placeholder="Buscar" aria-label="Search">
   </form>
+  <div class="me-0"></div>
 
-  <button class="btn btn-danger me-3" (click)="Logout()">Logout</button>
-
-
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false">
+      Dropdown button
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="#">Action</a>
+      <a class="dropdown-item" href="#">Another action</a>
+      <a class="dropdown-item" href="#">Something else here</a>
+    </div>
+  </div>
 </nav>

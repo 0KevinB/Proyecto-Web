@@ -4,26 +4,41 @@
 
     <div class="row">
 
-        <div class="col-12">
+        <div class="col-12 text-center ">
             <h2>Catálogo de Bicicletas</h2>
+            <div class="btn-group btn-group-toggle py-3 px-2" data-toggle="buttons">
+                <label class="btn btn btn-outline-secundary">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
+                </label>
+                <label class="btn btn btn-outline-secundary">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> Tradiciconal
+                </label>
+                <label class="btn btn btn-outline-secundary">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Electrica
+                </label>
+                <label class="btn btn btn-outline-secundary">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Montaña
+                </label>
+            </div>
         </div>
 
-        <div *ngFor="let product of listProduct" class="col-md-4 mb-4">
+        <div *ngFor="let product of listProduct" class="col-md-4 mb-4 tarjeta">
 
             <div class="card catalogo">
-
+                <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0"
+                    [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)" alt="Imagen de la bicicleta">
 
                 <div class="card-body">
 
-                    <h4><a>{{ product.Modelo }}</a></h4>
+                    <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
 
-                    <p>{{ product.Descripcion }}</p>
+                    <p>{{ product.Descripcion || 'N/A' }}</p>
 
-                    <p>Estado: {{ product.Estado }}</p>
+                    <p>Estado: {{ product.Estado || 'N/A' }}</p>
 
                     <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
 
-                    <button>
+                    <button class="btn btn-danger col-12">
                         Reservar
                     </button>
 
@@ -31,9 +46,12 @@
                         Editar
                     </button>
 
-                    <button (click)="deleteProduct(product.BikeID)">
-                        Eliminar
-                    </button>
+                    <ng-container *ngIf="product.BikeID !== undefined && product.BikeID !== null">
+                        <button (click)="deleteProduct(product.BikeID)">
+                            Eliminar
+                        </button>
+                    </ng-container>
+
 
                 </div>
 

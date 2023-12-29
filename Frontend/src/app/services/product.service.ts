@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Product } from '../interfaces/product';
+import { product_add } from '../interfaces/product_add.';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,13 @@ import { Product } from '../interfaces/product';
 export class ProductService {
   private myAppUrl: string;
   private myApiUrl: string;
+  // Configuración de opciones para la solicitud HTTP
+  private httpOptions = {
+    headers: new HttpHeaders({
+      // No es necesario configurar Content-Type aquí, Angular lo manejará automáticamente para solicitudes multipart/form-data
+    }),
+    reportProgress: true, // Habilita el seguimiento del progreso para la carga de archivos
+  };
 
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
@@ -40,4 +48,25 @@ export class ProductService {
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}`);
   }
+
+  getProductsWithImages(): Observable<Product[]> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}bikes`, {headers});
+  }
+  // Agregar una bicicleta a un usuario
+  createBicycleForUser(cedula: string, formData: product_add): Observable<any> {
+    let datos = new FormData();
+    datos.append("Modelo", formData.Modelo);
+    datos.append("Tipo", formData.Tipo);
+    datos.append("Estado", formData.Estado);
+    datos.append("PrecioPorHora", formData.PrecioPorHora);
+    datos.append("Descripcion", formData.Descripcion);
+    datos.append("imagenReferencia", formData.imagenReferencia);
+
+
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}/${cedula}/assign-bike`, datos, this.httpOptions);
+  }
+
 }

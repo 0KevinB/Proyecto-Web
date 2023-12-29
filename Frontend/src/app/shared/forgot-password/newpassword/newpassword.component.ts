@@ -40,8 +40,15 @@ export class NewpasswordComponent {
 
   onSubmit() {
     if (this.newPasswordForm.valid) {
+
       const formValues = this.newPasswordForm.value;
 
+      // Validar que las contraseñas coincidan
+      if (formValues.newPassword !== formValues.confirmPassword) {
+        console.error('Las contraseñas no coinciden');
+        // Puedes mostrar un mensaje de error al usuario
+        return;
+      }
       console.log('onSubmit triggered');
       console.log('Form Values:', formValues);
       console.log('Token:', this.token);
