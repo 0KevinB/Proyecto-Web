@@ -14,7 +14,12 @@ export class DashboardComponent implements OnInit {
   listProduct: Product[] = [];
   serverBaseUrl = 'http://localhost:3001';
   token: string | null = null;
-
+  opciones = [
+    { nombre: 'Tradicional', checked: false },
+    { nombre: 'Electrica', checked: false },
+    { nombre: 'Montaña', checked: false },
+    { nombre: 'Todas', checked: true }
+  ];
   constructor(private _productService: ProductService) { }
 
   ngOnInit(): void {
@@ -29,7 +34,28 @@ export class DashboardComponent implements OnInit {
       this.listProduct = data;
     });
   }
+  toggleCheckbox(opcion: any) {
+    // Si ya estaba seleccionado, deseleccionar
+    if (opcion.checked) {
+      opcion.checked = false;
+    } else {
+      // Si no estaba seleccionado, seleccionar y deseleccionar otras opciones
+      opcion.checked = true;
 
+      this.opciones.forEach((o: any) => {
+        if (o !== opcion) {
+          o.checked = false;
+        }
+      });
+    }
+  }
+
+  resetFilters() {
+    // Deseleccionar todas las opciones
+    this.opciones.forEach((opcion: any) => {
+      opcion.checked = false;
+    });
+  }
   getImageUrl(imageName: string): string {
     const token = localStorage.getItem('token');
     const tokenParam = token ? `?token=${token}` : '';

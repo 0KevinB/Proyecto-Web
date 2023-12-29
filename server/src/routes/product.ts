@@ -16,7 +16,7 @@ import {
 // Configuración de Multer
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'src/img/productos');
+        cb(null, 'img/productos');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);

@@ -135,7 +135,7 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
 };
 
 export let verImagen = async (req: Request, res: Response) => {
-    let ruta = path.join(__dirname, '../img/productos', req.params.img);
+    let ruta = path.join(__dirname, '../../img/productos', req.params.img);
     return res.sendFile(ruta);
 };
 

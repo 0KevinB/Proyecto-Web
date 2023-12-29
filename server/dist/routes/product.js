@@ -10,7 +10,7 @@ const bicicleta_1 = require("../controlers/bicicleta");
 // Configuración de Multer
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'src/img/productos');
+        cb(null, 'img/productos');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);

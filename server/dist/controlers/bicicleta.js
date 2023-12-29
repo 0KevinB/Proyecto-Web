@@ -146,7 +146,7 @@ const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0,
 });
 exports.agregarBicicletaAUsuario = agregarBicicletaAUsuario;
 let verImagen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let ruta = path_1.default.join(__dirname, '../img/productos', req.params.img);
+    let ruta = path_1.default.join(__dirname, '../../img/productos', req.params.img);
     return res.sendFile(ruta);
 });
 exports.verImagen = verImagen;

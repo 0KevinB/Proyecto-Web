@@ -1,4 +1,6 @@
-* a{
+/* Estilos generales para los enlaces */
+a {
     text-decoration: none;
     color: white;
 }
+
