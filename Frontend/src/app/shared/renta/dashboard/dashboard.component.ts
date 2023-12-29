@@ -11,21 +11,29 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  listProduct: Product[] = []
-  sanitizer: any;
-  serverBaseUrl = 'http://localhost:3001'; // Reemplaza con la URL base de tu servidor
+  listProduct: Product[] = [];
+  serverBaseUrl = 'http://localhost:3001';
+  token: string | null = null;
 
   constructor(private _productService: ProductService) { }
 
   ngOnInit(): void {
+    // Obtén el token del Local Storage
+    this.token = localStorage.getItem('token');
     this.getProducts();
   }
 
   getProducts() {
-    this._productService.getProducts().subscribe(data => {
+    this._productService.getProductsWithImages().subscribe(data => {
       console.log('Datos recibidos:', data);
       this.listProduct = data;
     });
+  }
+
+  getImageUrl(imageName: string): string {
+    const token = localStorage.getItem('token');
+    const tokenParam = token ? `?token=${token}` : '';
+    return `${this.serverBaseUrl}/api/products/bikes/imagen/${imageName}${tokenParam}`;
   }
 
 
@@ -36,12 +44,6 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  
-  getImageUrl(imageName: string): string {
-    // Aquí construye la URL completa utilizando la ruta de la API
-    // Asume que tu API está en http://localhost:3001
-    return `http://localhost:3001/api/products/bikes/imagen/${imageName}`;
-  }
 
   updateProduct(productId: number, updatedProduct: Product) {
     this._productService.updateProduct(productId, updatedProduct).subscribe(() => {

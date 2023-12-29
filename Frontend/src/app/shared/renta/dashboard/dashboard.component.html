@@ -11,9 +11,10 @@
         <div *ngFor="let product of listProduct" class="col-md-4 mb-4">
 
             <div class="card catalogo">
-                <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0 && product.PropietarioBicicletas[0].imagenReferencia"
-                    [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)" alt="Imagen de la bicicleta">
-
+                <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0"
+                [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)"
+                alt="Imagen de la bicicleta">
+           
                 <div class="card-body">
 
                     <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>

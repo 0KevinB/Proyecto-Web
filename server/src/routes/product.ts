@@ -10,6 +10,7 @@ import {
     agregarBicicletaAUsuario,
     obtenerBicicletasDeUsuario,
     verImagen,
+    obtenerBicicletasConImagen,
 } from '../controlers/bicicleta';
 
 // Configuración de Multer
@@ -29,7 +30,8 @@ const upload = multer({ storage: storage });
 const router = Router();
 
 // Obtener todas las bicicletas
-router.get('/', validateToken, obtenerBicicletas);
+router.get('/', obtenerBicicletas);
+router.get('/bikes', obtenerBicicletasConImagen);
 
 // Crear una nueva bicicleta
 router.post('/', validateToken, crearBicicleta);
@@ -43,7 +45,7 @@ router.delete('/:BikeID', validateToken, eliminarBicicleta);
 // Agregar bicicleta a un usuario
 router.post('/:Cedula/assign-bike', validateToken, upload.single('imagenReferencia'), agregarBicicletaAUsuario);
 
-router.get('/bikes/imagen/:img', validateToken, verImagen);
+router.get('/bikes/imagen/:img', verImagen);
 
 // Obtener bicicletas de un usuario
 router.get('/:Cedula/bicicletas', validateToken, obtenerBicicletasDeUsuario);

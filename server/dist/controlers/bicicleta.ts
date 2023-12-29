@@ -18,6 +18,24 @@ export const obtenerBicicletas = async (req: Request, res: Response) => {
     }
 };
 
+export const obtenerBicicletasConImagen = async (req: Request, res: Response) => {
+    try {
+        const bicicletas = await Bicicleta.findAll({
+            include: [
+                {
+                    model: PropietarioBicicletas,
+                    attributes: ['imagenReferencia'],
+                },
+            ],
+            attributes: ['BikeID','Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
+        });
+
+        res.json(bicicletas);
+    } catch (error) {
+        console.error('Error al obtener datos de bicicletas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
 // Crear una nueva bicicleta
 export const crearBicicleta = async (req: Request, res: Response) => {
     try {

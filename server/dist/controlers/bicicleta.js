@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarBicicletaAUsuario = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletas = void 0;
+exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarBicicletaAUsuario = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletas = void 0;
 const express_1 = __importDefault(require("express"));
 const bicicleta_1 = __importDefault(require("../models/bicicleta"));
 const propietarioBicicletas_1 = __importDefault(require("../models/propietarioBicicletas"));
@@ -30,6 +30,25 @@ const obtenerBicicletas = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.obtenerBicicletas = obtenerBicicletas;
+const obtenerBicicletasConImagen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const bicicletas = yield bicicleta_1.default.findAll({
+            include: [
+                {
+                    model: propietarioBicicletas_1.default,
+                    attributes: ['imagenReferencia'],
+                },
+            ],
+            attributes: ['BikeID', 'Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
+        });
+        res.json(bicicletas);
+    }
+    catch (error) {
+        console.error('Error al obtener datos de bicicletas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+exports.obtenerBicicletasConImagen = obtenerBicicletasConImagen;
 // Crear una nueva bicicleta
 const crearBicicleta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

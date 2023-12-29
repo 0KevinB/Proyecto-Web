@@ -10,6 +10,7 @@ import {
     agregarBicicletaAUsuario,
     obtenerBicicletasDeUsuario,
     verImagen,
+    obtenerBicicletasConImagen,
 } from '../controlers/bicicleta';
 
 // Configuración de Multer
@@ -30,6 +31,7 @@ const router = Router();
 
 // Obtener todas las bicicletas
 router.get('/', validateToken, obtenerBicicletas);
+router.get('/bikes', validateToken, obtenerBicicletasConImagen);
 
 // Crear una nueva bicicleta
 router.post('/', validateToken, crearBicicleta);

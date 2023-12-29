@@ -50,7 +50,10 @@ export class ProductService {
   }
 
   getProductsWithImages(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}bikes`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}bikes`, {headers});
   }
   // Agregar una bicicleta a un usuario
   createBicycleForUser(cedula: string, formData: product_add): Observable<any> {
