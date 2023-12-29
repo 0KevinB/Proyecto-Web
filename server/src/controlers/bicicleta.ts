@@ -119,16 +119,11 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
 };
 */
 
-// Agregar bicicleta a un usuario
 export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
-    const { Cedula } = req.params; // ID del usuario obtenido de la URL
+    const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
-    let imagenReferencia = req.body.imagenReferencia;
-    try {
 
-        // Loggings para identificar el problema
-        console.log('req.file.path:', req.file ? req.file.path : 'N/A');
-        console.log('imagenReferencia:', imagenReferencia);
+    try {
         // Crear la bicicleta
         const nuevaBicicleta = await Bicicleta.create({
             Modelo,
@@ -136,18 +131,17 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
             Estado,
             PrecioPorHora,
             Descripcion,
-            imagenReferencia: req.file ? req.file.path.replace('src\\img\\productos\\', '') : null,
+            imagenReferencia: req.file ? req.file.filename : null,
         });
 
-
-        // Obtener el ID de la bicicleta utilizando el método get()
+        // Obtener el ID de la bicicleta
         const bikeID = nuevaBicicleta.get('BikeID');
 
         // Asociar la bicicleta al usuario a través de la tabla intermedia
         await PropietarioBicicletas.create({
             Cedula,
             BikeID: bikeID,
-            imagenReferencia: req.file ? req.file.path : null,
+            imagenReferencia: req.file ? req.file.filename : null,
         });
 
         res.status(201).json(nuevaBicicleta);
@@ -155,7 +149,8 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
         console.error(error);
         res.status(500).json({ msg: 'Ocurrió un error al agregar bicicleta al usuario' });
     }
-}
+};
+
 
 export const obtenerBicicletasConImagen = async (req: Request, res: Response) => {
     try {

@@ -130,15 +130,10 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     }
 };
 */
-// Agregar bicicleta a un usuario
 const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { Cedula } = req.params; // ID del usuario obtenido de la URL
+    const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
-    let imagenReferencia = req.body.imagenReferencia;
     try {
-        // Loggings para identificar el problema
-        console.log('req.file.path:', req.file ? req.file.path : 'N/A');
-        console.log('imagenReferencia:', imagenReferencia);
         // Crear la bicicleta
         const nuevaBicicleta = yield bicicleta_1.default.create({
             Modelo,
@@ -146,15 +141,15 @@ const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0,
             Estado,
             PrecioPorHora,
             Descripcion,
-            imagenReferencia: req.file ? req.file.path.replace('src\\img\\productos\\', '') : null,
+            imagenReferencia: req.file ? req.file.filename : null,
         });
-        // Obtener el ID de la bicicleta utilizando el método get()
+        // Obtener el ID de la bicicleta
         const bikeID = nuevaBicicleta.get('BikeID');
         // Asociar la bicicleta al usuario a través de la tabla intermedia
         yield propietarioBicicletas_1.default.create({
             Cedula,
             BikeID: bikeID,
-            imagenReferencia: req.file ? req.file.path : null,
+            imagenReferencia: req.file ? req.file.filename : null,
         });
         res.status(201).json(nuevaBicicleta);
     }
