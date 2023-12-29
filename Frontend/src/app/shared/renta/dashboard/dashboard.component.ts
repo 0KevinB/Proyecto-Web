@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   constructor(private _productService: ProductService) { }
 
   ngOnInit(): void {
-    this.getProductsWI();
+    this.getProducts();
   }
 
   getProducts() {
@@ -27,23 +27,18 @@ export class DashboardComponent implements OnInit {
       this.listProduct = data;
     });
   }
-  getProductsWI() {
-    this._productService.getProductsWithImages().subscribe(data => {
-      console.log('Datos recibidos:', data);
-      this.listProduct = data;
-    });
-  }
-  // Método para obtener la URL segura de la imagen
-  getImageUrl(imageName: string): string {
-    // Usa el nombre de la imagen directamente, ya que ya contiene la ruta completa
-    return `http://localhost:3001/imagenes/${imageName}`;
-  }
+
 
   createProduct(newProduct: Product) {
     this._productService.createProduct(newProduct).subscribe(createdProduct => {
       // Lógica adicional si es necesario
       this.getProducts(); // Recargar la lista después de crear un nuevo producto
     });
+  }
+  // Método para obtener la URL segura de la imagen
+  getImageUrl(imageName: string): string {
+    // Usa el nombre de la imagen directamente, ya que ya contiene la ruta completa
+    return `http://localhost:3001/imagenes/${imageName}`;
   }
 
   updateProduct(productId: number, updatedProduct: Product) {
