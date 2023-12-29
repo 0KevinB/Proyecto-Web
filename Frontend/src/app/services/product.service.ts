@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Product } from '../interfaces/product';
-import { FormGroup } from '@angular/forms';
 import { product_add } from '../interfaces/product_add.';
 
 @Injectable({

@@ -10,7 +10,7 @@ const bicicleta_1 = require("../controlers/bicicleta");
 // Configuración de Multer
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'src\\img\\productos');
+        cb(null, 'src/img/productos');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
@@ -26,10 +26,8 @@ router.post('/', validate_token_1.default, bicicleta_1.crearBicicleta);
 router.put('/:BikeID', validate_token_1.default, bicicleta_1.actualizarBicicleta);
 // Eliminar una bicicleta por su ID
 router.delete('/:BikeID', validate_token_1.default, bicicleta_1.eliminarBicicleta);
-// Nuevas rutas para la asociación con usuarios
 // Agregar bicicleta a un usuario
 router.post('/:Cedula/assign-bike', validate_token_1.default, upload.single('imagenReferencia'), bicicleta_1.agregarBicicletaAUsuario);
-router.get('/bikes', validate_token_1.default, bicicleta_1.obtenerBicicletasConImagen);
 router.get('/bikes/imagen/:img', validate_token_1.default, bicicleta_1.verImagen);
 // Obtener bicicletas de un usuario
 router.get('/:Cedula/bicicletas', validate_token_1.default, bicicleta_1.obtenerBicicletasDeUsuario);

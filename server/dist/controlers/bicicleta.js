@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.obtenerBicicletasConImagen = exports.agregarBicicletaAUsuario = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletas = void 0;
+exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarBicicletaAUsuario = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletas = void 0;
 const express_1 = __importDefault(require("express"));
 const bicicleta_1 = __importDefault(require("../models/bicicleta"));
 const propietarioBicicletas_1 = __importDefault(require("../models/propietarioBicicletas"));
@@ -97,39 +97,6 @@ const eliminarBicicleta = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.eliminarBicicleta = eliminarBicicleta;
-/*
-export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
-    const { Cedula } = req.params;
-    const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
-
-    try {
-        // Crear la bicicleta
-        const nuevaBicicleta = await Bicicleta.create({
-            Modelo,
-            Tipo,
-            Estado,
-            PrecioPorHora,
-            Descripcion,
-            imagenReferencia: req.file ? req.file.filename : null,
-        });
-
-        // Obtener el ID de la bicicleta
-        const bikeID = nuevaBicicleta.get('BikeID');
-
-        // Asociar la bicicleta al usuario a través de la tabla intermedia
-        await PropietarioBicicletas.create({
-            Cedula,
-            BikeID: bikeID,
-            imagenReferencia: req.file ? req.file.filename : null,
-        });
-
-        res.status(201).json(nuevaBicicleta);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Ocurrió un error al agregar bicicleta al usuario' });
-    }
-};
-*/
 const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
@@ -159,25 +126,6 @@ const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.agregarBicicletaAUsuario = agregarBicicletaAUsuario;
-const obtenerBicicletasConImagen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const bicicletas = yield bicicleta_1.default.findAll({
-            include: [
-                {
-                    model: propietarioBicicletas_1.default,
-                    attributes: ['imagenReferencia'],
-                },
-            ],
-            attributes: ['Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
-        });
-        res.json(bicicletas);
-    }
-    catch (error) {
-        console.error('Error al obtener datos de bicicletas:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-exports.obtenerBicicletasConImagen = obtenerBicicletasConImagen;
 let verImagen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let ruta = path_1.default.join(__dirname, '../img/productos', req.params.img);
     return res.sendFile(ruta);

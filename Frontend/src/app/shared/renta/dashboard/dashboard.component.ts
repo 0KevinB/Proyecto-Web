@@ -35,10 +35,12 @@ export class DashboardComponent implements OnInit {
       this.getProducts(); // Recargar la lista después de crear un nuevo producto
     });
   }
-  // Método para obtener la URL segura de la imagen
+
+  
   getImageUrl(imageName: string): string {
-    // Usa el nombre de la imagen directamente, ya que ya contiene la ruta completa
-    return `http://localhost:3001/imagenes/${imageName}`;
+    // Aquí construye la URL completa utilizando la ruta de la API
+    // Asume que tu API está en http://localhost:3001
+    return `http://localhost:3001/api/products/bikes/imagen/${imageName}`;
   }
 
   updateProduct(productId: number, updatedProduct: Product) {
