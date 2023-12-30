@@ -10,8 +10,6 @@ export const addTokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (token) {
     req = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
   }
-
-
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {

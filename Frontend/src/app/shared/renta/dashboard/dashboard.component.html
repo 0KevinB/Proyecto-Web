@@ -41,18 +41,6 @@
                     <button class="btn btn-danger col-12">
                         Reservar
                     </button>
-
-                    <button (click)="updateProduct(product.BikeID, product)">
-                        Editar
-                    </button>
-
-                    <ng-container *ngIf="product.BikeID !== undefined && product.BikeID !== null">
-                        <button (click)="deleteProduct(product.BikeID)">
-                            Eliminar
-                        </button>
-                    </ng-container>
-
-
                 </div>
 
             </div>

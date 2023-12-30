@@ -1,45 +1,59 @@
-<form [formGroup]="bicicletaForm" (ngSubmit)="guardarBicicleta()" enctype="multipart/form-data">
-    <div class="row">
-        <div class="col-4">
-            <div class="form-group">
-                <label for="modelo">Modelo</label>
-                <input type="text" id="modelo" class="form-control" formControlName="modelo" required>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label for="tipo">Tipo</label>
-                <input type="text" id="tipo" class="form-control" formControlName="tipo" required>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label for="estado">Estado</label>
-                <input type="text" id="estado" class="form-control" formControlName="estado" required>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label for="precioPorHora">Precio por Hora</label>
-                <input type="text" id="precioPorHora" class="form-control" formControlName="precioPorHora" required>
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label for="descripcion">Descripción</label>
-                <input type="text" id="descripcion" class="form-control" formControlName="descripcion">
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="form-group">
-                <label for="imagen">Imagen de Referencia</label>
-                <input type="file" id="imagen" class="form-control" (change)="onFileChange($event)">
-                (change)="onFileChange($event)">
-            </div>
-        </div>
-    </div>
+<div class="main-container">
+    <app-nav></app-nav>
+    <div class="container">
+        <form [formGroup]="bicicletaForm" (ngSubmit)="guardarBicicleta()" enctype="multipart/form-data">
+            <div class="row py-2">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="modelo">Modelo</label>
+                        <input type="text" id="modelo" class="form-control" formControlName="modelo" required>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <input type="text" id="tipo" class="form-control" formControlName="tipo" required>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <select id="estado" class="form-control" formControlName="estado" required>
+                            <option value="muy-bueno">Muy bueno</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="regular">Regular</option>
+                        </select>
+                    </div>
+                </div>
 
-    <div class="row">
-        <button class="btn btn-danger" type="button" (click)="guardarBicicleta()">Guardar</button>
+                <div class="col-4 py-2">
+                    <div class="form-group">
+                        <label for="precioPorHora">Precio por Hora</label>
+                        <input type="text" id="precioPorHora" class="form-control" formControlName="precioPorHora"
+                            required pattern="[0-9]+(\.[0-9]+)?">
+                        <small class="form-text text-muted">(EJ 1.50).</small>
+                    </div>
+                </div>
+
+
+                <div class="col-4 py-2">
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <input type="text" id="descripcion" class="form-control" formControlName="descripcion">
+                    </div>
+                </div>
+                <div class="col-4 py-2">
+                    <div class="form-group">
+                        <label for="imagen">Imagen de Referencia</label>
+                        <input type="file" id="imagen" class="form-control" (change)="onFileChange($event)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <button class="btn btn-danger" type="button" (click)="guardarBicicleta()">Guardar</button>
+            </div>
+        </form>
     </div>
-</form>
+    <app-footer></app-footer>
+</div>
