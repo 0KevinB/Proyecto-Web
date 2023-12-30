@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -20,9 +21,14 @@ export class DashboardComponent implements OnInit {
     { nombre: 'Montaña', checked: false },
     { nombre: 'Todas', checked: true }
   ];
-  constructor(private _productService: ProductService) { }
+  isAdmin: boolean = false;
+
+  constructor(private _productService: ProductService, private _userService: UserService) { }
 
   ngOnInit(): void {
+    this._userService.getRolUsuario().subscribe(rol => {
+      this.isAdmin = rol === 2;
+    });
     // Obtén el token del Local Storage
     this.token = localStorage.getItem('token');
     this.getProducts();
