@@ -11,15 +11,15 @@
   </form>
   <div class="me-0"></div>
 
-  <div class="dropdown">
+  <div class="dropdown me-4">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
       aria-haspopup="true" aria-expanded="false">
-      Dropdown button
+      Cuenta
     </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#">Action</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">Something else here</a>
+    <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="/perfil">Perfil</a>
+      <a class="dropdown-item" href="/carrito">Carrito</a>
+      <button class="dropdown-item bg-danger text-white" (click)="Logout()">Logout</button>
     </div>
   </div>
 </nav>

@@ -2,12 +2,15 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
   imports: [CommonModule, NavComponent, HttpClientModule, RouterLink,
+    MatMenuModule, MatButtonModule,MatIconModule,
   ],
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css']

@@ -30,8 +30,8 @@ const upload = multer({ storage: storage });
 const router = Router();
 
 // Obtener todas las bicicletas
-router.get('/', obtenerBicicletas);
-router.get('/bikes', obtenerBicicletasConImagen);
+router.get('/', validateToken, obtenerBicicletas);
+router.get('/bikes', validateToken,  obtenerBicicletasConImagen);
 
 // Crear una nueva bicicleta
 router.post('/', validateToken, crearBicicleta);

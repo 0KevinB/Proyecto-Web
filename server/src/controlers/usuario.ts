@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
             return res.status(400).json({ msg: "Contraseña incorrecta" });
         }
 
-        const token = jwt.sign({ CorreoElectronico: CorreoElectronico, Cedula: user.Cedula,}, process.env.SECRET_KEY || '123');
+        const token = jwt.sign({ CorreoElectronico: CorreoElectronico, Cedula: user.Cedula, RolID: user.RolID}, process.env.SECRET_KEY || '123');
 
         res.json(token);
     } catch (error) {

@@ -12,13 +12,6 @@ export class ProductService {
   private myAppUrl: string;
   private myApiUrl: string;
   // Configuración de opciones para la solicitud HTTP
-  private httpOptions = {
-    headers: new HttpHeaders({
-      // No es necesario configurar Content-Type aquí, Angular lo manejará automáticamente para solicitudes multipart/form-data
-    }),
-    reportProgress: true, // Habilita el seguimiento del progreso para la carga de archivos
-  };
-
   constructor(private http: HttpClient) {
     this.myAppUrl = environment.endpoint;
     this.myApiUrl = '/api/products/';
@@ -45,16 +38,11 @@ export class ProductService {
   }
 
   // Obtener todos los productos
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}`);
-  }
-
   getProductsWithImages(): Observable<Product[]> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}bikes`, {headers});
+    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}bikes`);
   }
+
+
   // Agregar una bicicleta a un usuario
   createBicycleForUser(cedula: string, formData: product_add): Observable<any> {
     let datos = new FormData();
@@ -64,9 +52,7 @@ export class ProductService {
     datos.append("PrecioPorHora", formData.PrecioPorHora);
     datos.append("Descripcion", formData.Descripcion);
     datos.append("imagenReferencia", formData.imagenReferencia);
-
-
-    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}/${cedula}/assign-bike`, datos, this.httpOptions);
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}/${cedula}/assign-bike`, datos);
   }
 
 }

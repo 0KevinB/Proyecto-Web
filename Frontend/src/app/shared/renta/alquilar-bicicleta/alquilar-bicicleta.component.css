@@ -1,0 +1,9 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Establece la altura mínima de la vista al 100% del viewport height */
+}
+
+.container {
+    flex-grow: 1; /* Hace que el contenedor del formulario crezca para ocupar el espacio restante */
+}

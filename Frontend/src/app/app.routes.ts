@@ -6,6 +6,7 @@ import { RegisterComponent } from './shared/register/register.component';
 import { NewpasswordComponent } from './shared/forgot-password/newpassword/newpassword.component';
 import { CatalogoComponent } from './shared/renta/catalogo/catalogo.component';
 import { AlquilarBicicletaComponent } from './shared/renta/alquilar-bicicleta/alquilar-bicicleta.component';
+import { authGuard } from './utils/auth.guard';
 
 
 export const routes: Routes = [
@@ -17,8 +18,8 @@ export const routes: Routes = [
   { path: 'reset-password', component: NewpasswordComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'register', redirectTo: '/register', pathMatch: 'full' },
-  { path: 'catalogo', component: CatalogoComponent },
-  { path: 'agregar-bicicleta', component: AlquilarBicicletaComponent },
+  { path: 'catalogo', component: CatalogoComponent, canActivate: [authGuard] },
+  { path: 'agregar-bicicleta', component: AlquilarBicicletaComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/inicio', pathMatch: 'full' }
 ];
 

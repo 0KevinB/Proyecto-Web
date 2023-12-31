@@ -42,6 +42,16 @@ export class UserService {
     }
     return of(null);
   }
+
+  getRolUsuario(): Observable<number | null> {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken: any = this.decodeToken(token);
+      return of(decodedToken ? decodedToken.RolID : null);
+    }
+    return of(null);
+  }
+
   private decodeToken(token: string): any {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

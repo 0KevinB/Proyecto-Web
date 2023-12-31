@@ -11,7 +11,8 @@ import { NewpasswordComponent } from './shared/forgot-password/newpassword/newpa
 import { RegisterComponent } from "./shared/register/register.component";
 import { routes } from './app-routing';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import {MatMenuModule} from '@angular/material/menu'
+import {MatButtonModule} from '@angular/material/button'
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./app.component.css'],
   imports: [CommonModule, RouterOutlet, FooterComponent, HeaderComponent, 
     DashboardComponent, NavComponent, NewpasswordComponent, HttpClientModule, 
-    RouterLink, SectionComponent, RegisterComponent,ReactiveFormsModule,
+    RouterLink, SectionComponent, RegisterComponent,ReactiveFormsModule,MatMenuModule,
+    MatButtonModule,
     ]
 })
 
