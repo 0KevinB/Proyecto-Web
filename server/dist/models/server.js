@@ -27,6 +27,7 @@ const propietarioBicicletas_1 = __importDefault(require("./propietarioBicicletas
 const mantenimiento_1 = __importDefault(require("./mantenimiento"));
 const controlCalidad_1 = __importDefault(require("./controlCalidad"));
 const Bicicleta_Ubicacion_1 = __importDefault(require("./Bicicleta_Ubicacion"));
+const Carrito_1 = __importDefault(require("./Carrito"));
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -66,6 +67,7 @@ class Server {
                 yield propietarioBicicletas_1.default.sync({ alter: true });
                 yield mantenimiento_1.default.sync({ alter: true });
                 yield controlCalidad_1.default.sync({ alter: true });
+                yield Carrito_1.default.sync({ alter: true });
                 console.log("Connect");
             }
             catch (error) {
