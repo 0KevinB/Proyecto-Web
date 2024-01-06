@@ -24,10 +24,10 @@ export const obtenerBicicletasConImagen = async (req: Request, res: Response) =>
             include: [
                 {
                     model: PropietarioBicicletas,
-                    attributes: ['imagenReferencia'],
+                    attributes: ['imagenReferencia', 'Estado'],
                 },
             ],
-            attributes: ['BikeID','Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
+            attributes: ['BikeID', 'Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
         });
 
         res.json(bicicletas);
@@ -65,26 +65,20 @@ export const actualizarBicicleta = async (req: Request, res: Response) => {
 // Eliminar una bicicleta por su ID
 export const eliminarBicicleta = async (req: Request, res: Response) => {
     const { BikeID } = req.params;
-
     try {
         const bicicleta = await Bicicleta.findByPk(BikeID);
-
         if (bicicleta) {
             // Verificar que Bicicleta.sequelize no sea undefined antes de usarlo
             if (Bicicleta.sequelize) {
                 // Inicia una transacción manualmente
                 const t = await Bicicleta.sequelize.transaction();
-
                 try {
                     // Elimina la bicicleta de la tabla propietarioBicicleta dentro de la transacción
                     await PropietarioBicicletas.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
-
                     // Luego, elimina la bicicleta de la tabla Bicicleta
                     await bicicleta.destroy({ transaction: t });
-
                     // Hace commit de la transacción si todo fue exitoso
                     await t.commit();
-
                     res.status(204).send();
                 } catch (error) {
                     // En caso de error, realiza un rollback de la transacción
@@ -101,6 +95,45 @@ export const eliminarBicicleta = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Error al eliminar bicicleta' });
     }
 };
+
+// Aprobar una bicicleta por su ID
+export const aprobarBicicleta = async (req: Request, res: Response) => {
+    console.log(req.params);
+    const { productId } = req.params;
+    if (!productId) {
+        return res.status(400).json({ error: 'ID de bicicleta no proporcionada' });
+    }
+    try {
+        const bicicleta = await PropietarioBicicletas.findByPk(productId);
+        if (bicicleta) {
+            // Verificar que PropietarioBicicletas.sequelize no sea undefined antes de usarlo
+            if (PropietarioBicicletas.sequelize) {
+                // Inicia una transacción manualmente
+                const t = await PropietarioBicicletas.sequelize.transaction();
+                try {
+                    // Actualiza el estado de la bicicleta dentro de la transacción
+                    await PropietarioBicicletas.update({ Estado: true }, { where: { BikeID: productId }, transaction: t });
+                    // Hace commit de la transacción si todo fue exitoso
+                    await t.commit();
+
+                    res.status(200).json({ mensaje: 'Bicicleta aprobada exitosamente.' });
+                } catch (error) {
+                    // En caso de error, realiza un rollback de la transacción
+                    await t.rollback();
+                    res.status(500).json({ error: 'Error al aprobar bicicleta' });
+                }
+            } else {
+                res.status(500).json({ error: 'Error al obtener sequelize de PropietarioBicicletas' });
+            }
+        } else {
+            res.status(404).json({ mensaje: 'Bicicleta no encontrada' });
+        }
+    } catch (error) {
+        console.error('Error al aprobar la bicicleta:', error);
+        res.status(500).json({ error: 'Error al aprobar la bicicleta' });
+    }
+};
+
 
 export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     const { Cedula } = req.params;

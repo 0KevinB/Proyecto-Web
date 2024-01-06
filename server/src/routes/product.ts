@@ -11,6 +11,7 @@ import {
     obtenerBicicletasDeUsuario,
     verImagen,
     obtenerBicicletasConImagen,
+    aprobarBicicleta,
 } from '../controlers/bicicleta';
 
 // Configuración de Multer
@@ -46,6 +47,11 @@ router.delete('/:BikeID', validateToken, eliminarBicicleta);
 router.post('/:Cedula/assign-bike', validateToken, upload.single('imagenReferencia'), agregarBicicletaAUsuario);
 
 router.get('/bikes/imagen/:img', verImagen);
+
+
+// Aprobar bicicletas
+router.put('/approve/:productId', aprobarBicicleta);
+
 
 // Obtener bicicletas de un usuario
 router.get('/:Cedula/bicicletas', validateToken, obtenerBicicletasDeUsuario);

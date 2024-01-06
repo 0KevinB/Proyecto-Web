@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CarritoItem } from 'src/app/interfaces/carritoItem';
 import { Product } from 'src/app/interfaces/product';
 import { CarritoService } from 'src/app/services/carrito.service';
 
@@ -39,14 +40,15 @@ export class CarritoComponent implements OnInit {
     });
   }
 
+
   onAddToCart(product: Product): void {
     const cantidadHoras = this.carritoForm.get('cantidadHoras').value;
 
-    // Crear un nuevo producto con la cantidad de horas seleccionadas
-    const item: Product = {
-      ...product,
+    // Crear un nuevo item del carrito
+    const item: CarritoItem = {
+      Producto: product,
       CantidadHoras: cantidadHoras,
-      // Puedes ajustar la lógica para calcular el precio total aquí si es necesario
+      PrecioTotal: product.PrecioPorHora * cantidadHoras,
     };
 
     // Añadir al carrito a través del servicio
@@ -58,6 +60,8 @@ export class CarritoComponent implements OnInit {
     // Limpiar el formulario después de añadir al carrito
     this.carritoForm.reset();
   }
+
+
 
   onClearCart(): void {
     // Vaciar el carrito a través del servicio

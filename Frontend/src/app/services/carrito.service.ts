@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../interfaces/product'; // Ajusta la ruta
+import { CarritoItem } from '../interfaces/carritoItem';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class CarritoService {
 
   constructor(private http: HttpClient) { }
 
-  addToCart(item: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/agregar`, item);
+  addToCart(product: CarritoItem): Observable<Product> {
+    return this.http.post<Product>(`${this.apiUrl}/agregar`, product);
   }
 
   getItems(): Observable<Product[]> {

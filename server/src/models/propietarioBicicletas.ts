@@ -19,7 +19,10 @@ const PropietarioBicicletas = sequelize.define('PropietarioBicicletas', {
     }, imagenReferencia: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
+    }, Estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    }
 },
     {
         timestamps: false, freezeTableName: true

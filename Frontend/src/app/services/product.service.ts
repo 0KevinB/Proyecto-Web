@@ -55,4 +55,11 @@ export class ProductService {
     return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}/${cedula}/assign-bike`, datos);
   }
 
+  // product.service.ts
+
+  // Aprobar una bicicleta por su ID
+  approveProduct(productId: number): Observable<void> {
+    return this.http.put<void>(`${this.myAppUrl}${this.myApiUrl}approve/${productId}`, null);
+  }
+
 }

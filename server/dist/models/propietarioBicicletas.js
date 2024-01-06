@@ -22,7 +22,10 @@ const PropietarioBicicletas = connection_1.default.define('PropietarioBicicletas
     }, imagenReferencia: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true,
-    },
+    }, Estado: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
+    }
 }, {
     timestamps: false, freezeTableName: true
 });
