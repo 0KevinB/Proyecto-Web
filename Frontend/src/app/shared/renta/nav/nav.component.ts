@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { FilterService } from 'src/app/services/filter.service';
-import { filter } from 'rxjs';
+
 @Component({
   selector: 'app-nav',
   standalone: true,
@@ -44,6 +44,4 @@ export class NavComponent implements OnInit {
     localStorage.removeItem('token')
     this.router.navigate(['/inicio']);
   }
-
-
 }

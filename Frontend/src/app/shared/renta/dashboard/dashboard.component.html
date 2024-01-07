@@ -64,8 +64,7 @@
                     </label>
                 </div>
             </div>
-
-            <div *ngFor="let product of listProductUser" class="col-md-4 mb-4 tarjeta">
+            <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
                 <ng-container *ngIf="product.PropietarioBicicletas[0].Estado == 1">
                     <!-- Contenido del producto -->
                     <div class="card catalogo">
