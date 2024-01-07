@@ -38,14 +38,10 @@ export class DashboardComponent implements OnInit {
     this._userService.getRolUsuario().subscribe((rol) => {
       this.isAdmin = rol === 2;
     });
-
     this.getProducts();
-
-    // Obtén los productos del usuario y aplica el filtro después de obtenerlos
     this.getProductsUser().subscribe(() => {
       this.applyFilterOnInit();
     });
-
     this.token = localStorage.getItem('token');
     this._filterService.filter$.subscribe((data) => {
       console.log(data);
@@ -53,24 +49,23 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+
+  
   applyFilterOnInit() {
     this.filteredProducts = this.listProductUser.filter((product) => {
       return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
     });
   }
-
   applyFilter() {
     this.filteredProducts = this.listProductUser.filter((product) => {
       return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
     });
   }
-
   getProducts() {
     this._productService.getProductsWithImages().subscribe((data) => {
       this.listProduct = data;
     });
   }
-
   getProductsUser(): Observable<any> {
     return this._productService.getProductsWithImages().pipe(map((data) => {
       const dataFiltrada = data.filter((item) => {
@@ -85,27 +80,23 @@ export class DashboardComponent implements OnInit {
   isProductApproved(product: Product): boolean {
     return product.PropietarioBicicletas[0].Estado === 1;
   }
-
   getImageUrl(imageName: string): string {
     const token = localStorage.getItem('token');
     const tokenParam = token ? `?token=${token}` : '';
     return `${this.serverBaseUrl}/api/products/bikes/imagen/${imageName}${tokenParam}`;
   }
-
   createProduct(newProduct: Product) {
     this._productService.createProduct(newProduct).subscribe(createdProduct => {
       // Lógica adicional si es necesario
       this.getProducts(); // Recargar la lista después de crear un nuevo producto
     });
   }
-
   updateProduct(productId: number, updatedProduct: Product) {
     this._productService.updateProduct(productId, updatedProduct).subscribe(() => {
       // Lógica adicional si es necesario
       this.getProducts(); // Recargar la lista después de actualizar el producto
     });
   }
-
   deleteProduct(productId: number) {
     if (productId !== undefined && productId !== null) {
       this._productService.deleteProduct(productId).subscribe(() => {
@@ -115,7 +106,6 @@ export class DashboardComponent implements OnInit {
       console.error('El ID del producto es indefinido o nulo.');
     }
   }
-
   approveBicycle(bikeId: number) {
     console.log('BikeID:', bikeId); // Agrega este log para verificar el valor
 
