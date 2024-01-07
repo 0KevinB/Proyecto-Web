@@ -5,13 +5,14 @@ import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { Observable, map } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
 })
 export class DashboardComponent implements OnInit {
   listProduct: Product[] = [];
@@ -27,6 +28,7 @@ export class DashboardComponent implements OnInit {
     { nombre: 'Todas', checked: true },
   ];
   isAdmin: boolean = false;
+  selectedFilter: string = 'Todas'; // la opción de filtro por defecto
 
   constructor(
     private _productService: ProductService,
@@ -50,7 +52,19 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  
+  filterBicycles(filterOption: string): void {
+    this.selectedFilter = filterOption;
+
+    this.filteredProducts = this.listProductUser.filter((product) => {
+      if (filterOption === 'Todas') {
+        return true; 
+      } else {
+        return product.Tipo.toLowerCase() === filterOption.toLowerCase();
+      }
+    });
+  }
+
+
   applyFilterOnInit() {
     this.filteredProducts = this.listProductUser.filter((product) => {
       return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());

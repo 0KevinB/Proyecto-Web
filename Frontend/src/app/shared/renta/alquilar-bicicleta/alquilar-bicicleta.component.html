@@ -12,16 +12,20 @@
                 <div class="col-4">
                     <div class="form-group">
                         <label for="tipo">Tipo</label>
-                        <input type="text" id="tipo" class="form-control" formControlName="tipo" required>
+                        <select id="tipo" class="form-control" formControlName="tipo" required>
+                            <option value="Eléctrica">Eléctrica</option>
+                            <option value="Tradicional">Tradicional</option>
+                            <option value="Montaña">Montaña</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <label for="estado">Estado</label>
                         <select id="estado" class="form-control" formControlName="estado" required>
-                            <option value="muy-bueno">Muy bueno</option>
-                            <option value="bueno">Bueno</option>
-                            <option value="regular">Regular</option>
+                            <option value="Muy bueno">Muy bueno</option>
+                            <option value="Bueno">Bueno</option>
+                            <option value="Regular">Regular</option>
                         </select>
                     </div>
                 </div>
