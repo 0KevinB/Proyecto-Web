@@ -6,19 +6,27 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { product_add } from 'src/app/interfaces/product_add.';
 import { NavComponent } from "../../renta/nav/nav.component";
 import { FooterComponent } from "../../footer/footer.component";
+import { Router, RouterLink } from '@angular/router';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
-    selector: 'app-alquilar-bicicleta',
-    standalone: true,
-    templateUrl: './alquilar-bicicleta.component.html',
-    styleUrl: './alquilar-bicicleta.component.css',
-    imports: [ReactiveFormsModule, NavComponent, FooterComponent]
+  selector: 'app-alquilar-bicicleta',
+  standalone: true,
+  templateUrl: './alquilar-bicicleta.component.html',
+  styleUrl: './alquilar-bicicleta.component.css',
+  imports: [ReactiveFormsModule, NavComponent, FooterComponent, RouterLink
+    ,]
 })
 
 export class AlquilarBicicletaComponent {
   bicicletaForm: FormGroup | any;
   cedulaUsuario: string | null = null;
-  constructor(private formBuilder: FormBuilder, private productService: ProductService, private userService: UserService) { }
+
+  constructor(private formBuilder: FormBuilder,
+    private productService: ProductService,
+    private userService: UserService,
+    private router: Router,
+    private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     // Obtén la cédula del usuario al inicializar el componente
@@ -61,15 +69,13 @@ export class AlquilarBicicletaComponent {
         PrecioPorHora: this.bicicletaForm.value.precioPorHora,
         Descripcion: this.bicicletaForm.value.descripcion,
       }
-      console.log('Bicicleta agregada correctamente:', product);
-
-      // Verifica en la consola si los valores se están capturando correctamente
       this.productService.createBicycleForUser(this.cedulaUsuario, product).subscribe(
         (respuesta) => {
-          console.log('Bicicleta agregada correctamente:', respuesta);
+          this.notificationService.notify('Bicicleta agregada con exito, espere confirmacion del administrador.', 2000);
+          this.router.navigate(['/catalogo']);
         },
         (error) => {
-          console.error('Error al agregar bicicleta:', error);
+          this.notificationService.notify('Algo salió mal, intente más tarde.', 2000);
         }
       );
 

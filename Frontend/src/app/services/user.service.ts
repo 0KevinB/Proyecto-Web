@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, catchError, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../interfaces/user';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,15 +14,25 @@ export class UserService {
   private myAppUrl: string
   private myApiUrl: string
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private notificationService: NotificationService
+  ) {
     this.myAppUrl = environment.endpoint
     this.myApiUrl = '/api/users/'
   }
   singin(user: User): Observable<String> {
     return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}`, user)
   }
-  login(user: User): Observable<String> {
-    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}login`, user)
+  login(user: User): Observable<string> {
+    return this.http.post<string>(`${this.myAppUrl}${this.myApiUrl}login`, user).pipe(
+      catchError((error) => {
+        if (error.status === 400) {
+          this.notificationService.notify('Credenciales incorrectas. Por favor, intenta de nuevo.');
+        } else {
+          this.notificationService.notify('Error al intentar iniciar sesión. Por favor, inténtalo más tarde.');
+        }
+        return throwError(error);
+      })
+    );
   }
 
   sendResetEmail(email: string): Observable<any> {

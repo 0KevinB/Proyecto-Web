@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interfaces/user';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -35,8 +36,8 @@ export class RegisterComponent {
   constructor(
     private _userService: UserService,
     private fb: FormBuilder,
-    private router: Router
-
+    private router: Router,
+    private notificationService : NotificationService
   ) { }
 
   isValidField(field: string) {
@@ -61,10 +62,8 @@ export class RegisterComponent {
     ) {
       return
     }
-
-    console.log('Formulario válido. Datos:', user);
     this._userService.singin(user).subscribe(data => {
-      console.log('Se registro correctamente')
+      this.notificationService.notify('Registrado correctamente.', 2000);
       this.router.navigate(['/login'])
     })
 
