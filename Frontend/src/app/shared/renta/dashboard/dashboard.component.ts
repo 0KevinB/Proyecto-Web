@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
   filterBicycles(filterOption: string): void {
     this.selectedFilter = filterOption;
     if (this.isAdmin) {
-      this.filteredProducts = this.listProductUser.filter((product) => {
+      this.filteredProducts = this.listProduct.filter((product) => {
         if (filterOption === 'Todas') {
           return true;
         } else {
