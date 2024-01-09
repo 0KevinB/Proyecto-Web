@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-newpassword',
@@ -24,7 +25,8 @@ export class NewpasswordComponent {
     private route: ActivatedRoute,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.newPasswordForm = this.formBuilder.group({
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -40,12 +42,10 @@ export class NewpasswordComponent {
 
   onSubmit() {
     if (this.newPasswordForm.valid) {
-
       const formValues = this.newPasswordForm.value;
-
       // Validar que las contraseñas coincidan
       if (formValues.newPassword !== formValues.confirmPassword) {
-        console.error('Las contraseñas no coinciden');
+        this.notificationService.notify('Las contraseñas no coinciden.', 2000);
         // Puedes mostrar un mensaje de error al usuario
         return;
       }
@@ -58,11 +58,11 @@ export class NewpasswordComponent {
       // Ahora intenta llamar al servicio
       this.userService.resetPassword(this.token, formValues.newPassword).subscribe(
         (response: any) => {
-          console.log('Contraseña restablecida con éxito', response);
+          this.notificationService.notify('Contraseña restrablecida con exito.', 2000);
           this.router.navigate(['/login']);
         },
         (error: any) => {
-          console.error('Error al restablecer la contraseña', error);
+          this.notificationService.notify('Error al restrablecer la contraseña.', 2000);
           // Manejo de errores, puedes mostrar mensajes al usuario
         }
       ).add(() => this.loading = false);

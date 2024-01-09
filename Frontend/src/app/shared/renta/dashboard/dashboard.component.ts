@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { Observable, map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,6 @@ export class DashboardComponent implements OnInit {
   listProduct: Product[] = [];
   listProductUser: Product[] = [];
   filteredProducts: Product[] = [];
-
   serverBaseUrl = 'http://localhost:3001';
   token: string | null = null;
   opciones = [
@@ -28,12 +28,12 @@ export class DashboardComponent implements OnInit {
     { nombre: 'Todas', checked: true },
   ];
   isAdmin: boolean = false;
-  selectedFilter: string = 'Todas'; // la opción de filtro por defecto
-
+  selectedFilter: string = 'Todas';
   constructor(
     private _productService: ProductService,
     private _userService: UserService,
-    private _filterService: FilterService
+    private _filterService: FilterService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -50,30 +50,47 @@ export class DashboardComponent implements OnInit {
       this.applyFilter();
     });
   }
-
-
   filterBicycles(filterOption: string): void {
     this.selectedFilter = filterOption;
-
-    this.filteredProducts = this.listProductUser.filter((product) => {
-      if (filterOption === 'Todas') {
-        return true; 
-      } else {
-        return product.Tipo.toLowerCase() === filterOption.toLowerCase();
-      }
-    });
+    if (this.isAdmin) {
+      this.filteredProducts = this.listProductUser.filter((product) => {
+        if (filterOption === 'Todas') {
+          return true;
+        } else {
+          return product.Tipo.toLowerCase() === filterOption.toLowerCase();
+        }
+      });
+    } else {
+      this.filteredProducts = this.listProductUser.filter((product) => {
+        if (filterOption === 'Todas') {
+          return true;
+        } else {
+          return product.Tipo.toLowerCase() === filterOption.toLowerCase();
+        }
+      });
+    }
   }
-
-
   applyFilterOnInit() {
-    this.filteredProducts = this.listProductUser.filter((product) => {
-      return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
-    });
+    if (this.isAdmin) {
+      this.filteredProducts = this.listProduct.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    } else {
+      this.filteredProducts = this.listProductUser.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    }
   }
   applyFilter() {
-    this.filteredProducts = this.listProductUser.filter((product) => {
-      return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
-    });
+    if (this.isAdmin) {
+      this.filteredProducts = this.listProduct.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    } else {
+      this.filteredProducts = this.listProductUser.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    }
   }
   getProducts() {
     this._productService.getProductsWithImages().subscribe((data) => {
@@ -115,21 +132,19 @@ export class DashboardComponent implements OnInit {
     if (productId !== undefined && productId !== null) {
       this._productService.deleteProduct(productId).subscribe(() => {
         this.getProducts();
+        this.notificationService.notify('Producto eliminado correctamente', 2000);
       });
     } else {
-      console.error('El ID del producto es indefinido o nulo.');
+      this.notificationService.notify('El ID del producto es indefinido o nulo.', 2000);
     }
   }
   approveBicycle(bikeId: number) {
-    console.log('BikeID:', bikeId); // Agrega este log para verificar el valor
-
     if (bikeId !== undefined) {
       this._productService.approveProduct(bikeId).subscribe(() => {
-        // Lógica adicional si es necesario
         this.getProducts(); // Recargar la lista después de aprobar la bicicleta
       });
     } else {
-      console.error('ID de bicicleta indefinido');
+      this.notificationService.notify('El ID del producto es indefinido o nulo.', 2000);
     }
   }
 }
