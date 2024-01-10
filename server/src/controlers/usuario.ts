@@ -53,7 +53,7 @@ export const login = async (req: Request, res: Response) => {
             return res.status(400).json({ msg: "Contraseña incorrecta" });
         }
 
-        const token = jwt.sign({ CorreoElectronico: CorreoElectronico, Cedula: user.Cedula, RolID: user.RolID}, process.env.SECRET_KEY || '123');
+        const token = jwt.sign({ CorreoElectronico: CorreoElectronico, Cedula: user.Cedula, RolID: user.RolID }, process.env.SECRET_KEY || '123');
 
         res.json(token);
     } catch (error) {
@@ -125,19 +125,15 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
 export const resetPassword = async (req: Request, res: Response) => {
     const { token, newPassword } = req.body;
-
     try {
         // Verifica la validez del token usando la clave secreta
         const decodedToken: any = jwt.verify(token, process.env.SECRET_KEY || '123');
         const userId: string = decodedToken.userId;
-
         // Encuentra al usuario en la base de datos por el ID
         const user: any = await Usuario.findByPk(userId);
-
         if (!user) {
             return res.status(404).json({ msg: 'Usuario no encontrado' });
         }
-
         // Validar que la propiedad Contraseña sea un string
         if (typeof user.Contraseña !== 'string') {
             return res.status(500).json({ msg: 'Error en el formato de la contraseña' });
@@ -148,7 +144,6 @@ export const resetPassword = async (req: Request, res: Response) => {
         const hashedPass = await bcrypt.hash(newPassword, 10);
         user.Contraseña = hashedPass; // Asegúrate de que Contraseña sea la propiedad correcta
         await user.save();
-
         res.json({ msg: 'Contraseña restablecida con éxito' });
     } catch (error) {
         console.error(error);
@@ -159,19 +154,29 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const updateUserInfo = async (req: Request, res: Response) => {
     const { Cedula } = req.params;
     const { Nombre, Apellido, Direccion, Telefono } = req.body;
-
     try {
         const user = await Usuario.findByPk(Cedula);
-
         if (!user) {
             return res.status(404).json({ msg: "Usuario no encontrado" });
         }
-
         await user.update({ Nombre, Apellido, Direccion, Telefono });
-
         res.json({ msg: "Información de usuario actualizada correctamente" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: "Ocurrió un error al intentar actualizar la información del usuario" });
+    }
+}
+export const getUserDetails = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.Cedula;
+        const user = await Usuario.findByPk(userId, { attributes: ['Cedula', 'Nombre', 'Apellido', 'CorreoElectronico', 'Direccion', 'Telefono'] });
+
+        if (!user) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
+        }
+        res.json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Ocurrió un error al obtener los detalles del usuario' });
     }
 };

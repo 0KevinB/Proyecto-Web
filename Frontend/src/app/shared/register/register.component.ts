@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { FooterComponent } from "../footer/footer.component";
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interfaces/user';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -14,9 +15,7 @@ import { User } from 'src/app/interfaces/user';
   imports: [CommonModule, ReactiveFormsModule, RouterLink, FooterComponent]
 })
 
-
 export class RegisterComponent {
-
   public myForm: FormGroup = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(2)]],
     apellidos: ['', [Validators.required, Validators.minLength(2)]],
@@ -28,22 +27,20 @@ export class RegisterComponent {
     provincia: ['', [Validators.required]],
     terminos: ['', [Validators.required]],
     Direccion: ['', [Validators.required]],
-
     cedula: ['', [Validators.required]],
   });
 
   constructor(
     private _userService: UserService,
     private fb: FormBuilder,
-    private router: Router
-
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
 
   isValidField(field: string) {
     const control = this.myForm.controls[field];
     return control ? control.valid && control.touched : false;
   }
-
 
   onSubmit() {
     const user: User = {
@@ -55,19 +52,14 @@ export class RegisterComponent {
       Direccion: this.myForm.value.Direccion,
       Telefono: this.myForm.value.telefono,
     }
-
     if (this.myForm.value.Contraseña != this.myForm.value.passwordConfirm ||
       this.myForm.value.CorreoElectronico != this.myForm.value.emailConfirm
     ) {
       return
     }
-
-    console.log('Formulario válido. Datos:', user);
     this._userService.singin(user).subscribe(data => {
-      console.log('Se registro correctamente')
+      this.notificationService.notify('Registrado correctamente.', 2000);
       this.router.navigate(['/login'])
     })
-
   }
-
 }

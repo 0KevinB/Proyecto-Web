@@ -7,6 +7,7 @@ import { User } from 'src/app/interfaces/user';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } 
   styleUrls: ['./login.component.css'],
   imports: [RouterLink, LoginComponent, NavComponent,
     NewpasswordComponent, RegisterComponent, CommonModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule, 
   ]
 })
 
@@ -28,7 +29,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -47,8 +49,10 @@ export class LoginComponent implements OnInit {
 
       this.CorreoElectronico = this.loginForm.value.email;
       this.Contraseña = this.loginForm.value.password;
-      // Campos vacios
-      if (this.CorreoElectronico == '' || this.Contraseña == '') {
+      // Campos vacíos
+      if (this.CorreoElectronico === '' || this.Contraseña === '') {
+        this.notificationService.notify('Por favor, completa todos los campos.');
+        return;
       }
 
       // Body
@@ -60,10 +64,12 @@ export class LoginComponent implements OnInit {
 
       this.loading = true;
       this._userService.login(user).subscribe({
-        next: (data: any)  => {
+        next: (data: any) => {
           this.router.navigate(['/catalogo'])
           localStorage.setItem('token', data)
-        }
+        }, error: (error) => {
+          this.notificationService.notify('Credenciales incorrectas. Por favor, intenta de nuevo.', 2000);
+        },
       })
     }
 

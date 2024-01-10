@@ -1,97 +1,150 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { SafeResourceUrl } from '@angular/platform-browser';
 import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
+import { FilterService } from 'src/app/services/filter.service';
+import { Observable, map } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { NotificationService } from 'src/app/services/notification.service';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css'],
+  imports: [CommonModule, FormsModule],
 })
 export class DashboardComponent implements OnInit {
   listProduct: Product[] = [];
+  listProductUser: Product[] = [];
+  filteredProducts: Product[] = [];
   serverBaseUrl = 'http://localhost:3001';
   token: string | null = null;
   opciones = [
     { nombre: 'Tradicional', checked: false },
     { nombre: 'Electrica', checked: false },
     { nombre: 'Montaña', checked: false },
-    { nombre: 'Todas', checked: true }
+    { nombre: 'Todas', checked: true },
   ];
   isAdmin: boolean = false;
-
-  constructor(private _productService: ProductService, private _userService: UserService) { }
+  selectedFilter: string = 'Todas';
+  constructor(
+    private _productService: ProductService,
+    private _userService: UserService,
+    private _filterService: FilterService,
+    private notificationService: NotificationService
+  ) { }
 
   ngOnInit(): void {
-    this._userService.getRolUsuario().subscribe(rol => {
+    this._userService.getRolUsuario().subscribe((rol) => {
       this.isAdmin = rol === 2;
     });
-    // Obtén el token del Local Storage
-    this.token = localStorage.getItem('token');
     this.getProducts();
-  }
-
-  getProducts() {
-    this._productService.getProductsWithImages().subscribe(data => {
-      console.log('Datos recibidos:', data);
-      this.listProduct = data;
+    this.getProductsUser().subscribe(() => {
+      this.applyFilterOnInit();
+    });
+    this.token = localStorage.getItem('token');
+    this._filterService.filter$.subscribe((data) => {
+      console.log(data);
+      this.applyFilter();
     });
   }
-  toggleCheckbox(opcion: any) {
-    // Si ya estaba seleccionado, deseleccionar
-    if (opcion.checked) {
-      opcion.checked = false;
+  filterBicycles(filterOption: string): void {
+    this.selectedFilter = filterOption;
+    if (this.isAdmin) {
+      this.filteredProducts = this.listProduct.filter((product) => {
+        if (filterOption === 'Todas') {
+          return true;
+        } else {
+          return product.Tipo.toLowerCase() === filterOption.toLowerCase();
+        }
+      });
     } else {
-      // Si no estaba seleccionado, seleccionar y deseleccionar otras opciones
-      opcion.checked = true;
-
-      this.opciones.forEach((o: any) => {
-        if (o !== opcion) {
-          o.checked = false;
+      this.filteredProducts = this.listProductUser.filter((product) => {
+        if (filterOption === 'Todas') {
+          return true;
+        } else {
+          return product.Tipo.toLowerCase() === filterOption.toLowerCase();
         }
       });
     }
   }
-
-  resetFilters() {
-    // Deseleccionar todas las opciones
-    this.opciones.forEach((opcion: any) => {
-      opcion.checked = false;
+  applyFilterOnInit() {
+    if (this.isAdmin) {
+      this.filteredProducts = this.listProduct.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    } else {
+      this.filteredProducts = this.listProductUser.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    }
+  }
+  applyFilter() {
+    if (this.isAdmin) {
+      this.filteredProducts = this.listProduct.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    } else {
+      this.filteredProducts = this.listProductUser.filter((product) => {
+        return product.Modelo.toLowerCase().includes(this._filterService.getFilter().toLowerCase());
+      });
+    }
+  }
+  getProducts() {
+    this._productService.getProductsWithImages().subscribe((data) => {
+      this.listProduct = data;
     });
+  }
+  getProductsUser(): Observable<any> {
+    return this._productService.getProductsWithImages().pipe(map((data) => {
+      const dataFiltrada = data.filter((item) => {
+        if (item.PropietarioBicicletas && item.PropietarioBicicletas.length > 0) {
+          return item.PropietarioBicicletas.some((bicicleta: { Estado: boolean }) => bicicleta.Estado === true);
+        }
+        return false;
+      });
+      this.listProductUser = dataFiltrada;
+    }));
+  }
+  isProductApproved(product: Product): boolean {
+    return product.PropietarioBicicletas[0].Estado === 1;
   }
   getImageUrl(imageName: string): string {
     const token = localStorage.getItem('token');
     const tokenParam = token ? `?token=${token}` : '';
     return `${this.serverBaseUrl}/api/products/bikes/imagen/${imageName}${tokenParam}`;
   }
-
-
   createProduct(newProduct: Product) {
     this._productService.createProduct(newProduct).subscribe(createdProduct => {
       // Lógica adicional si es necesario
       this.getProducts(); // Recargar la lista después de crear un nuevo producto
     });
   }
-
-
   updateProduct(productId: number, updatedProduct: Product) {
     this._productService.updateProduct(productId, updatedProduct).subscribe(() => {
       // Lógica adicional si es necesario
       this.getProducts(); // Recargar la lista después de actualizar el producto
     });
   }
-
   deleteProduct(productId: number) {
     if (productId !== undefined && productId !== null) {
       this._productService.deleteProduct(productId).subscribe(() => {
         this.getProducts();
+        this.notificationService.notify('Producto eliminado correctamente', 2000);
       });
     } else {
-      console.error('El ID del producto es indefinido o nulo.');
+      this.notificationService.notify('El ID del producto es indefinido o nulo.', 2000);
     }
   }
-
+  approveBicycle(bikeId: number) {
+    if (bikeId !== undefined) {
+      this._productService.approveProduct(bikeId).subscribe(() => {
+        this.getProducts(); // Recargar la lista después de aprobar la bicicleta
+      });
+    } else {
+      this.notificationService.notify('El ID del producto es indefinido o nulo.', 2000);
+    }
+  }
 }

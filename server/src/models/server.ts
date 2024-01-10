@@ -12,6 +12,7 @@ import PropietarioBicicletas from "./propietarioBicicletas"
 import Mantenimiento from "./mantenimiento"
 import ControlCalidad from "./controlCalidad"
 import Bicicleta_Ubicacion from "./Bicicleta_Ubicacion"
+import Carrito from "./Carrito";
 
 
 export class Server {
@@ -59,6 +60,7 @@ export class Server {
             await PropietarioBicicletas.sync({ alter: true });
             await Mantenimiento.sync({ alter: true })
             await ControlCalidad.sync({ alter: true });
+            await Carrito.sync({ alter: true });
             console.log("Connect");
         } catch (error) {
             console.log("Unable to connect: ", error);

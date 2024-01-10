@@ -1,110 +1,90 @@
 <!-- dashboard.component.html -->
 <div *ngIf="isAdmin; else userDashboard">
     <div class="container">
-
         <div class="row">
-
-            <div class="col-12 text-center ">
+            <div class="col-12 text-center">
                 <h2>Catálogo de Bicicletas</h2>
                 <div class="btn-group btn-group-toggle py-3 px-2" data-toggle="buttons">
-                    <label class="btn btn btn-outline-secundary">
+                    <!-- Asegúrate de que los id sean únicos -->
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
                         <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
                     </label>
-                    <label class="btn btn btn-outline-secundary">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> Tradiciconal
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Tradicional')">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Tradicional
                     </label>
-                    <label class="btn btn btn-outline-secundary">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> Electrica
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Eléctrica')">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Eléctrica
                     </label>
-                    <label class="btn btn btn-outline-secundary">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> Montaña
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
+                        <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
                     </label>
                 </div>
             </div>
-
-            <div *ngFor="let product of listProduct" class="col-md-4 mb-4 tarjeta">
-
+            <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
                 <div class="card catalogo">
                     <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0"
                         [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)"
                         alt="Imagen de la bicicleta">
-
                     <div class="card-body">
-
                         <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
-
                         <p>{{ product.Descripcion || 'N/A' }}</p>
-
                         <p>Estado: {{ product.Estado || 'N/A' }}</p>
-
                         <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
-
-                        <button class="btn btn-danger col-12">
-                            Reservar
+                        <button class="btn btn-success col-6" (click)="approveBicycle(product.BikeID)">
+                            Aprobar
                         </button>
                         <button class="btn btn-danger col-6" (click)="deleteProduct(product.BikeID)">
                             Eliminar
                         </button>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 </div>
+
+
 <ng-template #userDashboard>
     <div class="container">
-
         <div class="row">
-
-            <div class="col-12 text-center ">
+            <div class="col-12 text-center">
                 <h2>Catálogo de Bicicletas</h2>
                 <div class="btn-group btn-group-toggle py-3 px-2" data-toggle="buttons">
-                    <label class="btn btn btn-outline-secundary">
+                    <!-- Asegúrate de que los id sean únicos -->
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
                         <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
                     </label>
-                    <label class="btn btn btn-outline-secundary">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> Tradiciconal
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Tradicional')">
+                        <input type="radio" name="options" id="option2" autocomplete="off"> Tradicional
                     </label>
-                    <label class="btn btn btn-outline-secundary">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> Electrica
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Eléctrica')">
+                        <input type="radio" name="options" id="option3" autocomplete="off"> Eléctrica
                     </label>
-                    <label class="btn btn btn-outline-secundary">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> Montaña
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
+                        <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
                     </label>
                 </div>
             </div>
-
-            <div *ngFor="let product of listProduct" class="col-md-4 mb-4 tarjeta">
-
-                <div class="card catalogo">
-                    <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0"
-                        [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)"
-                        alt="Imagen de la bicicleta">
-
-                    <div class="card-body">
-
-                        <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
-
-                        <p>{{ product.Descripcion || 'N/A' }}</p>
-
-                        <p>Estado: {{ product.Estado || 'N/A' }}</p>
-
-                        <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
-
-                        <button class="btn btn-danger col-12">
-                            Reservar
-                        </button>
+            <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
+                <ng-container *ngIf="product.PropietarioBicicletas[0].Estado == 1">
+                    <!-- Contenido del producto -->
+                    <div class="card catalogo">
+                        <img *ngIf="product.PropietarioBicicletas?.length > 0"
+                            [src]="getImageUrl(product.PropietarioBicicletas[0]?.imagenReferencia)"
+                            alt="Imagen de la bicicleta">
+                        <div class="card-body">
+                            <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
+                            <p>{{ product.Descripcion || 'N/A' }}</p>
+                            <p>{{ product.Tipo || 'N/A' }}</p>
+                            <p>Estado: {{ product.Estado || 'N/A' }}</p>
+                            <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
+                            <button class="btn btn-danger col-12">
+                                Reservar
+                            </button>
+                        </div>
                     </div>
-
-                </div>
-
+                </ng-container>
             </div>
-
         </div>
-
     </div>
 </ng-template>

@@ -1,0 +1,26 @@
+<!-- carrito.component.html -->
+
+<div class="container">
+    <h2>Carrito de Compras</h2>
+
+    <div *ngFor="let item of carrito" class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ item.Modelo || 'N/A' }}</h5>
+            <p class="card-text">Cantidad de Horas: {{ item.CantidadHoras || 0 }}</p>
+            <!-- Otras propiedades del producto según sea necesario -->
+
+            <!-- Puedes añadir más detalles del producto aquí -->
+
+            <button class="btn btn-danger" (click)="onAddToCart(item)">Añadir al carrito</button>
+        </div>
+    </div>
+
+    <form [formGroup]="carritoForm">
+        <div class="form-group">
+            <label for="cantidadHoras">Cantidad de Horas:</label>
+            <input type="number" id="cantidadHoras" formControlName="cantidadHoras" class="form-control" min="1"
+                required>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="onClearCart()">Vaciar Carrito</button>
+    </form>
+</div>

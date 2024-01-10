@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarBicicletaAUsuario = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletas = void 0;
+exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarBicicletaAUsuario = exports.aprobarBicicleta = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletas = void 0;
 const express_1 = __importDefault(require("express"));
 const bicicleta_1 = __importDefault(require("../models/bicicleta"));
 const propietarioBicicletas_1 = __importDefault(require("../models/propietarioBicicletas"));
@@ -36,7 +36,7 @@ const obtenerBicicletasConImagen = (req, res) => __awaiter(void 0, void 0, void 
             include: [
                 {
                     model: propietarioBicicletas_1.default,
-                    attributes: ['imagenReferencia'],
+                    attributes: ['imagenReferencia', 'Estado'],
                 },
             ],
             attributes: ['BikeID', 'Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
@@ -116,6 +116,47 @@ const eliminarBicicleta = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.eliminarBicicleta = eliminarBicicleta;
+// Aprobar una bicicleta por su ID
+const aprobarBicicleta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.params);
+    const { productId } = req.params;
+    if (!productId) {
+        return res.status(400).json({ error: 'ID de bicicleta no proporcionada' });
+    }
+    try {
+        const bicicleta = yield propietarioBicicletas_1.default.findByPk(productId);
+        if (bicicleta) {
+            // Verificar que PropietarioBicicletas.sequelize no sea undefined antes de usarlo
+            if (propietarioBicicletas_1.default.sequelize) {
+                // Inicia una transacción manualmente
+                const t = yield propietarioBicicletas_1.default.sequelize.transaction();
+                try {
+                    // Actualiza el estado de la bicicleta dentro de la transacción
+                    yield propietarioBicicletas_1.default.update({ Estado: true }, { where: { BikeID: productId }, transaction: t });
+                    // Hace commit de la transacción si todo fue exitoso
+                    yield t.commit();
+                    res.status(200).json({ mensaje: 'Bicicleta aprobada exitosamente.' });
+                }
+                catch (error) {
+                    // En caso de error, realiza un rollback de la transacción
+                    yield t.rollback();
+                    res.status(500).json({ error: 'Error al aprobar bicicleta' });
+                }
+            }
+            else {
+                res.status(500).json({ error: 'Error al obtener sequelize de PropietarioBicicletas' });
+            }
+        }
+        else {
+            res.status(404).json({ mensaje: 'Bicicleta no encontrada' });
+        }
+    }
+    catch (error) {
+        console.error('Error al aprobar la bicicleta:', error);
+        res.status(500).json({ error: 'Error al aprobar la bicicleta' });
+    }
+});
+exports.aprobarBicicleta = aprobarBicicleta;
 const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;

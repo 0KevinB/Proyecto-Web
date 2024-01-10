@@ -30,6 +30,8 @@ router.delete('/:BikeID', validate_token_1.default, bicicleta_1.eliminarBiciclet
 // Agregar bicicleta a un usuario
 router.post('/:Cedula/assign-bike', validate_token_1.default, upload.single('imagenReferencia'), bicicleta_1.agregarBicicletaAUsuario);
 router.get('/bikes/imagen/:img', bicicleta_1.verImagen);
+// Aprobar bicicletas
+router.put('/approve/:productId', bicicleta_1.aprobarBicicleta);
 // Obtener bicicletas de un usuario
 router.get('/:Cedula/bicicletas', validate_token_1.default, bicicleta_1.obtenerBicicletasDeUsuario);
 exports.default = router;

@@ -3,6 +3,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -19,7 +20,8 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.fpForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]]
@@ -32,21 +34,18 @@ export class ForgotPasswordComponent implements OnInit {
     if (this.fpForm.invalid) {
       return;
     }
-
     const email = this.fpForm.value.email;
-
-    // Mostrar un spinner de carga mientras se envía la solicitud
     this.loading = true;
 
     // Enviando solo el email
     this._userService.sendResetEmail(email).subscribe({
       next: (data: any) => {
-        console.log('Respuesta del servidor:', data);
+        this.notificationService.notify('Correo enviado exitosamente.', 2000);
         // Redirige a una página o muestra un mensaje al usuario, etc.
         this.router.navigate(['/mensaje-de-envio-exitoso']);
       },
       error: (error) => {
-        console.error('Error al enviar el correo electrónico de restablecimiento:', error);
+        this.notificationService.notify('No se encontro el correo, intente más tarde.', 2000);
         // Detén el spinner de carga aquí si lo estás mostrando
         this.loading = false;
       }
