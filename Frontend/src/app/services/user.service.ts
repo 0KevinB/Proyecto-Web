@@ -68,4 +68,8 @@ export class UserService {
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     return JSON.parse(atob(base64));
   }
+
+  getUserDetails(userId : string | null): Observable<User> {
+    return this.http.get<User>(`${this.myAppUrl}${this.myApiUrl}/getUserDetails/${userId}`);
+  }
 }

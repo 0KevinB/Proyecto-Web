@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { login, newUser, forgotPassword, resetPassword } from "../controlers/usuario";
+import { login, newUser, forgotPassword, resetPassword, getUserDetails } from "../controlers/usuario";
+import validateToken from "./validate-token";
 
 const router = Router()
 
@@ -10,4 +11,7 @@ router.post('/login', login)
 router.post('/forgotPassword', forgotPassword)
 
 router.post('/resetPassword', resetPassword)
+
+router.get('/getUserDetails/:Cedula', validateToken, getUserDetails);
+
 export default router;
