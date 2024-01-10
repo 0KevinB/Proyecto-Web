@@ -17,3 +17,8 @@
 .hidden {
     display: none;
 }
+
+.custom-icon {
+    font-size: 28px;
+    vertical-align: middle;
+}
