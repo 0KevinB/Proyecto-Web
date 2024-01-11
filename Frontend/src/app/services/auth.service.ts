@@ -12,6 +12,10 @@ export class AuthService {
 
   // Método para verificar si el usuario está autenticado
   isLoggedIn(): boolean {
+    const data = localStorage.getItem('token');
+    if (data) {
+      this.isAuthenticated = true;
+    }
     return this.isAuthenticated;
   }
 

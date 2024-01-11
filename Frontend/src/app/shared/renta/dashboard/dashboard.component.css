@@ -22,3 +22,11 @@
     font-size: 28px;
     vertical-align: middle;
 }
+
+.fixed-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    /* Ajusta el margen según tus necesidades */
+}

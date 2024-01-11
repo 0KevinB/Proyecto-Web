@@ -15,10 +15,14 @@
   </ul>
 
   <div class="col-md-3 text-end me-3">
-    <button type="button" class="btn btn-outline-danger me-2 text-white" [routerLink]="['/login']">Login</button>
-    <button type="button" class="btn btn-danger" [routerLink]="['/register']">Sign-up</button>
+    <ng-container *ngIf="userLoginOn; else showLoginButtons">
+      <i class="fa fa-user"></i>
+      <button type="button" class="btn btn-outline-danger me-2 text-white" (click)="logout()">LogOut</button>
+    </ng-container>
+    <ng-template #showLoginButtons>
+      <button type="button" class="btn btn-outline-danger me-2 text-white" [routerLink]="['/login']">Login</button>
+      <button type="button" class="btn btn-danger" [routerLink]="['/register']">Sign-up</button>
+    </ng-template>
   </div>
-  
+
 </nav>
-
-

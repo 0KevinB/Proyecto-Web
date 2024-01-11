@@ -16,7 +16,6 @@ export class PerfilComponent {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
-    // Obtén la cédula del usuario al inicializar el componente
     this.userService.getCedulaUsuario().subscribe(cedula => {
       this.cedulaUsuario = cedula;
     });
