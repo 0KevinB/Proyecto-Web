@@ -12,4 +12,5 @@ router.post('/login', usuario_1.login);
 router.post('/forgotPassword', usuario_1.forgotPassword);
 router.post('/resetPassword', usuario_1.resetPassword);
 router.get('/getUserDetails/:Cedula', validate_token_1.default, usuario_1.getUserDetails);
+router.put('/update/:Cedula', validate_token_1.default, usuario_1.updateUserInfo);
 exports.default = router;

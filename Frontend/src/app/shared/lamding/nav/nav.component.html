@@ -7,7 +7,7 @@
     </a>
   </div>
   <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-    <li><a href="#" class="nav-link px-2 link-danger text-white">Home</a></li>
+    <li><a [routerLink]="['/catalogo']" class="nav-link px-2 link-danger text-white">Catálogo</a></li>
     <li><a href="#" class="nav-link px-2 link-danger text-white">Features</a></li>
     <li><a href="#" class="nav-link px-2 link-danger text-white">Pricing</a></li>
     <li><a href="#" class="nav-link px-2 link-danger text-white">FAQs</a></li>
@@ -16,8 +16,17 @@
 
   <div class="col-md-3 text-end me-3">
     <ng-container *ngIf="userLoginOn; else showLoginButtons">
-      <i class="fa fa-user"></i>
-      <button type="button" class="btn btn-outline-danger me-2 text-white" (click)="logout()">LogOut</button>
+      <div class="dropdown me-4">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Cuenta
+        </button>
+        <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="/perfil">Perfil</a>
+          <a class="dropdown-item" [routerLink]="['/carrito']">Carrito</a>
+          <button class="dropdown-item bg-danger text-white" (click)="logout()">Logout</button>
+        </div>
+      </div>
     </ng-container>
     <ng-template #showLoginButtons>
       <button type="button" class="btn btn-outline-danger me-2 text-white" [routerLink]="['/login']">Login</button>
