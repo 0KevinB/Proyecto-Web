@@ -154,18 +154,23 @@ export const resetPassword = async (req: Request, res: Response) => {
 export const updateUserInfo = async (req: Request, res: Response) => {
     const { Cedula } = req.params;
     const { Nombre, Apellido, Direccion, Telefono } = req.body;
+
     try {
         const user = await Usuario.findByPk(Cedula);
         if (!user) {
             return res.status(404).json({ msg: "Usuario no encontrado" });
         }
+
+        // Utiliza req.body para acceder a los datos del cuerpo de la solicitud
         await user.update({ Nombre, Apellido, Direccion, Telefono });
         res.json({ msg: "Información de usuario actualizada correctamente" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: "Ocurrió un error al intentar actualizar la información del usuario" });
     }
-}
+};
+
+
 export const getUserDetails = async (req: Request, res: Response) => {
     try {
         const userId = req.params.Cedula;

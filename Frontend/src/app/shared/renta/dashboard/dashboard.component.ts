@@ -7,13 +7,14 @@ import { FilterService } from 'src/app/services/filter.service';
 import { Observable, map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';
-
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatIconModule, RouterLink],
 })
 export class DashboardComponent implements OnInit {
   listProduct: Product[] = [];

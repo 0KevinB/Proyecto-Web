@@ -69,7 +69,12 @@ export class UserService {
     return JSON.parse(atob(base64));
   }
 
-  getUserDetails(userId : string | null): Observable<User> {
+  getUserDetails(userId: string | null): Observable<User> {
     return this.http.get<User>(`${this.myAppUrl}${this.myApiUrl}/getUserDetails/${userId}`);
   }
+
+  updateUserDetails(userId: string | null, data: User): Observable<User> {
+    return this.http.put<User>(`${this.myAppUrl}${this.myApiUrl}/update/${userId}`, data);
+  }
+
 }

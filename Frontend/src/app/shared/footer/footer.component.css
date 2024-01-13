@@ -11,3 +11,7 @@ footer {
     z-index: 1;
     /* Ajusta según sea necesario */
 }
+
+.link-secondary{
+    color: white;
+}

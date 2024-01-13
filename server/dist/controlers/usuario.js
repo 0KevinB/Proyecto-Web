@@ -156,6 +156,7 @@ const updateUserInfo = (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (!user) {
             return res.status(404).json({ msg: "Usuario no encontrado" });
         }
+        // Utiliza req.body para acceder a los datos del cuerpo de la solicitud
         yield user.update({ Nombre, Apellido, Direccion, Telefono });
         res.json({ msg: "Información de usuario actualizada correctamente" });
     }
