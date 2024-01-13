@@ -8,4 +8,5 @@ const ubicacion_1 = require("../controlers/ubicacion");
 const validate_token_1 = __importDefault(require("./validate-token"));
 const router = (0, express_1.Router)();
 router.get('/', validate_token_1.default, ubicacion_1.obtenerUbicacion);
+router.get('/bicicleta/:bikeId', validate_token_1.default, ubicacion_1.obtenerUbicacionPorBicicletaId);
 exports.default = router;

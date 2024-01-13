@@ -8,7 +8,8 @@ import { Observable, map } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { UbicacionService } from 'src/app/services/ubicacion.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +36,9 @@ export class DashboardComponent implements OnInit {
     private _productService: ProductService,
     private _userService: UserService,
     private _filterService: FilterService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private ubicacionService: UbicacionService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -124,12 +127,6 @@ export class DashboardComponent implements OnInit {
       this.getProducts(); // Recargar la lista después de crear un nuevo producto
     });
   }
-  updateProduct(productId: number, updatedProduct: Product) {
-    this._productService.updateProduct(productId, updatedProduct).subscribe(() => {
-      // Lógica adicional si es necesario
-      this.getProducts(); // Recargar la lista después de actualizar el producto
-    });
-  }
   deleteProduct(productId: number) {
     if (productId !== undefined && productId !== null) {
       this._productService.deleteProduct(productId).subscribe(() => {
@@ -148,5 +145,16 @@ export class DashboardComponent implements OnInit {
     } else {
       this.notificationService.notify('El ID del producto es indefinido o nulo.', 2000);
     }
+  }
+  verMapa(bicicletaId: number): void {
+    this.ubicacionService.getUbicacion(bicicletaId).subscribe(
+      (ubicacion) => {
+        console.log('Ubicación de la bicicleta:', ubicacion);
+        this.router.navigate(['/mapa', bicicletaId]);
+      },
+      (error) => {
+        console.error('Error al obtener la ubicación de la bicicleta:', error);
+      }
+    );
   }
 }

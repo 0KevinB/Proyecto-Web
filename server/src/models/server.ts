@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors";
 import routesProduct from '../routes/product'
+import routesUbicacion from '../routes/ubicacion'
 import routesUser from '../routes/user'
 import { Rol } from "./rol"
 import Usuario from "./usuario"
@@ -37,6 +38,7 @@ export class Server {
     routes() {
         this.app.use('/api/products', routesProduct)
         this.app.use('/api/users', routesUser)
+        this.app.use('/api/ubicacions', routesUbicacion)
     }
 
     middlewares() {

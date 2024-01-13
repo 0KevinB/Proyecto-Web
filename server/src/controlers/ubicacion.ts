@@ -1,14 +1,47 @@
 import express, { Request, Response } from 'express';
 import Ubicacion from '../models/ubicacion';
+import Bicicleta_Ubicacion from '../models/Bicicleta_Ubicacion';
 
 
 const app = express();
 
 export const obtenerUbicacion = async (req: Request, res: Response) => {
     try {
-        const Ubicaciones = await Ubicacion.findAll();
-        res.status(200).json(Ubicaciones);
+        const ubicaciones: any[] = await Bicicleta_Ubicacion.findAll({
+            include: [{
+                model: Ubicacion,
+                attributes: ['LocationID', 'NombreUbicacion', 'Latitud', 'Longitud', 'Direccion'],
+            }],
+        });
+
+        // Obtén solo las ubicaciones de la relación
+        const ubicacionesFiltradas = ubicaciones.map((ubicacionBicicleta: any) => ubicacionBicicleta.Ubicacion);
+
+        res.status(200).json(ubicacionesFiltradas);
     } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener bicicleta ubicacion' });
+    }
+};
+
+export const obtenerUbicacionPorBicicletaId = async (req: Request, res: Response) => {
+    try {
+        const { bikeId } = req.params; // Supongo que el BikeID está en los parámetros de la solicitud
+
+        const ubicaciones: any[] = await Bicicleta_Ubicacion.findAll({
+            where: { BikeID: bikeId },
+            include: [{
+                model: Ubicacion,
+                attributes: ['LocationID', 'NombreUbicacion', 'Latitud', 'Longitud', 'Direccion'],
+            }],
+        });
+
+        // Obtén solo las ubicaciones de la relación
+        const ubicacionesFiltradas = ubicaciones.map((ubicacionBicicleta: any) => ubicacionBicicleta.Ubicacion);
+
+        res.status(200).json(ubicacionesFiltradas);
+    } catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Error al obtener bicicleta ubicacion' });
     }
 };

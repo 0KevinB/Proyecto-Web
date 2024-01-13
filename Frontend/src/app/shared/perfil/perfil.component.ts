@@ -4,11 +4,12 @@ import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms'
 import { User } from 'src/app/interfaces/user';
 import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })
@@ -20,7 +21,8 @@ export class PerfilComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -64,5 +66,9 @@ export class PerfilComponent implements OnInit {
         this.notificationService.notify('Error al guardar cambios', 2000);
       }
     );
+  }
+  Logout() {
+    localStorage.removeItem('token')
+    this.router.navigate(['/inicio']);
   }
 }
