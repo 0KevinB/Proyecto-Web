@@ -12,17 +12,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerUbicacion = void 0;
+exports.obtenerUbicacionPorBicicletaId = exports.obtenerUbicacion = void 0;
 const express_1 = __importDefault(require("express"));
 const ubicacion_1 = __importDefault(require("../models/ubicacion"));
+const Bicicleta_Ubicacion_1 = __importDefault(require("../models/Bicicleta_Ubicacion"));
 const app = (0, express_1.default)();
 const obtenerUbicacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const Ubicaciones = yield ubicacion_1.default.findAll();
-        res.status(200).json(Ubicaciones);
+        const ubicaciones = yield Bicicleta_Ubicacion_1.default.findAll({
+            include: [{
+                    model: ubicacion_1.default,
+                    attributes: ['LocationID', 'NombreUbicacion', 'Latitud', 'Longitud', 'Direccion'],
+                }],
+        });
+        // Obtén solo las ubicaciones de la relación
+        const ubicacionesFiltradas = ubicaciones.map((ubicacionBicicleta) => ubicacionBicicleta.Ubicacion);
+        res.status(200).json(ubicacionesFiltradas);
     }
     catch (error) {
+        console.error(error);
         res.status(500).json({ error: 'Error al obtener bicicleta ubicacion' });
     }
 });
 exports.obtenerUbicacion = obtenerUbicacion;
+const obtenerUbicacionPorBicicletaId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { bikeId } = req.params; // Supongo que el BikeID está en los parámetros de la solicitud
+        const ubicaciones = yield Bicicleta_Ubicacion_1.default.findAll({
+            where: { BikeID: bikeId },
+            include: [{
+                    model: ubicacion_1.default,
+                    attributes: ['LocationID', 'NombreUbicacion', 'Latitud', 'Longitud', 'Direccion'],
+                }],
+        });
+        // Obtén solo las ubicaciones de la relación
+        const ubicacionesFiltradas = ubicaciones.map((ubicacionBicicleta) => ubicacionBicicleta.Ubicacion);
+        res.status(200).json(ubicacionesFiltradas);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener bicicleta ubicacion' });
+    }
+});
+exports.obtenerUbicacionPorBicicletaId = obtenerUbicacionPorBicicletaId;

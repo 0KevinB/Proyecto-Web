@@ -25,6 +25,7 @@ export const routes: Routes = [
   { path: 'carrito', component: CarritoComponent, canActivate: [authGuard] },
   { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
   { path: 'mapa', component: MapaComponent, canActivate: [authGuard] },
+  { path: 'mapa/:bicicletaId', component: MapaComponent, canActivate: [authGuard] },
   { path: 'agregar-bicicleta', component: AlquilarBicicletaComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/inicio', pathMatch: 'full' }
 ];

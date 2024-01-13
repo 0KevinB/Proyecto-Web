@@ -1,8 +1,27 @@
-<h1 class="text-center mt-3 text-success">Mapa con Leaflet</h1>
+<nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between 
+    py-3 mb-4 me border-bottom bg-dark ">
+  <div class="col-md-3  mb-2 mb-md-0">
+    <a href="/catalogo" class="d-inline-flex link-body-emphasis text-decoration-none ">
+      <img src="../../../assets/img/nodo.png" aria-label="Bootstrap" class="bi my-auto mx-5" width="45" role="img"
+        alt="">
+    </a>
+  </div>
+  <div class="me-0"></div>
+
+  <div class="dropdown me-4">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+      aria-haspopup="true" aria-expanded="false">
+      Cuenta
+    </button>
+    <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
+      <button class="dropdown-item bg-danger text-white" (click)="Logout()">Logout</button>
+    </div>
+  </div>
+</nav>
 <div class="mt-3">
   <button class="btn btn-outline-success btn-dark mx-2" (click)="ubicar()">Geolocalización</button>
   <button class="btn btn-outline-success btn-dark mx-2" (click)="marcadores()">Marcadores</button>
   <button class="btn btn-outline-success btn-dark mx-2" (click)="recargar()">Recargar</button>
 </div>
-  <hr>
+<hr>
 <div id="map"></div>

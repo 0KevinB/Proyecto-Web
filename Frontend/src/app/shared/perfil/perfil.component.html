@@ -1,13 +1,25 @@
+<nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between 
+    py-3 mb-4 me border-bottom bg-dark ">
+    <div class="col-md-3  mb-2 mb-md-0">
+        <a href="/catalogo" class="d-inline-flex link-body-emphasis text-decoration-none ">
+            <img src="../../../assets/img/nodo.png" aria-label="Bootstrap" class="bi my-auto mx-5" width="45" role="img"
+                alt="">
+        </a>
+    </div>
+    <div class="me-0"></div>
+
+    <div class="dropdown me-4">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Cuenta
+        </button>
+        <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
+            <button class="dropdown-item bg-danger text-white" (click)="Logout()">Logout</button>
+        </div>
+    </div>
+</nav>
 <div class="container" *ngIf="user">
     <div class="main-body">
-        <nav aria-label="breadcrumb" class="main-breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
-                <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-                <i class="bi bi-arrow-down text-black"></i>
-            </ol>
-        </nav>
         <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
                 <div class="card">

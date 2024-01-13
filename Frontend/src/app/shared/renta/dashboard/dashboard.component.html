@@ -5,7 +5,6 @@
             <div class="col-12 text-center">
                 <h2>Catálogo de Bicicletas</h2>
                 <div class="btn-group btn-group-toggle py-3 px-2" data-toggle="buttons">
-                    <!-- Asegúrate de que los id sean únicos -->
                     <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
                         <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
                     </label>
@@ -18,6 +17,12 @@
                     <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
                         <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
                     </label>
+                </div>
+                <div>
+                    <h3 class="text-center">¿Quieres rentar tu bicicleta?
+                        <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
+                            <mat-icon class="custom-icon">motorcycle</mat-icon></a>
+                    </h3>
                 </div>
             </div>
             <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
@@ -38,15 +43,14 @@
                         </button>
                     </div>
                 </div>
+                <div class="fixed-container">
+                    <h3 class="text-center">Bicicletas cerca de tu zona
+                        <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
+                            <mat-icon class="custom-icon">map</mat-icon></a>
+                    </h3>
+                </div>
             </div>
         </div>
-        <div class="fixed-container">
-            <h3 class="text-center">¿Quieres rentar tu bicicleta?
-                <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
-                    <mat-icon class="custom-icon">motorcycle</mat-icon></a>
-            </h3>
-        </div>
-
     </div>
 </div>
 
@@ -56,7 +60,6 @@
             <div class="col-12 text-center">
                 <h2>Catálogo de Bicicletas</h2>
                 <div class="btn-group btn-group-toggle py-3 px-2" data-toggle="buttons">
-                    <!-- Asegúrate de que los id sean únicos -->
                     <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
                         <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
                     </label>
@@ -70,10 +73,15 @@
                         <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
                     </label>
                 </div>
+                <div>
+                    <h3 class="text-center">¿Quieres rentar tu bicicleta?
+                        <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
+                            <mat-icon class="custom-icon">motorcycle</mat-icon></a>
+                    </h3>
+                </div>
             </div>
             <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
                 <ng-container *ngIf="product.PropietarioBicicletas[0].Estado == 1">
-                    <!-- Contenido del producto -->
                     <div class="card catalogo">
                         <img *ngIf="product.PropietarioBicicletas?.length > 0"
                             [src]="getImageUrl(product.PropietarioBicicletas[0]?.imagenReferencia)"
@@ -84,19 +92,22 @@
                             <p>{{ product.Tipo || 'N/A' }}</p>
                             <p>Estado: {{ product.Estado || 'N/A' }}</p>
                             <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
-                            <button class="btn btn-danger col-12">
+                            <button class="btn btn-primary col-6" (click)="verMapa(product.BikeID)">
+                                Ver en el Mapa
+                            </button>
+                            <button class="btn btn-danger col-6">
                                 Reservar
                             </button>
                         </div>
                     </div>
                 </ng-container>
+                <div class="fixed-container">
+                    <h3 class="text-center">Bicicletas cerca de tu zona
+                        <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
+                            <mat-icon class="custom-icon">map</mat-icon></a>
+                    </h3>
+                </div>
             </div>
-        </div>
-        <div class="fixed-container">
-            <h3 class="text-center">¿Quieres rentar tu bicicleta?
-                <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
-                    <mat-icon class="custom-icon">motorcycle</mat-icon></a>
-            </h3>
         </div>
     </div>
 </ng-template>

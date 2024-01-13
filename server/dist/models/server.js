@@ -16,11 +16,12 @@ exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const product_1 = __importDefault(require("../routes/product"));
+const ubicacion_1 = __importDefault(require("../routes/ubicacion"));
 const user_1 = __importDefault(require("../routes/user"));
 const rol_1 = require("./rol");
 const usuario_1 = __importDefault(require("./usuario"));
 const bicicleta_1 = __importDefault(require("./bicicleta"));
-const ubicacion_1 = __importDefault(require("./ubicacion"));
+const ubicacion_2 = __importDefault(require("./ubicacion"));
 const alquiler_1 = __importDefault(require("./alquiler"));
 const transaccion_1 = __importDefault(require("./transaccion"));
 const propietarioBicicletas_1 = __importDefault(require("./propietarioBicicletas"));
@@ -45,6 +46,7 @@ class Server {
     routes() {
         this.app.use('/api/products', product_1.default);
         this.app.use('/api/users', user_1.default);
+        this.app.use('/api/ubicacions', ubicacion_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());
@@ -59,7 +61,7 @@ class Server {
             try {
                 yield rol_1.Rol.sync();
                 yield usuario_1.default.sync({ alter: true });
-                yield ubicacion_1.default.sync({ alter: true });
+                yield ubicacion_2.default.sync({ alter: true });
                 yield bicicleta_1.default.sync({ alter: true });
                 yield Bicicleta_Ubicacion_1.default.sync({ alter: true });
                 yield alquiler_1.default.sync({ alter: true });
