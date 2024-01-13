@@ -9,6 +9,7 @@ import { AlquilarBicicletaComponent } from './shared/renta/alquilar-bicicleta/al
 import { authGuard } from './utils/auth.guard';
 import { CarritoComponent } from './shared/renta/carrito/carrito.component';
 import { PerfilComponent } from './shared/perfil/perfil.component';
+import { MapaComponent } from './shared/mapa/mapa.component';
 
 
 export const routes: Routes = [
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'catalogo', component: CatalogoComponent, canActivate: [authGuard] },
   { path: 'carrito', component: CarritoComponent, canActivate: [authGuard] },
   { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
+  { path: 'mapa', component: MapaComponent, canActivate: [authGuard] },
   { path: 'agregar-bicicleta', component: AlquilarBicicletaComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/inicio', pathMatch: 'full' }
 ];

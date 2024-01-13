@@ -1,5 +1,5 @@
 @import "~bootstrap/dist/css/bootstrap.css";
-
+@import url("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
 .ng-valid:not(form).ng-touched   {
     border-left: 5px solid #42A948; /* green */
   }
