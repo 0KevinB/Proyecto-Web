@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
 
@@ -10,22 +10,37 @@ import { UbicacionService } from 'src/app/services/ubicacion.service';
   templateUrl: './ubicacion.component.html',
   styleUrl: './ubicacion.component.css'
 })
-export class UbicacionComponent {
-  ubicacionForm: FormGroup | any;
-  constructor(private formBuilder: FormBuilder, private ubicacionSharedService: UbicacionService) { }
-  ngOnInit(): void {
+export class UbicacionComponent implements OnInit {
+  ubicacionForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder, private ubicacionSharedService: UbicacionService) {
     this.ubicacionForm = this.formBuilder.group({
       nombreUbicacion: ['', Validators.required],
       direccion: ['', Validators.required],
-    });
-    // Suscríbete al evento de ubicación compartida
-    this.ubicacionSharedService.ubicacionForm.subscribe(coordenadas => {
-      // Actualiza el formulario de ubicación con las coordenadas
-      this.ubicacionForm.patchValue({
-        latitud: coordenadas.latitud,
-        longitud: coordenadas.longitud
-      });
+      latitud: ['', Validators.required],
+      longitud: ['', Validators.required],
     });
   }
+
+  ngOnInit(): void {
+
+    this.ubicacionForm = this.formBuilder.group({
+      nombreUbicacion: ['', Validators.required],
+      direccion: ['', Validators.required],
+      latitud: ['', Validators.required],
+      longitud: ['', Validators.required],
+    });
+
+    this.ubicacionSharedService.ubicacionForm.subscribe(coordenadas => {
+      this.ubicacionForm?.patchValue({
+        nombreUbicacion: this.ubicacionForm?.get('nombreUbicacion')?.value,
+        direccion: this.ubicacionForm?.get('direccion')?.value,
+        latitud: coordenadas?.lat,
+        longitud: coordenadas?.lng,
+      });
+      this.ubicacionSharedService.setUbicacion(this.ubicacionForm.value);
+    });
+  }
+
 }
 

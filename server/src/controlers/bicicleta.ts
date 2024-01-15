@@ -4,6 +4,8 @@ import express, { Request, Response } from 'express';
 import Bicicleta from '../models/bicicleta';
 import PropietarioBicicletas from '../models/propietarioBicicletas';
 import path from 'path';
+import Bicicleta_Ubicacion from '../models/Bicicleta_Ubicacion';
+import Ubicacion from '../models/ubicacion';
 
 
 const app = express();
@@ -166,6 +168,41 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
         res.status(500).json({ msg: 'Ocurrió un error al agregar bicicleta al usuario' });
     }
 };
+
+
+export const agregarUbicacionABicicleta = async (req: Request, res: Response) => {
+    const { BikeID } = req.params; // Obtén el BikeID de los parámetros
+
+    const { NombreUbicacion, Latitud, Longitud, Direccion } = req.body;
+
+    console.log(BikeID, NombreUbicacion, Latitud, Longitud, Direccion); 
+    try {
+        // Crear la ubicación
+        const nuevaUbicacion = await Ubicacion.create({
+            NombreUbicacion,
+            Latitud,
+            Longitud,
+            Direccion,
+        });
+
+        // Obtener el ID de la ubicación
+        const ubicacionID = nuevaUbicacion.get('LocationID');
+
+        // Asociar la ubicación a la bicicleta a través de la tabla intermedia
+        await Bicicleta_Ubicacion.create({
+            BikeID,
+            LocationID: ubicacionID,
+        });
+
+        res.status(201).json(nuevaUbicacion);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Ocurrió un error al agregar ubicación a la bicicleta' });
+    }
+};
+
+
+
 
 export let verImagen = async (req: Request, res: Response) => {
     let ruta = path.join(__dirname, '../../img/productos', req.params.img);

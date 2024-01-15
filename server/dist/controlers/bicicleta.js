@@ -13,11 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarBicicletaAUsuario = exports.aprobarBicicleta = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletas = void 0;
+exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarUbicacionABicicleta = exports.agregarBicicletaAUsuario = exports.aprobarBicicleta = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletas = void 0;
 const express_1 = __importDefault(require("express"));
 const bicicleta_1 = __importDefault(require("../models/bicicleta"));
 const propietarioBicicletas_1 = __importDefault(require("../models/propietarioBicicletas"));
 const path_1 = __importDefault(require("path"));
+const Bicicleta_Ubicacion_1 = __importDefault(require("../models/Bicicleta_Ubicacion"));
+const ubicacion_1 = __importDefault(require("../models/ubicacion"));
 const app = (0, express_1.default)();
 // Obtener todas las bicicletas
 const obtenerBicicletas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -186,6 +188,33 @@ const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.agregarBicicletaAUsuario = agregarBicicletaAUsuario;
+const agregarUbicacionABicicleta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { BikeID } = req.params; // Obtén el BikeID de los parámetros
+    const { NombreUbicacion, Latitud, Longitud, Direccion } = req.body;
+    console.log(BikeID, NombreUbicacion, Latitud, Longitud, Direccion);
+    try {
+        // Crear la ubicación
+        const nuevaUbicacion = yield ubicacion_1.default.create({
+            NombreUbicacion,
+            Latitud,
+            Longitud,
+            Direccion,
+        });
+        // Obtener el ID de la ubicación
+        const ubicacionID = nuevaUbicacion.get('LocationID');
+        // Asociar la ubicación a la bicicleta a través de la tabla intermedia
+        yield Bicicleta_Ubicacion_1.default.create({
+            BikeID,
+            LocationID: ubicacionID,
+        });
+        res.status(201).json(nuevaUbicacion);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Ocurrió un error al agregar ubicación a la bicicleta' });
+    }
+});
+exports.agregarUbicacionABicicleta = agregarUbicacionABicicleta;
 let verImagen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let ruta = path_1.default.join(__dirname, '../../img/productos', req.params.img);
     return res.sendFile(ruta);

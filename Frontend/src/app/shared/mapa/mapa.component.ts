@@ -20,6 +20,7 @@ export class MapaComponent implements OnInit {
   geo: any;
   map: any;
   bicicletaId: number = 0;
+  currentRoute = this.route.snapshot.routeConfig?.path;
 
   constructor(
     private PlacesService: PlacesService,
@@ -47,9 +48,7 @@ export class MapaComponent implements OnInit {
           }
         );
       } else {
-        // Solo cargar ubicaciones si la ruta no es /agregar-bicicleta
-        const currentRoute = this.route.snapshot.routeConfig?.path;
-        if (currentRoute !== 'agregar-bicicleta') {
+        if (this.currentRoute !== 'agregar-bicicleta') {
           this._ubicacionService.getUbicacion().subscribe(
             (ubicaciones) => {
               this.listUbicacion = ubicaciones;
@@ -82,7 +81,7 @@ export class MapaComponent implements OnInit {
 
       // Verifica si los clics en el mapa están funcionando
       this.map.on('click', (e: any) => {
-        console.log('Click en el mapa:', e.latlng);
+        this._ubicacionService.obtenerUbicacionAlClic(e.latlng);
       });
     }, 2000);
   }

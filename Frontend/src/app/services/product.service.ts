@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Product } from '../interfaces/product';
 import { product_add } from '../interfaces/product_add.';
+import { Ubicacion } from '../interfaces/ubicacion';
 
 @Injectable({
   providedIn: 'root'
@@ -52,12 +53,16 @@ export class ProductService {
     datos.append("PrecioPorHora", formData.PrecioPorHora);
     datos.append("Descripcion", formData.Descripcion);
     datos.append("imagenReferencia", formData.imagenReferencia);
-    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}/${cedula}/assign-bike`, datos);
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}${cedula}/assign-bike`, datos)
+      .pipe(
+        tap((respuesta: any) => console.log(respuesta)) // Agrega esta línea para imprimir la respuesta en la consola
+      );
   }
 
-  // product.service.ts
+  bicicleta_ubicacion(bikeid: number, formData: Ubicacion): Observable<any> {
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}${bikeid}/assign-ubicacion`, formData);
+  }
 
-  // Aprobar una bicicleta por su ID
   approveProduct(productId: number): Observable<void> {
     return this.http.put<void>(`${this.myAppUrl}${this.myApiUrl}approve/${productId}`, null);
   }

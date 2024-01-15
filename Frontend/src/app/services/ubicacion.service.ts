@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Ubicacion } from '../interfaces/ubicacion';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LatLngExpression } from 'leaflet';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,12 @@ export class UbicacionService {
   ubicacionForm: EventEmitter<any> = new EventEmitter();
   obtenerUbicacionAlClic(coordenadas: LatLngExpression) {
     this.ubicacionForm.emit(coordenadas);
+  }
+
+  private ubicacionSubject = new BehaviorSubject<any>(null);
+  ubicacion$ = this.ubicacionSubject.asObservable();
+
+  setUbicacion(data: FormGroup) {
+    this.ubicacionSubject.next(data);
   }
 }
