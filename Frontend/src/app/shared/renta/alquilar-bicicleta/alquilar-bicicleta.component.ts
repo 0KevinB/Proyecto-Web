@@ -8,14 +8,15 @@ import { NavComponent } from "../../renta/nav/nav.component";
 import { FooterComponent } from "../../footer/footer.component";
 import { Router, RouterLink } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification.service';
+import { UbicacionComponent } from "../ubicacion/ubicacion.component";
+import { MapaComponent } from "../../mapa/mapa.component";
 
 @Component({
-  selector: 'app-alquilar-bicicleta',
-  standalone: true,
-  templateUrl: './alquilar-bicicleta.component.html',
-  styleUrl: './alquilar-bicicleta.component.css',
-  imports: [ReactiveFormsModule, NavComponent, FooterComponent, RouterLink
-    ,]
+    selector: 'app-alquilar-bicicleta',
+    standalone: true,
+    templateUrl: './alquilar-bicicleta.component.html',
+    styleUrl: './alquilar-bicicleta.component.css',
+    imports: [ReactiveFormsModule, NavComponent, FooterComponent, RouterLink, UbicacionComponent, MapaComponent]
 })
 
 export class AlquilarBicicletaComponent {
@@ -41,7 +42,7 @@ export class AlquilarBicicletaComponent {
       estado: ['', Validators.required],
       precioPorHora: ['', Validators.required],
       descripcion: [''],
-      imagenReferencia: [null]
+      imagenReferencia: [null],
     });
   }
 

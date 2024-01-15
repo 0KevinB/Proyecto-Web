@@ -30,40 +30,45 @@ export class MapaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const bicicletaIdParam = params.get('bicicletaId');
       this.bicicletaId = bicicletaIdParam ? +bicicletaIdParam : 0;
 
       if (this.bicicletaId) {
         this._ubicacionService.getUbicacion(this.bicicletaId).subscribe(
-          ubicacion => {
+          (ubicacion) => {
             this.listUbicacion = ubicacion;
-
           },
-          error => {
-            this.notificationService.notify('Error al obtener la ubicación de la bicicleta', 2000);
+          (error) => {
+            this.notificationService.notify(
+              'Error al obtener la ubicación de la bicicleta',
+              2000
+            );
           }
         );
       } else {
-        // Si no hay un ID de bicicleta, obtener la lista completa de ubicaciones
-        this._ubicacionService.getUbicacion().subscribe(
-          ubicaciones => {
-            this.listUbicacion = ubicaciones;
-            this.marcadores();
-          },
-          error => {
-            this.notificationService.notify('Error al obtener la ubicación de la bicicleta', 2000);
-          }
-        );
+        // Solo cargar ubicaciones si la ruta no es /agregar-bicicleta
+        const currentRoute = this.route.snapshot.routeConfig?.path;
+        if (currentRoute !== 'agregar-bicicleta') {
+          this._ubicacionService.getUbicacion().subscribe(
+            (ubicaciones) => {
+              this.listUbicacion = ubicaciones;
+              this.marcadores();
+            },
+            (error) => {
+              this.notificationService.notify(
+                'Error al obtener la ubicación de la bicicleta',
+                2000
+              );
+            }
+          );
+        }
       }
     });
-
     setTimeout(() => {
       this.geo = this.PlacesService.useLocation;
     }, 2000);
   }
-
-
   ngAfterViewInit() {
     setTimeout(() => {
       this.map = new Map('map').setView(
@@ -74,8 +79,14 @@ export class MapaComponent implements OnInit {
         maxZoom: 18,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
+
+      // Verifica si los clics en el mapa están funcionando
+      this.map.on('click', (e: any) => {
+        console.log('Click en el mapa:', e.latlng);
+      });
     }, 2000);
   }
+
 
   marcadores() {
     setTimeout(() => {
@@ -92,7 +103,6 @@ export class MapaComponent implements OnInit {
       }
     }, 2000);
   }
-
   ubicar() {
     setTimeout(() => {
       const myIcon = icon({ iconUrl: './assets/img/pin.png', iconSize: [34, 42] });

@@ -1,0 +1,12 @@
+<!-- ubicacion-formulario.component.html -->
+<form [formGroup]="ubicacionForm">
+    <div class="form-group">
+        <label for="nombreUbicacion">Nombre de la Ubicación</label>
+        <input type="text" id="nombreUbicacion" class="form-control" formControlName="nombreUbicacion" required>
+    </div>
+    <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" class="form-control" formControlName="direccion" required>
+    </div>
+    <!-- Agrega campos adicionales según tus necesidades -->
+</form>
