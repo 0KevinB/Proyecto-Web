@@ -7,13 +7,15 @@ import { LatLngExpression } from 'leaflet';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification.service';
+import { UserService } from 'src/app/services/user.service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-mapa',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './mapa.component.html',
   styleUrl: './mapa.component.css',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class MapaComponent implements OnInit {
   listUbicacion: Ubicacion[] = [];
@@ -21,16 +23,25 @@ export class MapaComponent implements OnInit {
   map: any;
   bicicletaId: number = 0;
   currentRoute = this.route.snapshot.routeConfig?.path;
+  isAdmin: boolean = false;
+  ubicacionForm: FormGroup | any;
+  modoEdicion: boolean = false;
+  ubicacion: Partial<Ubicacion> = {};
 
   constructor(
     private PlacesService: PlacesService,
     private _ubicacionService: UbicacionService,
     private router: Router,
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private _userService: UserService
   ) { }
 
   ngOnInit() {
+    this._userService.getRolUsuario().subscribe((rol) => {
+      this.isAdmin = rol === 2;
+    });
     this.route.paramMap.subscribe((params) => {
       const bicicletaIdParam = params.get('bicicletaId');
       this.bicicletaId = bicicletaIdParam ? +bicicletaIdParam : 0;
@@ -39,6 +50,13 @@ export class MapaComponent implements OnInit {
         this._ubicacionService.getUbicacion(this.bicicletaId).subscribe(
           (ubicacion) => {
             this.listUbicacion = ubicacion;
+            this.ubicacionForm.patchValue({
+              NombreUbicacion: this.listUbicacion[0].NombreUbicacion,
+              Direccion: this.listUbicacion[0].Direccion,
+              Latitud: this.listUbicacion[0].Latitud,
+              Longitud: this.listUbicacion[0].Longitud,
+            });
+            console.log(this.listUbicacion[0])
           },
           (error) => {
             this.notificationService.notify(
@@ -67,6 +85,13 @@ export class MapaComponent implements OnInit {
     setTimeout(() => {
       this.geo = this.PlacesService.useLocation;
     }, 2000);
+
+    this.ubicacionForm = this.formBuilder.group({
+      NombreUbicacion: ['', Validators.required],
+      Direccion: ['', Validators.required],
+      Latitud: ['', Validators.required],
+      Longitud: ['', Validators.required],
+    });
   }
   ngAfterViewInit() {
     setTimeout(() => {
@@ -85,8 +110,6 @@ export class MapaComponent implements OnInit {
       });
     }, 2000);
   }
-
-
   marcadores() {
     setTimeout(() => {
       for (let i = 0; i < this.listUbicacion.length; i++) {
@@ -111,15 +134,31 @@ export class MapaComponent implements OnInit {
   recargar() {
     location.reload();
   }
-
   getUbicacions() {
     this._ubicacionService.getUbicacion().subscribe(data => {
       this.listUbicacion = data;
     });
   }
-
   Logout() {
     localStorage.removeItem('token')
     this.router.navigate(['/inicio']);
+  }
+
+  saveChanges(): void {
+    if (this.ubicacionForm.valid) {
+      const data = this.ubicacionForm.value;
+      this._ubicacionService.updateUbicacionDetails(this.listUbicacion[0].LocationID, data)
+        .subscribe(
+          () => {
+            console.log('Ubicación actualizada correctamente');
+          },
+          (error) => {
+            console.error('Error al actualizar la ubicación:', error);
+          }
+        );
+    }
+  }
+  toggleEditMode(): void {
+    this.modoEdicion = !this.modoEdicion;
   }
 }

@@ -36,4 +36,10 @@ export class UbicacionService {
   setUbicacion(data: FormGroup) {
     this.ubicacionSubject.next(data);
   }
+
+  updateUbicacionDetails(ubicacionId: number | undefined, data: Ubicacion): Observable<Ubicacion> {
+    console.log('data recibida: ', data)
+    return this.http.put<Ubicacion>(`${this.myAppUrl}${this.myApiUrl}updateUbicacion/${ubicacionId}`, data);
+  }
+
 }

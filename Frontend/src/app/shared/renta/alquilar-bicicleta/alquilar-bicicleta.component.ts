@@ -77,7 +77,7 @@ export class AlquilarBicicletaComponent {
 
       this.productService.createBicycleForUser(this.cedulaUsuario, product).subscribe(
         (respuesta) => {
-          const bikeId = respuesta.BikeID; // Asegúrate de que la respuesta incluya el ID
+          const bikeId = respuesta.BikeID;
           const ubicacion: Ubicacion = {
             NombreUbicacion: this.ubicacionData.nombreUbicacion,
             Latitud: this.ubicacionData.latitud,

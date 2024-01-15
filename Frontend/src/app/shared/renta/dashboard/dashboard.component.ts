@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
     private notificationService: NotificationService,
     private ubicacionService: UbicacionService,
     private router: Router
+
   ) { }
 
   ngOnInit(): void {
@@ -149,7 +150,7 @@ export class DashboardComponent implements OnInit {
   verMapa(bicicletaId: number): void {
     this.ubicacionService.getUbicacion(bicicletaId).subscribe(
       (ubicacion) => {
-        console.log('Ubicación de la bicicleta:', ubicacion);
+        const locationID = ubicacion[0].LocationID;
         this.router.navigate(['/mapa', bicicletaId]);
       },
       (error) => {
