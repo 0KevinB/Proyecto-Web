@@ -2,7 +2,8 @@ import { Product } from "./product";
 
 // carrito-item.ts
 export interface CarritoItem {
+    Cedula?: number;
     Producto: Product;
     CantidadHoras: number;
-    PrecioTotal: number; // PrecioTotal es el resultado de Precio * CantidadHoras
+    PrecioTotal: number;
 }

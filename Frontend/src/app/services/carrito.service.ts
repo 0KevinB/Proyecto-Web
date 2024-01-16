@@ -2,7 +2,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Product } from '../interfaces/product'; // Ajusta la ruta
 import { CarritoItem } from '../interfaces/carritoItem';
 
@@ -19,12 +19,27 @@ export class CarritoService {
   }
 
   getItems(): Observable<Product[]> {
-    // No se requiere el argumento cedulaUsuario en la función getItems
     return this.http.get<Product[]>(`${this.apiUrl}/obtener`);
   }
 
   clearCart(): Observable<void> {
-    // No se requiere el argumento cedulaUsuario en la función clearCart
     return this.http.delete<void>(`${this.apiUrl}/vaciar`);
   }
+
+  reserveProduct(product: CarritoItem): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/reservar`, product);
+  }
+
+  private productoSeleccionadoSubject = new BehaviorSubject<Product | null>(null);
+  productoSeleccionado$ = this.productoSeleccionadoSubject.asObservable();
+
+  setProductoSeleccionado(data: Product): void {
+    this.productoSeleccionadoSubject.next(data);
+  }
+
+  getProductoSeleccionado(): Product | null {
+    const valorActual = this.productoSeleccionadoSubject.value;
+    return valorActual;
+  }
+
 }

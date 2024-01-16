@@ -98,7 +98,8 @@
                             <button class="btn btn-primary col-6" (click)="verMapa(product.BikeID)">
                                 Ver en el Mapa
                             </button>
-                            <button class="btn btn-danger col-6">
+                            <button class="btn btn-danger col-6" (click)="onReserve(product)"
+                                [routerLink]="[ '/carrito' ]">
                                 Reservar
                             </button>
                         </div>

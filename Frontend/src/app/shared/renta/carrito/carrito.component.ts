@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CarritoItem } from 'src/app/interfaces/carritoItem';
 import { Product } from 'src/app/interfaces/product';
 import { CarritoService } from 'src/app/services/carrito.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-carrito',
@@ -15,59 +16,73 @@ import { CarritoService } from 'src/app/services/carrito.service';
 export class CarritoComponent implements OnInit {
   carritoForm: FormGroup | any;
   carrito: Product[] = [];
+  cedula: string | any;
+  producto: Product | any;
 
   constructor(
     private fb: FormBuilder,
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
-    // Inicializar el formulario reactivo
+    this.userService.getCedulaUsuario().subscribe(cedula => {
+      this.cedula = cedula;
+    });
     this.carritoForm = this.fb.group({
-      cantidadHoras: [1], // Valor por defecto, puedes ajustar según tus necesidades
+      cantidadHoras: [1],
     });
 
-    // Obtener el carrito actual del usuario al iniciar el componente
+    this.producto = this.carritoService.getProductoSeleccionado();
+    console.log("Producto obtenido: ", this.producto);
+
     this.refreshCart();
   }
 
   refreshCart(): void {
-    // Obtener el carrito actual del servicio
-    // Suponiendo que tienes un método en tu servicio para obtener el carrito del usuario actual
-    // Ajusta según la implementación real de tu servicio
     this.carritoService.getItems().subscribe((items: Product[]) => {
       this.carrito = items;
     });
   }
 
-
   onAddToCart(product: Product): void {
     const cantidadHoras = this.carritoForm.get('cantidadHoras').value;
-
-    // Crear un nuevo item del carrito
     const item: CarritoItem = {
+      Cedula: this.cedula,
+      Producto: product,
+      CantidadHoras: cantidadHoras,
+      PrecioTotal: product.PrecioPorHora * cantidadHoras,
+    };
+    this.carritoService.addToCart(item).subscribe(() => {
+      this.refreshCart();
+    });
+    this.carritoForm.reset();
+  }
+
+  onClearCart(): void {
+    this.carritoService.clearCart().subscribe(() => {
+      this.refreshCart();
+    });
+  }
+
+  getCarritoTotal(): number {
+    return this.carrito.reduce((total, item) => total + item.PrecioPorHora * item.CantidadHoras, 0);
+  }
+
+  onReserve(product: Product): void {
+    const cantidadHoras = this.carritoForm.get('cantidadHoras').value;
+    const item: CarritoItem = {
+      Cedula: this.cedula,
       Producto: product,
       CantidadHoras: cantidadHoras,
       PrecioTotal: product.PrecioPorHora * cantidadHoras,
     };
 
-    // Añadir al carrito a través del servicio
-    this.carritoService.addToCart(item).subscribe(() => {
-      // Refrescar el carrito después de añadir un elemento
+    this.carritoService.reserveProduct(item).subscribe(() => {
       this.refreshCart();
     });
 
-    // Limpiar el formulario después de añadir al carrito
     this.carritoForm.reset();
   }
 
-
-
-  onClearCart(): void {
-    // Vaciar el carrito a través del servicio
-    this.carritoService.clearCart().subscribe(() => {
-      // Refrescar el carrito después de vaciarlo
-      this.refreshCart();
-    });
-  }
 }

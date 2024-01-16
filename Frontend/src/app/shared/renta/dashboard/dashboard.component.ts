@@ -10,6 +10,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
+import { CarritoService } from 'src/app/services/carrito.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,8 +39,8 @@ export class DashboardComponent implements OnInit {
     private _filterService: FilterService,
     private notificationService: NotificationService,
     private ubicacionService: UbicacionService,
-    private router: Router
-
+    private router: Router,
+    private carritoService: CarritoService
   ) { }
 
   ngOnInit(): void {
@@ -157,5 +158,9 @@ export class DashboardComponent implements OnInit {
         console.error('Error al obtener la ubicación de la bicicleta:', error);
       }
     );
+  }
+
+  onReserve(product: Product): void {
+    this.carritoService.setProductoSeleccionado(product)
   }
 }
