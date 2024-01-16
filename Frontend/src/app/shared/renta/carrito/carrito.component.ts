@@ -45,14 +45,16 @@ export class CarritoComponent implements OnInit {
     });
   }
 
-  onAddToCart(product: Product): void {
+  onAddToCart(): void {
     const cantidadHoras = this.carritoForm.get('cantidadHoras').value;
     const item: CarritoItem = {
       Cedula: this.cedula,
-      Producto: product,
+      Producto: this.producto,
       CantidadHoras: cantidadHoras,
-      PrecioTotal: product.PrecioPorHora * cantidadHoras,
+      PrecioTotal: this.producto.PrecioPorHora * cantidadHoras,
     };
+
+    console.log('ITEM: ', item);
     this.carritoService.addToCart(item).subscribe(() => {
       this.refreshCart();
     });

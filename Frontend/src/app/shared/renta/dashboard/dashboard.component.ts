@@ -161,6 +161,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onReserve(product: Product): void {
-    this.carritoService.setProductoSeleccionado(product)
+    localStorage.setItem('productoSeleccionado', JSON.stringify(product));
   }
 }

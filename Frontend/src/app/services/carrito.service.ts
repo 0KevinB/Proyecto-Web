@@ -10,7 +10,7 @@ import { CarritoItem } from '../interfaces/carritoItem';
   providedIn: 'root'
 })
 export class CarritoService {
-  private apiUrl = 'http://localhost:3000/api/carrito'; // Ajusta la URL según sea necesario
+  private apiUrl = 'http://localhost:3000/api/carrito';
 
   constructor(private http: HttpClient) { }
 
@@ -30,16 +30,8 @@ export class CarritoService {
     return this.http.post<void>(`${this.apiUrl}/reservar`, product);
   }
 
-  private productoSeleccionadoSubject = new BehaviorSubject<Product | null>(null);
-  productoSeleccionado$ = this.productoSeleccionadoSubject.asObservable();
-
-  setProductoSeleccionado(data: Product): void {
-    this.productoSeleccionadoSubject.next(data);
-  }
-
   getProductoSeleccionado(): Product | null {
-    const valorActual = this.productoSeleccionadoSubject.value;
-    return valorActual;
+    const storedData = localStorage.getItem('productoSeleccionado');
+    return storedData ? JSON.parse(storedData) : null;
   }
-
 }
