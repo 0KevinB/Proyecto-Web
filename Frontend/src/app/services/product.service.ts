@@ -43,6 +43,11 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}bikes`);
   }
 
+  // Obtener todos los productos
+  getRentadas(): Observable<Product[]> {
+    console.log("Product renta")
+    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}rentadas`);
+  }
 
   // Agregar una bicicleta a un usuario
   createBicycleForUser(cedula: string, formData: product_add): Observable<any> {

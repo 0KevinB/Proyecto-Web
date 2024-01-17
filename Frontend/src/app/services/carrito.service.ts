@@ -22,9 +22,7 @@ export class CarritoService {
   }
 
   addToCart(product: CarritoItem): Observable<CarritoItem> {
-    console.log('Servicio ', product);
     return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}agregar`, product)
-
   }
 
   handleError(error: any): Observable<never> {
@@ -46,6 +44,14 @@ export class CarritoService {
 
   getAlquilerByCedula(cedula: string | null): Observable<any> {
     const url = `${this.myAppUrl}${this.myApiUrl}alquiler/${cedula}`;
+    return this.http.get<any>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getAlquiler(): Observable<any> {
+    const url = `${this.myAppUrl}${this.myApiUrl}alquiler`;
+    console.log(url);
     return this.http.get<any>(url).pipe(
       catchError(this.handleError)
     );

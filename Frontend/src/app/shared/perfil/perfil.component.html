@@ -113,9 +113,7 @@
                                             <small>Fecha de Inicio: {{ pago.FechaInicio | date:'short' }}</small>
                                             <small class="mb-1">Fecha de Fin: {{ pago.FechaFin | date:'short' }}</small>
                                         </div>
-                                        <div *ngIf="bicicletaSeleccionada[pago.BikeID]">
-                                            <h5 class="mb-1">Bike ID: {{ pago.BikeID }}</h5>
-                                        </div>
+                                        <h5 class="mb-1">Modelo: {{ pago.Modelo }}</h5>
                                         <p class="mb-1">Monto Total: ${{ pago.MontoTotal }}</p>
                                     </div>
                                 </div>

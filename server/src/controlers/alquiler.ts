@@ -23,3 +23,20 @@ export const getAlquilerByCedula = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
+
+export const getAlquiler = async (req: Request, res: Response) => {
+    console.log('Llegaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ', req.params, req.body)
+    try {
+        const alquiler = await Alquiler.findAll();
+        if (!alquiler || alquiler.length === 0) {
+            return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
+        }
+
+        // Retornar el estado de alquiler
+        res.json(alquiler);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+

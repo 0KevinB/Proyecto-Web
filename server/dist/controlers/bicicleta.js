@@ -13,13 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarUbicacionABicicleta = exports.agregarBicicletaAUsuario = exports.aprobarBicicleta = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletaPorId = void 0;
+exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarUbicacionABicicleta = exports.agregarBicicletaAUsuario = exports.aprobarBicicleta = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletasEnRenta = exports.obtenerBicicletaPorId = void 0;
 const express_1 = __importDefault(require("express"));
 const bicicleta_1 = __importDefault(require("../models/bicicleta"));
 const propietarioBicicletas_1 = __importDefault(require("../models/propietarioBicicletas"));
 const path_1 = __importDefault(require("path"));
 const Bicicleta_Ubicacion_1 = __importDefault(require("../models/Bicicleta_Ubicacion"));
 const ubicacion_1 = __importDefault(require("../models/ubicacion"));
+const alquiler_1 = __importDefault(require("../models/alquiler"));
+const sequelize_1 = require("sequelize");
 const app = (0, express_1.default)();
 // Obtener todas las bicicletas
 const obtenerBicicletaPorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,6 +38,39 @@ const obtenerBicicletaPorId = (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.obtenerBicicletaPorId = obtenerBicicletaPorId;
+const obtenerBicicletasEnRenta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const fechaActual = new Date();
+        const bicicletas = yield bicicleta_1.default.findAll({
+            include: [
+                {
+                    model: propietarioBicicletas_1.default,
+                    attributes: ['imagenReferencia', 'Estado'],
+                },
+                {
+                    model: alquiler_1.default,
+                    where: {
+                        EstadoAlquiler: 'En renta',
+                        FechaInicio: {
+                            [sequelize_1.Op.lte]: fechaActual, // La fecha de inicio debe ser menor o igual a la fecha actual
+                        },
+                        FechaFin: {
+                            [sequelize_1.Op.gt]: fechaActual, // La fecha de fin debe ser mayor a la fecha actual
+                        },
+                    },
+                    attributes: ['EstadoAlquiler'],
+                },
+            ],
+            attributes: ['BikeID', 'Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
+        });
+        res.json(bicicletas);
+    }
+    catch (error) {
+        console.error('Error al obtener datos de bicicletas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+exports.obtenerBicicletasEnRenta = obtenerBicicletasEnRenta;
 const obtenerBicicletasConImagen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bicicletas = yield bicicleta_1.default.findAll({

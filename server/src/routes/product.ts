@@ -13,6 +13,7 @@ import {
     obtenerBicicletasConImagen,
     aprobarBicicleta,
     agregarUbicacionABicicleta,
+    obtenerBicicletasEnRenta,
 } from '../controlers/bicicleta';
 
 // Configuración de Multer
@@ -32,9 +33,11 @@ const upload = multer({ storage: storage });
 const router = Router();
 
 // Obtener todas las bicicletas
-router.get('/bicicletas/:BikeID', validateToken, obtenerBicicletaPorId);
+router.get('/bicicletas/:bikeId', validateToken, obtenerBicicletaPorId);
 
 router.get('/bikes', validateToken, obtenerBicicletasConImagen);
+
+router.get('/rentadas', validateToken, obtenerBicicletasEnRenta);
 
 // Crear una nueva bicicleta
 router.post('/', validateToken, crearBicicleta);

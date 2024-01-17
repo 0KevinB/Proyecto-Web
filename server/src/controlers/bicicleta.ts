@@ -6,6 +6,8 @@ import PropietarioBicicletas from '../models/propietarioBicicletas';
 import path from 'path';
 import Bicicleta_Ubicacion from '../models/Bicicleta_Ubicacion';
 import Ubicacion from '../models/ubicacion';
+import Alquiler from '../models/alquiler';
+import { Op } from 'sequelize';
 
 
 const app = express();
@@ -26,6 +28,39 @@ export const obtenerBicicletaPorId = async (req: Request, res: Response) => {
     }
 };
 
+export const obtenerBicicletasEnRenta = async (req: Request, res: Response) => {
+    try {
+        const fechaActual = new Date();
+
+        const bicicletas = await Bicicleta.findAll({
+            include: [
+                {
+                    model: PropietarioBicicletas,
+                    attributes: ['imagenReferencia', 'Estado'],
+                },
+                {
+                    model: Alquiler,
+                    where: {
+                        EstadoAlquiler: 'En renta', // Filtrar por alquileres que están actualmente en curso
+                        FechaInicio: {
+                            [Op.lte]: fechaActual, // La fecha de inicio debe ser menor o igual a la fecha actual
+                        },
+                        FechaFin: {
+                            [Op.gt]: fechaActual, // La fecha de fin debe ser mayor a la fecha actual
+                        },
+                    },
+                    attributes: ['EstadoAlquiler'],
+                },
+            ],
+            attributes: ['BikeID', 'Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
+        });
+
+        res.json(bicicletas);
+    } catch (error) {
+        console.error('Error al obtener datos de bicicletas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
 
 export const obtenerBicicletasConImagen = async (req: Request, res: Response) => {
     try {
@@ -45,6 +80,7 @@ export const obtenerBicicletasConImagen = async (req: Request, res: Response) =>
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
 // Crear una nueva bicicleta
 export const crearBicicleta = async (req: Request, res: Response) => {
     try {

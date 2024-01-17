@@ -12,4 +12,5 @@ router.post('/agregar', carrito_1.addToCarrito);
 router.delete('/:carritoId', carrito_1.removeFromCarrito);
 // Ruta para obtener el estado de alquiler por cédula
 router.get('/alquiler/:cedula', alquiler_1.getAlquilerByCedula);
+router.get('/alquiler', alquiler_1.getAlquiler);
 exports.default = router;

@@ -4,7 +4,7 @@ import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
 import { FilterService } from 'src/app/services/filter.service';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getProductsRentados()
     this._userService.getRolUsuario().subscribe((rol) => {
       this.isAdmin = rol === 2;
     });
@@ -104,17 +105,40 @@ export class DashboardComponent implements OnInit {
       this.listProduct = data;
     });
   }
+
   getProductsUser(): Observable<any> {
-    return this._productService.getProductsWithImages().pipe(map((data) => {
-      const dataFiltrada = data.filter((item) => {
-        if (item.PropietarioBicicletas && item.PropietarioBicicletas.length > 0) {
-          return item.PropietarioBicicletas.some((bicicleta: { Estado: boolean }) => bicicleta.Estado === true);
-        }
-        return false;
-      });
-      this.listProductUser = dataFiltrada;
-    }));
+    return forkJoin([
+      this._productService.getProductsWithImages(),
+      this._productService.getRentadas()
+    ]).pipe(
+      map(([allProducts, rentadas]) => {
+        const dataFiltrada = allProducts.filter((item) => {
+          if (item.PropietarioBicicletas && item.PropietarioBicicletas.length > 0) {
+            return item.PropietarioBicicletas.some((bicicleta: { Estado: boolean }) => bicicleta.Estado === true);
+          }
+          return false;
+        });
+
+        this.listProductUser = dataFiltrada;
+
+        // Filtrar los productos que están en rentadas
+        this.filteredProducts = rentadas;
+
+        const notInFilteredProducts = this.listProductUser.filter(
+          product => !this.filteredProducts.some(filteredProduct => filteredProduct.BikeID === product.BikeID)
+        );
+        console.log(notInFilteredProducts);
+        this.listProductUser = notInFilteredProducts;
+      })
+    );
   }
+  getProductsRentados() {
+    this._productService.getRentadas().subscribe((data) => {
+      this.filteredProducts = data;
+      console.log(this.filteredProducts)
+    });
+  }
+
   isProductApproved(product: Product): boolean {
     return product.PropietarioBicicletas[0].Estado === 1;
   }

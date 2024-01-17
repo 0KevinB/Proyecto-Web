@@ -21,7 +21,7 @@ export class PerfilComponent implements OnInit {
   cedulaUsuario: string | null = null;
   editMode = false;
   historialPagos: any[] = [];
-  bicicletaSeleccionada: any[] = [];
+  bicicletaSeleccionada: any = [];
 
   constructor(
     private userService: UserService,
@@ -48,18 +48,15 @@ export class PerfilComponent implements OnInit {
   }
 
   enableEditMode(): void {
-    // Copia los datos del usuario a editedUser
     this.editedUser = { ...this.user };
     this.editMode = true;
   }
 
   saveChanges(): void {
-    // Realiza la solicitud de actualización al servicio
     this.userService.updateUserDetails(this.cedulaUsuario, this.editedUser).subscribe(
       () => {
         this.notificationService.notify('Cambios guardados correctamente', 2000);
         this.editMode = false;
-        // Actualiza los datos del usuario después de guardar los cambios
         this.userService.getUserDetails(this.cedulaUsuario).subscribe(
           (user) => {
             this.user = user;
@@ -81,24 +78,33 @@ export class PerfilComponent implements OnInit {
 
   onGetAlquilerByCedula(): void {
     this.carritoService.getAlquilerByCedula(this.cedulaUsuario).subscribe(
-      (alquiler: any) => {
-        this.historialPagos = alquiler
-        console.log('Estado del Alquiler:', alquiler);
-        console.log('Estado del :', this.historialPagos);
-        if (this.historialPagos.length > 0) {
-          this.obtenerInformacionBicicleta(this.historialPagos[0].BikeID);
-        }
+      (historialPagos: any[]) => {
+        // Agregar el campo 'Modelo' a cada objeto en historialPagos
+        historialPagos.forEach(pago => {
+          const bikeId = pago.BikeID;
+          this.productService.getProductById(bikeId).subscribe(
+            (bicicleta: any) => {
+              pago.Modelo = bicicleta.Modelo;
+            },
+            error => {
+              console.error('Error al obtener la información de la bicicleta:', error);
+            }
+          );
+        });
 
-      }, error => {
-        console.error('Error al obtener el alquiler por cédula:', error);
+        this.historialPagos = historialPagos;
+        console.log('historialPagos', this.historialPagos);
+      },
+      error => {
+        console.error('Error al obtener el historial de pagos:', error);
       }
     );
   }
-
   obtenerInformacionBicicleta(bikeId: number): void {
     this.productService.getProductById(bikeId).subscribe(
       (bicicleta: any) => {
         this.bicicletaSeleccionada = bicicleta;
+        console.log('biciclet', this.bicicletaSeleccionada);
       },
       error => {
         console.error('Error al obtener la información de la bicicleta:', error);

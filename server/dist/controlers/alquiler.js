@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAlquilerByCedula = void 0;
+exports.getAlquiler = exports.getAlquilerByCedula = void 0;
 const alquiler_1 = __importDefault(require("../models/alquiler"));
 // Controlador para obtener el estado de alquiler por cédula
 const getAlquilerByCedula = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,3 +34,19 @@ const getAlquilerByCedula = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getAlquilerByCedula = getAlquilerByCedula;
+const getAlquiler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('Llegaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ', req.params, req.body);
+    try {
+        const alquiler = yield alquiler_1.default.findAll();
+        if (!alquiler || alquiler.length === 0) {
+            return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
+        }
+        // Retornar el estado de alquiler
+        res.json(alquiler);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+exports.getAlquiler = getAlquiler;
