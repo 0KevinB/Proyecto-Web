@@ -17,6 +17,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const product_1 = __importDefault(require("../routes/product"));
 const ubicacion_1 = __importDefault(require("../routes/ubicacion"));
+const cart_1 = __importDefault(require("../routes/cart"));
 const user_1 = __importDefault(require("../routes/user"));
 const rol_1 = require("./rol");
 const usuario_1 = __importDefault(require("./usuario"));
@@ -47,6 +48,7 @@ class Server {
         this.app.use('/api/products', product_1.default);
         this.app.use('/api/users', user_1.default);
         this.app.use('/api/ubicacions', ubicacion_1.default);
+        this.app.use('/api/carrito', cart_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());

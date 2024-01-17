@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CarritoItem } from 'src/app/interfaces/carritoItem';
+import { CarritoItem } from 'src/app/interfaces/CarritoItem';
 import { Product } from 'src/app/interfaces/product';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { UserService } from 'src/app/services/user.service';
@@ -18,7 +18,6 @@ export class CarritoComponent implements OnInit {
   carrito: Product[] = [];
   cedula: string | any;
   producto: Product | any;
-
   constructor(
     private fb: FormBuilder,
     private carritoService: CarritoService,
@@ -35,14 +34,6 @@ export class CarritoComponent implements OnInit {
 
     this.producto = this.carritoService.getProductoSeleccionado();
     console.log("Producto obtenido: ", this.producto);
-
-    this.refreshCart();
-  }
-
-  refreshCart(): void {
-    this.carritoService.getItems().subscribe((items: Product[]) => {
-      this.carrito = items;
-    });
   }
 
   onAddToCart(): void {
@@ -53,38 +44,8 @@ export class CarritoComponent implements OnInit {
       CantidadHoras: cantidadHoras,
       PrecioTotal: this.producto.PrecioPorHora * cantidadHoras,
     };
-
-    console.log('ITEM: ', item);
-    this.carritoService.addToCart(item).subscribe(() => {
-      this.refreshCart();
-    });
-    this.carritoForm.reset();
+    this.carritoService.addToCart(item).subscribe(data => {
+      console.log('data ',data);
+    })
   }
-
-  onClearCart(): void {
-    this.carritoService.clearCart().subscribe(() => {
-      this.refreshCart();
-    });
-  }
-
-  getCarritoTotal(): number {
-    return this.carrito.reduce((total, item) => total + item.PrecioPorHora * item.CantidadHoras, 0);
-  }
-
-  onReserve(product: Product): void {
-    const cantidadHoras = this.carritoForm.get('cantidadHoras').value;
-    const item: CarritoItem = {
-      Cedula: this.cedula,
-      Producto: product,
-      CantidadHoras: cantidadHoras,
-      PrecioTotal: product.PrecioPorHora * cantidadHoras,
-    };
-
-    this.carritoService.reserveProduct(item).subscribe(() => {
-      this.refreshCart();
-    });
-
-    this.carritoForm.reset();
-  }
-
 }

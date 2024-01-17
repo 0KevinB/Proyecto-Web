@@ -1,14 +1,15 @@
-const express = require('express');
-const router = express.Router();
-const carritoController = require('../controllers/carritoController');
+import validateToken from './validate-token';
+import { Router } from 'express';
+import { addToCarrito, getCarritoByUsuario, removeFromCarrito } from '../controlers/carrito'
+const router = Router();
 
 // Obtener el carrito de un usuario
-router.get('/:cedula', carritoController.getCarritoByUsuario);
+router.get('/obtener/:cedula', getCarritoByUsuario);
 
 // Agregar un producto al carrito
-router.post('/agregar', carritoController.addToCarrito);
+router.post('/agregar', addToCarrito);
 
 // Eliminar un producto del carrito
-router.delete('/:carritoId', carritoController.removeFromCarrito);
+router.delete('/:carritoId', removeFromCarrito);
 
-module.exports = router;
+export default router;

@@ -189,7 +189,7 @@ const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0,
 });
 exports.agregarBicicletaAUsuario = agregarBicicletaAUsuario;
 const agregarUbicacionABicicleta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { BikeID } = req.params; // Obtén el BikeID de los parámetros
+    const { BikeID } = req.params;
     const { NombreUbicacion, Latitud, Longitud, Direccion } = req.body;
     console.log(BikeID, NombreUbicacion, Latitud, Longitud, Direccion);
     try {

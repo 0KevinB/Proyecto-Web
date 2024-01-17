@@ -171,7 +171,7 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
 
 
 export const agregarUbicacionABicicleta = async (req: Request, res: Response) => {
-    const { BikeID } = req.params; // Obtén el BikeID de los parámetros
+    const { BikeID } = req.params; 
 
     const { NombreUbicacion, Latitud, Longitud, Direccion } = req.body;
 

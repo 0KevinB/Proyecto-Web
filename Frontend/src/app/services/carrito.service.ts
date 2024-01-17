@@ -4,30 +4,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Product } from '../interfaces/product'; // Ajusta la ruta
-import { CarritoItem } from '../interfaces/carritoItem';
+import { CarritoItem } from '../interfaces/CarritoItem';
+import { environment } from 'src/environments/environment';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarritoService {
-  private apiUrl = 'http://localhost:3000/api/carrito';
+  private myAppUrl: string
+  private myApiUrl: string
 
-  constructor(private http: HttpClient) { }
-
-  addToCart(product: CarritoItem): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/agregar`, product);
+  constructor(private http: HttpClient, private notificationService: NotificationService
+  ) {
+    this.myAppUrl = environment.endpoint
+    this.myApiUrl = '/api/carrito/'
   }
 
-  getItems(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/obtener`);
-  }
-
-  clearCart(): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/vaciar`);
-  }
-
-  reserveProduct(product: CarritoItem): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/reservar`, product);
+  addToCart(product: CarritoItem): Observable<CarritoItem> {
+    console.log('Servicio ', product);
+    return this.http.post<CarritoItem>(`${this.myAppUrl}${this.myApiUrl}agregar`, product);
   }
 
   getProductoSeleccionado(): Product | null {

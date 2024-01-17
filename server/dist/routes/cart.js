@@ -1,11 +1,12 @@
 "use strict";
-const express = require('express');
-const router = express.Router();
-const carritoController = require('../controllers/carritoController');
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const carrito_1 = require("../controlers/carrito");
+const router = (0, express_1.Router)();
 // Obtener el carrito de un usuario
-router.get('/:cedula', carritoController.getCarritoByUsuario);
+router.get('/obtener/:cedula', carrito_1.getCarritoByUsuario);
 // Agregar un producto al carrito
-router.post('/agregar', carritoController.addToCarrito);
+router.post('/agregar', carrito_1.addToCarrito);
 // Eliminar un producto del carrito
-router.delete('/:carritoId', carritoController.removeFromCarrito);
-module.exports = router;
+router.delete('/:carritoId', carrito_1.removeFromCarrito);
+exports.default = router;

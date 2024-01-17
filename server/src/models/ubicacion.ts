@@ -1,7 +1,7 @@
 // models/Ubicacion.ts
 
 import { DataTypes } from 'sequelize';
-import sequelize from '../db/connection'; // Ajusta la ruta según tu estructura de archivos
+import sequelize from '../db/connection';
 import Bicicleta from './bicicleta';
 
 const Ubicacion = sequelize.define('Ubicacion', {

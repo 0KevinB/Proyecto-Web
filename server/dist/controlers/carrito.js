@@ -8,17 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const Carrito = require('../models/Carrito');
-const Usuario = require('../models/Usuario');
-const Bicicleta = require('../models/Bicicleta');
+exports.removeFromCarrito = exports.addToCarrito = exports.getCarritoByUsuario = void 0;
+const Carrito_1 = __importDefault(require("../models/Carrito"));
+const usuario_1 = __importDefault(require("../models/usuario"));
+const bicicleta_1 = __importDefault(require("../models/bicicleta"));
+const alquiler_1 = __importDefault(require("../models/alquiler"));
+const Bicicleta_Ubicacion_1 = __importDefault(require("../models/Bicicleta_Ubicacion"));
 // Obtener todos los elementos del carrito de un usuario
-exports.getCarritoByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getCarritoByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const cedula = req.params.cedula; // asumiendo que la cedula está en los parámetros de la URL
-        const carrito = yield Carrito.findAll({
+        const carrito = yield Carrito_1.default.findAll({
             where: { Cedula: cedula },
-            include: [Usuario, Bicicleta],
+            include: [usuario_1.default, bicicleta_1.default],
         });
         res.json(carrito);
     }
@@ -27,30 +33,88 @@ exports.getCarritoByUsuario = (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
-// Agregar un producto al carrito
-exports.addToCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getCarritoByUsuario = getCarritoByUsuario;
+// Agregar un producto al carrito y crear un registro de alquiler simultáneamente
+const addToCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { cedula, bikeId, horasSeleccionadas, fechaInicio, fechaFinalizacion, precioTotal } = req.body;
-        const newCartItem = yield Carrito.create({
-            Cedula: cedula,
-            BikeID: bikeId,
-            HorasSeleccionadas: horasSeleccionadas,
+        const { Cedula, Producto, CantidadHoras, PrecioTotal } = req.body;
+        const { BikeID } = Producto;
+        // Calcular la fecha actual
+        const fechaInicio = new Date();
+        // Calcular la fecha final como la fecha actual más las horas seleccionadas
+        const fechaFinalizacion = new Date(fechaInicio);
+        fechaFinalizacion.setHours(fechaFinalizacion.getHours() + CantidadHoras);
+        // Obtener la LocationID de la tabla intermedia Bicicleta_Ubicacion
+        const ubicacionBicicleta = yield Bicicleta_Ubicacion_1.default.findOne({
+            where: { BikeID: BikeID },
+        });
+        if (!ubicacionBicicleta) {
+            return res.status(404).json({ message: 'Ubicación de bicicleta no encontrada' });
+        }
+        const { LocationID } = ubicacionBicicleta.toJSON(); // Extraer la LocationID del resultado
+        // Crear un nuevo registro en la tabla Carrito
+        const newCartItem = yield Carrito_1.default.create({
+            Cedula: Cedula,
+            BikeID: BikeID,
+            HorasSeleccionadas: CantidadHoras,
             FechaInicio: fechaInicio,
             FechaFinalizacion: fechaFinalizacion,
-            PrecioTotal: precioTotal,
+            PrecioTotal: PrecioTotal,
         });
-        res.status(201).json(newCartItem);
+        // Crear un nuevo registro en la tabla Alquiler
+        const newRental = yield alquiler_1.default.create({
+            Cedula: Cedula,
+            BikeID: BikeID,
+            FechaInicio: fechaInicio,
+            FechaFin: fechaFinalizacion,
+            EstadoAlquiler: 'Pendiente',
+            MontoTotal: PrecioTotal,
+            LocationID: LocationID,
+        });
+        console.log('back - Carrito', newCartItem);
+        console.log('back - Alquiler', newRental);
+        res.status(201).json({ carrito: newCartItem, alquiler: newRental });
     }
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
-// Eliminar un producto del carrito
-exports.removeFromCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.addToCarrito = addToCarrito;
+// Agregar un producto al carrito
+/*
+export const addToCarrito = async (req: Request, res: Response) => {
+    try {
+        const { Cedula, Producto, CantidadHoras, PrecioTotal } = req.body;
+        const { BikeID } = Producto;
+
+        // Calcular la fecha actual
+        const fechaInicio = new Date();
+
+        // Calcular la fecha final como la fecha actual más las horas seleccionadas
+        const fechaFinalizacion = new Date(fechaInicio);
+        fechaFinalizacion.setHours(fechaFinalizacion.getHours() + CantidadHoras);
+
+        const newCartItem = await Carrito.create({
+            Cedula: Cedula,
+            BikeID: BikeID,
+            HorasSeleccionadas: CantidadHoras,
+            FechaInicio: fechaInicio,
+            FechaFinalizacion: fechaFinalizacion,
+            PrecioTotal: PrecioTotal,
+        });
+        console.log('back', newCartItem);
+        res.status(201).json(newCartItem);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+*/
+const removeFromCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const carritoId = req.params.carritoId;
-        const carrito = yield Carrito.findByPk(carritoId);
+        const carrito = yield Carrito_1.default.findByPk(carritoId);
         if (!carrito) {
             return res.status(404).json({ message: 'El producto en el carrito no fue encontrado' });
         }
@@ -62,3 +126,4 @@ exports.removeFromCarrito = (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
+exports.removeFromCarrito = removeFromCarrito;

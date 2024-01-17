@@ -1,43 +1,54 @@
 "use strict";
-// controllers/alquilerAutomaticoController.ts
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-/*
-export const alquilerAutomatico = async (req: Request, res: Response) => {
-    // Obtener datos necesarios desde la solicitud (podrían ser enviados como parámetros o en el cuerpo de la solicitud)
-    const { Cedula, BikeID, HorasAlquiler } = req.body;
-
+exports.realizarAlquiler = void 0;
+const Carrito_1 = __importDefault(require("../models/Carrito"));
+const alquiler_1 = __importDefault(require("../models/alquiler"));
+const realizarAlquiler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Obtener información del usuario, bicicleta y ubicación
-        const usuario = await Usuario.findByPk(Cedula);
-        const bicicleta = await Bicicleta.findByPk(BikeID);
-        const ubicacion = await Ubicacion.findByPk(LocationID);
-
-        if (!usuario || !bicicleta || !ubicacion) {
-            return res.status(404).json({ mensaje: 'Usuario, bicicleta o ubicación no encontrados' });
+        // Extrae los datos necesarios del cuerpo de la solicitud
+        const { Cedula, BikeID, HorasSeleccionadas, PrecioTotal, LocationID } = req.body;
+        // Obtén el carrito correspondiente
+        const carritoItem = yield Carrito_1.default.findOne({
+            where: {
+                Cedula,
+                BikeID,
+            },
+        });
+        if (!carritoItem) {
+            return res.status(404).json({ message: 'Item de carrito no encontrado' });
         }
-
-        // Calcular fechas y monto total
-        const fechaInicio = new Date();
-        const fechaFin = new Date();
-        fechaFin.setHours(fechaInicio.getHours() + HorasAlquiler);
-
-        const montoTotal = Bicicleta.PrecioPorHora * HorasAlquiler;
-
-        // Crear el registro de alquiler
-        const nuevoAlquiler = await Alquiler.create({
+        const newAlquiler = yield alquiler_1.default.create({
             Cedula,
             BikeID,
-            FechaInicio: fechaInicio,
-            FechaFin: fechaFin,
-            EstadoAlquiler: 'Activo', // Puedes ajustar según tus necesidades
-            MontoTotal: montoTotal,
-            LocationID: ubicacion.LocationID,
+            FechaInicio: carritoItem.get('FechaInicio'),
+            FechaFin: carritoItem.get('FechaFinalizacion'),
+            EstadoAlquiler: 'En proceso',
+            MontoTotal: PrecioTotal,
+            LocationID,
         });
-
-        res.status(201).json(nuevoAlquiler);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al crear alquiler automático' });
+        yield Carrito_1.default.destroy({
+            where: {
+                Cedula,
+                BikeID,
+            },
+        });
+        res.status(201).json(newAlquiler);
     }
-};
-*/ 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+exports.realizarAlquiler = realizarAlquiler;
