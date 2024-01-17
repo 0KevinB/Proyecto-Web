@@ -11,14 +11,21 @@ import Ubicacion from '../models/ubicacion';
 const app = express();
 
 // Obtener todas las bicicletas
-export const obtenerBicicletas = async (req: Request, res: Response) => {
+export const obtenerBicicletaPorId = async (req: Request, res: Response) => {
     try {
-        const bicicletas = await Bicicleta.findAll();
-        res.status(200).json(bicicletas);
+        const { bikeId } = req.params;
+        const bicicleta = await Bicicleta.findByPk(bikeId);
+
+        if (!bicicleta) {
+            return res.status(404).json({ error: 'Bicicleta no encontrada' });
+        }
+
+        res.status(200).json(bicicleta);
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener bicicletas' });
+        res.status(500).json({ error: 'Error al obtener bicicleta por ID' });
     }
 };
+
 
 export const obtenerBicicletasConImagen = async (req: Request, res: Response) => {
     try {
@@ -136,7 +143,6 @@ export const aprobarBicicleta = async (req: Request, res: Response) => {
     }
 };
 
-
 export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
@@ -169,13 +175,12 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     }
 };
 
-
 export const agregarUbicacionABicicleta = async (req: Request, res: Response) => {
-    const { BikeID } = req.params; 
+    const { BikeID } = req.params;
 
     const { NombreUbicacion, Latitud, Longitud, Direccion } = req.body;
 
-    console.log(BikeID, NombreUbicacion, Latitud, Longitud, Direccion); 
+    console.log(BikeID, NombreUbicacion, Latitud, Longitud, Direccion);
     try {
         // Crear la ubicación
         const nuevaUbicacion = await Ubicacion.create({

@@ -3,7 +3,7 @@ import validateToken from './validate-token';
 import multer from 'multer';
 
 import {
-    obtenerBicicletas,
+    obtenerBicicletaPorId,
     crearBicicleta,
     actualizarBicicleta,
     eliminarBicicleta,
@@ -32,7 +32,8 @@ const upload = multer({ storage: storage });
 const router = Router();
 
 // Obtener todas las bicicletas
-router.get('/', validateToken, obtenerBicicletas);
+router.get('/bicicletas/:BikeID', validateToken, obtenerBicicletaPorId);
+
 router.get('/bikes', validateToken, obtenerBicicletasConImagen);
 
 // Crear una nueva bicicleta

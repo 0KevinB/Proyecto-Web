@@ -102,16 +102,25 @@
                     </div>
                     <div class="col-sm-6 mb-3">
                         <div class="card h-100">
+                            <!-- En tu componente.html -->
                             <div class="card-body">
                                 <h6 class="d-flex align-items-center mb-3"><i
-                                        class="material-icons text-info mr-2">assignment</i>Historial
-                                    de pagos</h6>
-                                <small>Web Design</small>
-                                <div class="progress mb-3" style="height: 5px">
-                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
-                                        aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                        class="material-icons text-info mr-2">assignment</i>Historial de pagos</h6>
+
+                                <div class="list-group">
+                                    <div *ngFor="let pago of historialPagos" class="list-group-item mb-3">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <small>Fecha de Inicio: {{ pago.FechaInicio | date:'short' }}</small>
+                                            <small class="mb-1">Fecha de Fin: {{ pago.FechaFin | date:'short' }}</small>
+                                        </div>
+                                        <div *ngIf="bicicletaSeleccionada[pago.BikeID]">
+                                            <h5 class="mb-1">Bike ID: {{ pago.BikeID }}</h5>
+                                        </div>
+                                        <p class="mb-1">Monto Total: ${{ pago.MontoTotal }}</p>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

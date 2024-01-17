@@ -45,7 +45,8 @@ export class CarritoComponent implements OnInit {
       PrecioTotal: this.producto.PrecioPorHora * cantidadHoras,
     };
     this.carritoService.addToCart(item).subscribe(data => {
-      console.log('data ',data);
+      console.log('data ', data);
     })
   }
+
 }

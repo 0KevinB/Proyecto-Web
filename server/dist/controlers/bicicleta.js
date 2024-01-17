@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarUbicacionABicicleta = exports.agregarBicicletaAUsuario = exports.aprobarBicicleta = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletas = void 0;
+exports.obtenerBicicletasDeUsuario = exports.verImagen = exports.agregarUbicacionABicicleta = exports.agregarBicicletaAUsuario = exports.aprobarBicicleta = exports.eliminarBicicleta = exports.actualizarBicicleta = exports.crearBicicleta = exports.obtenerBicicletasConImagen = exports.obtenerBicicletaPorId = void 0;
 const express_1 = __importDefault(require("express"));
 const bicicleta_1 = __importDefault(require("../models/bicicleta"));
 const propietarioBicicletas_1 = __importDefault(require("../models/propietarioBicicletas"));
@@ -22,16 +22,20 @@ const Bicicleta_Ubicacion_1 = __importDefault(require("../models/Bicicleta_Ubica
 const ubicacion_1 = __importDefault(require("../models/ubicacion"));
 const app = (0, express_1.default)();
 // Obtener todas las bicicletas
-const obtenerBicicletas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const obtenerBicicletaPorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const bicicletas = yield bicicleta_1.default.findAll();
-        res.status(200).json(bicicletas);
+        const { bikeId } = req.params;
+        const bicicleta = yield bicicleta_1.default.findByPk(bikeId);
+        if (!bicicleta) {
+            return res.status(404).json({ error: 'Bicicleta no encontrada' });
+        }
+        res.status(200).json(bicicleta);
     }
     catch (error) {
-        res.status(500).json({ error: 'Error al obtener bicicletas' });
+        res.status(500).json({ error: 'Error al obtener bicicleta por ID' });
     }
 });
-exports.obtenerBicicletas = obtenerBicicletas;
+exports.obtenerBicicletaPorId = obtenerBicicletaPorId;
 const obtenerBicicletasConImagen = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bicicletas = yield bicicleta_1.default.findAll({

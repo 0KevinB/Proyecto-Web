@@ -12,43 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.realizarAlquiler = void 0;
-const Carrito_1 = __importDefault(require("../models/Carrito"));
+exports.getAlquilerByCedula = void 0;
 const alquiler_1 = __importDefault(require("../models/alquiler"));
-const realizarAlquiler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// Controlador para obtener el estado de alquiler por cédula
+const getAlquilerByCedula = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Extrae los datos necesarios del cuerpo de la solicitud
-        const { Cedula, BikeID, HorasSeleccionadas, PrecioTotal, LocationID } = req.body;
-        // Obtén el carrito correspondiente
-        const carritoItem = yield Carrito_1.default.findOne({
-            where: {
-                Cedula,
-                BikeID,
-            },
+        const cedula = req.params.cedula;
+        // Buscar el estado de alquiler en la base de datos
+        const alquiler = yield alquiler_1.default.findAll({
+            where: { Cedula: cedula },
         });
-        if (!carritoItem) {
-            return res.status(404).json({ message: 'Item de carrito no encontrado' });
+        if (!alquiler) {
+            return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
         }
-        const newAlquiler = yield alquiler_1.default.create({
-            Cedula,
-            BikeID,
-            FechaInicio: carritoItem.get('FechaInicio'),
-            FechaFin: carritoItem.get('FechaFinalizacion'),
-            EstadoAlquiler: 'En proceso',
-            MontoTotal: PrecioTotal,
-            LocationID,
-        });
-        yield Carrito_1.default.destroy({
-            where: {
-                Cedula,
-                BikeID,
-            },
-        });
-        res.status(201).json(newAlquiler);
+        // Retornar el estado de alquiler
+        res.json(alquiler);
     }
     catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
-exports.realizarAlquiler = realizarAlquiler;
+exports.getAlquilerByCedula = getAlquilerByCedula;

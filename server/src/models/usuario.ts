@@ -8,17 +8,17 @@ const Usuario = sequelize.define('Usuario', {
         primaryKey: true,
     },
     Nombre: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING(50),
         allowNull: false
 
     },
     Apellido: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING(50),
         allowNull: false
 
     },
     CorreoElectronico: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING(50),
         unique: true,
         allowNull: false
 
@@ -29,7 +29,7 @@ const Usuario = sequelize.define('Usuario', {
 
     },
     Direccion: {
-        type: DataTypes.STRING(255),
+        type: DataTypes.STRING(50),
         allowNull: false
 
     },

@@ -19,7 +19,7 @@ const storage = multer_1.default.diskStorage({
 const upload = (0, multer_1.default)({ storage: storage });
 const router = (0, express_1.Router)();
 // Obtener todas las bicicletas
-router.get('/', validate_token_1.default, bicicleta_1.obtenerBicicletas);
+router.get('/bicicletas/:BikeID', validate_token_1.default, bicicleta_1.obtenerBicicletaPorId);
 router.get('/bikes', validate_token_1.default, bicicleta_1.obtenerBicicletasConImagen);
 // Crear una nueva bicicleta
 router.post('/', validate_token_1.default, bicicleta_1.crearBicicleta);

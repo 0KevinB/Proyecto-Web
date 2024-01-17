@@ -13,15 +13,15 @@ const Usuario = connection_1.default.define('Usuario', {
         primaryKey: true,
     },
     Nombre: {
-        type: sequelize_1.DataTypes.STRING(255),
+        type: sequelize_1.DataTypes.STRING(50),
         allowNull: false
     },
     Apellido: {
-        type: sequelize_1.DataTypes.STRING(255),
+        type: sequelize_1.DataTypes.STRING(50),
         allowNull: false
     },
     CorreoElectronico: {
-        type: sequelize_1.DataTypes.STRING(255),
+        type: sequelize_1.DataTypes.STRING(50),
         unique: true,
         allowNull: false
     },
@@ -30,7 +30,7 @@ const Usuario = connection_1.default.define('Usuario', {
         allowNull: false
     },
     Direccion: {
-        type: sequelize_1.DataTypes.STRING(255),
+        type: sequelize_1.DataTypes.STRING(50),
         allowNull: false
     },
     Telefono: {

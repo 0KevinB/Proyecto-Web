@@ -20,7 +20,7 @@ export class ProductService {
 
   // Obtener un producto por su ID
   getProductById(productId: number): Observable<Product> {
-    return this.http.get<Product>(`${this.myAppUrl}${this.myApiUrl}${productId}`);
+    return this.http.get<Product>(`${this.myAppUrl}${this.myApiUrl}bicicletas/${productId}`);
   }
 
   // Crear un nuevo producto

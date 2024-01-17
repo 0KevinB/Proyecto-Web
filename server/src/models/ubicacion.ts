@@ -28,12 +28,12 @@ const Ubicacion = sequelize.define('Ubicacion', {
 });
 
 Ubicacion.belongsToMany(Bicicleta, {
-    through: 'Bicicleta_Ubicacion', // Nombre de la tabla intermedia
+    through: 'Bicicleta_Ubicacion',
     foreignKey: 'LocationID',
 });
 
 Bicicleta.belongsToMany(Ubicacion, {
-    through: 'Bicicleta_Ubicacion', // Nombre de la tabla intermedia
+    through: 'Bicicleta_Ubicacion',
     foreignKey: 'BikeID',
 });
 

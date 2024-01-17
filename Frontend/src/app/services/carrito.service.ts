@@ -23,10 +23,8 @@ export class CarritoService {
 
   addToCart(product: CarritoItem): Observable<CarritoItem> {
     console.log('Servicio ', product);
-    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}agregar`, product).pipe(
-      map(response => response.alquiler),
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}agregar`, product)
+
   }
 
   handleError(error: any): Observable<never> {
@@ -44,5 +42,12 @@ export class CarritoService {
   getProductoSeleccionado(): Product | null {
     const storedData = localStorage.getItem('productoSeleccionado');
     return storedData ? JSON.parse(storedData) : null;
+  }
+
+  getAlquilerByCedula(cedula: string | null): Observable<any> {
+    const url = `${this.myAppUrl}${this.myApiUrl}alquiler/${cedula}`;
+    return this.http.get<any>(url).pipe(
+      catchError(this.handleError)
+    );
   }
 }
