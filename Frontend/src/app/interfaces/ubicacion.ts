@@ -1,7 +1,7 @@
 export interface Ubicacion {
   LocationID?: number;
-  NombreUbicacion?: string;
-  Latitud?: number;
-  Longitud?: number;
-  Direccion?: string;
+  NombreUbicacion: string;
+  Latitud: any;
+  Longitud: any;
+  Direccion: string;
 }

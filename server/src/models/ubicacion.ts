@@ -1,7 +1,7 @@
 // models/Ubicacion.ts
 
 import { DataTypes } from 'sequelize';
-import sequelize from '../db/connection'; // Ajusta la ruta según tu estructura de archivos
+import sequelize from '../db/connection';
 import Bicicleta from './bicicleta';
 
 const Ubicacion = sequelize.define('Ubicacion', {
@@ -28,12 +28,12 @@ const Ubicacion = sequelize.define('Ubicacion', {
 });
 
 Ubicacion.belongsToMany(Bicicleta, {
-    through: 'Bicicleta_Ubicacion', // Nombre de la tabla intermedia
+    through: 'Bicicleta_Ubicacion',
     foreignKey: 'LocationID',
 });
 
 Bicicleta.belongsToMany(Ubicacion, {
-    through: 'Bicicleta_Ubicacion', // Nombre de la tabla intermedia
+    through: 'Bicicleta_Ubicacion',
     foreignKey: 'BikeID',
 });
 

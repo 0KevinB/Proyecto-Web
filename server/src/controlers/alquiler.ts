@@ -1,47 +1,42 @@
-// controllers/alquilerAutomaticoController.ts
-
+// Importa el modelo y módulos necesarios
 import { Request, Response } from 'express';
 import Alquiler from '../models/alquiler';
-import Bicicleta from '../models/bicicleta';
-import Usuario from '../models/usuario';
-import Ubicacion from '../models/ubicacion';
-/*
-export const alquilerAutomatico = async (req: Request, res: Response) => {
-    // Obtener datos necesarios desde la solicitud (podrían ser enviados como parámetros o en el cuerpo de la solicitud)
-    const { Cedula, BikeID, HorasAlquiler } = req.body;
 
+// Controlador para obtener el estado de alquiler por cédula
+export const getAlquilerByCedula = async (req: Request, res: Response) => {
     try {
-        // Obtener información del usuario, bicicleta y ubicación
-        const usuario = await Usuario.findByPk(Cedula);
-        const bicicleta = await Bicicleta.findByPk(BikeID);
-        const ubicacion = await Ubicacion.findByPk(LocationID);
+        const cedula = req.params.cedula;
 
-        if (!usuario || !bicicleta || !ubicacion) {
-            return res.status(404).json({ mensaje: 'Usuario, bicicleta o ubicación no encontrados' });
-        }
-
-        // Calcular fechas y monto total
-        const fechaInicio = new Date();
-        const fechaFin = new Date();
-        fechaFin.setHours(fechaInicio.getHours() + HorasAlquiler);
-
-        const montoTotal = Bicicleta.PrecioPorHora * HorasAlquiler;
-
-        // Crear el registro de alquiler
-        const nuevoAlquiler = await Alquiler.create({
-            Cedula,
-            BikeID,
-            FechaInicio: fechaInicio,
-            FechaFin: fechaFin,
-            EstadoAlquiler: 'Activo', // Puedes ajustar según tus necesidades
-            MontoTotal: montoTotal,
-            LocationID: ubicacion.LocationID,
+        // Buscar el estado de alquiler en la base de datos
+        const alquiler = await Alquiler.findAll({
+            where: { Cedula: cedula },
         });
 
-        res.status(201).json(nuevoAlquiler);
+        if (!alquiler) {
+            return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
+        }
+
+        // Retornar el estado de alquiler
+        res.json(alquiler);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error al crear alquiler automático' });
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 };
-*/
+
+export const getAlquiler = async (req: Request, res: Response) => {
+    console.log('Llegaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ', req.params, req.body)
+    try {
+        const alquiler = await Alquiler.findAll();
+        if (!alquiler || alquiler.length === 0) {
+            return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
+        }
+
+        // Retornar el estado de alquiler
+        res.json(alquiler);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+

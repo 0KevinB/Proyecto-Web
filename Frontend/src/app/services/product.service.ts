@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Product } from '../interfaces/product';
 import { product_add } from '../interfaces/product_add.';
+import { Ubicacion } from '../interfaces/ubicacion';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class ProductService {
 
   // Obtener un producto por su ID
   getProductById(productId: number): Observable<Product> {
-    return this.http.get<Product>(`${this.myAppUrl}${this.myApiUrl}${productId}`);
+    return this.http.get<Product>(`${this.myAppUrl}${this.myApiUrl}bicicletas/${productId}`);
   }
 
   // Crear un nuevo producto
@@ -42,6 +43,11 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}bikes`);
   }
 
+  // Obtener todos los productos
+  getRentadas(): Observable<Product[]> {
+    console.log("Product renta")
+    return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}rentadas`);
+  }
 
   // Agregar una bicicleta a un usuario
   createBicycleForUser(cedula: string, formData: product_add): Observable<any> {
@@ -52,12 +58,16 @@ export class ProductService {
     datos.append("PrecioPorHora", formData.PrecioPorHora);
     datos.append("Descripcion", formData.Descripcion);
     datos.append("imagenReferencia", formData.imagenReferencia);
-    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}/${cedula}/assign-bike`, datos);
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}${cedula}/assign-bike`, datos)
+      .pipe(
+        tap((respuesta: any) => console.log(respuesta)) // Agrega esta línea para imprimir la respuesta en la consola
+      );
   }
 
-  // product.service.ts
+  bicicleta_ubicacion(bikeid: number, formData: Ubicacion): Observable<any> {
+    return this.http.post<any>(`${this.myAppUrl}${this.myApiUrl}${bikeid}/assign-ubicacion`, formData);
+  }
 
-  // Aprobar una bicicleta por su ID
   approveProduct(productId: number): Observable<void> {
     return this.http.put<void>(`${this.myAppUrl}${this.myApiUrl}approve/${productId}`, null);
   }

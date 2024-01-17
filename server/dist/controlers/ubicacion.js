@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerUbicacionPorBicicletaId = exports.obtenerUbicacion = void 0;
+exports.actualizarUbicacion = exports.obtenerUbicacionPorBicicletaId = exports.obtenerUbicacion = void 0;
 const express_1 = __importDefault(require("express"));
 const ubicacion_1 = __importDefault(require("../models/ubicacion"));
 const Bicicleta_Ubicacion_1 = __importDefault(require("../models/Bicicleta_Ubicacion"));
@@ -55,3 +55,25 @@ const obtenerUbicacionPorBicicletaId = (req, res) => __awaiter(void 0, void 0, v
     }
 });
 exports.obtenerUbicacionPorBicicletaId = obtenerUbicacionPorBicicletaId;
+const actualizarUbicacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { ubicacionId } = req.params;
+        const { NombreUbicacion, Direccion } = req.body;
+        const ubicacion = yield ubicacion_1.default.findByPk(ubicacionId);
+        if (!ubicacion) {
+            return res.status(404).json({ error: 'Ubicación no encontrada' });
+        }
+        // Actualiza la ubicación con los nuevos datos
+        yield ubicacion.update({
+            NombreUbicacion,
+            Direccion,
+            // Otros campos que puedas tener en la ubicación
+        });
+        res.status(200).json({ mensaje: 'Ubicación actualizada correctamente' });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al actualizar ubicación' });
+    }
+});
+exports.actualizarUbicacion = actualizarUbicacion;

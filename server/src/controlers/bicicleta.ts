@@ -4,17 +4,61 @@ import express, { Request, Response } from 'express';
 import Bicicleta from '../models/bicicleta';
 import PropietarioBicicletas from '../models/propietarioBicicletas';
 import path from 'path';
+import Bicicleta_Ubicacion from '../models/Bicicleta_Ubicacion';
+import Ubicacion from '../models/ubicacion';
+import Alquiler from '../models/alquiler';
+import { Op } from 'sequelize';
 
 
 const app = express();
 
 // Obtener todas las bicicletas
-export const obtenerBicicletas = async (req: Request, res: Response) => {
+export const obtenerBicicletaPorId = async (req: Request, res: Response) => {
     try {
-        const bicicletas = await Bicicleta.findAll();
-        res.status(200).json(bicicletas);
+        const { bikeId } = req.params;
+        const bicicleta = await Bicicleta.findByPk(bikeId);
+
+        if (!bicicleta) {
+            return res.status(404).json({ error: 'Bicicleta no encontrada' });
+        }
+
+        res.status(200).json(bicicleta);
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener bicicletas' });
+        res.status(500).json({ error: 'Error al obtener bicicleta por ID' });
+    }
+};
+
+export const obtenerBicicletasEnRenta = async (req: Request, res: Response) => {
+    try {
+        const fechaActual = new Date();
+
+        const bicicletas = await Bicicleta.findAll({
+            include: [
+                {
+                    model: PropietarioBicicletas,
+                    attributes: ['imagenReferencia', 'Estado'],
+                },
+                {
+                    model: Alquiler,
+                    where: {
+                        EstadoAlquiler: 'En renta', // Filtrar por alquileres que están actualmente en curso
+                        FechaInicio: {
+                            [Op.lte]: fechaActual, // La fecha de inicio debe ser menor o igual a la fecha actual
+                        },
+                        FechaFin: {
+                            [Op.gt]: fechaActual, // La fecha de fin debe ser mayor a la fecha actual
+                        },
+                    },
+                    attributes: ['EstadoAlquiler'],
+                },
+            ],
+            attributes: ['BikeID', 'Modelo', 'Tipo', 'Estado', 'PrecioPorHora', 'Descripcion'],
+        });
+
+        res.json(bicicletas);
+    } catch (error) {
+        console.error('Error al obtener datos de bicicletas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
@@ -36,6 +80,7 @@ export const obtenerBicicletasConImagen = async (req: Request, res: Response) =>
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
+
 // Crear una nueva bicicleta
 export const crearBicicleta = async (req: Request, res: Response) => {
     try {
@@ -134,7 +179,6 @@ export const aprobarBicicleta = async (req: Request, res: Response) => {
     }
 };
 
-
 export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
@@ -166,6 +210,40 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
         res.status(500).json({ msg: 'Ocurrió un error al agregar bicicleta al usuario' });
     }
 };
+
+export const agregarUbicacionABicicleta = async (req: Request, res: Response) => {
+    const { BikeID } = req.params;
+
+    const { NombreUbicacion, Latitud, Longitud, Direccion } = req.body;
+
+    console.log(BikeID, NombreUbicacion, Latitud, Longitud, Direccion);
+    try {
+        // Crear la ubicación
+        const nuevaUbicacion = await Ubicacion.create({
+            NombreUbicacion,
+            Latitud,
+            Longitud,
+            Direccion,
+        });
+
+        // Obtener el ID de la ubicación
+        const ubicacionID = nuevaUbicacion.get('LocationID');
+
+        // Asociar la ubicación a la bicicleta a través de la tabla intermedia
+        await Bicicleta_Ubicacion.create({
+            BikeID,
+            LocationID: ubicacionID,
+        });
+
+        res.status(201).json(nuevaUbicacion);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Ocurrió un error al agregar ubicación a la bicicleta' });
+    }
+};
+
+
+
 
 export let verImagen = async (req: Request, res: Response) => {
     let ruta = path.join(__dirname, '../../img/productos', req.params.img);

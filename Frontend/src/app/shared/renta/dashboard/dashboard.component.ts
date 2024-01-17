@@ -4,12 +4,13 @@ import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
 import { FilterService } from 'src/app/services/filter.service';
-import { Observable, map } from 'rxjs';
+import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
+import { CarritoService } from 'src/app/services/carrito.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,10 +39,12 @@ export class DashboardComponent implements OnInit {
     private _filterService: FilterService,
     private notificationService: NotificationService,
     private ubicacionService: UbicacionService,
-    private router: Router
+    private router: Router,
+    private carritoService: CarritoService
   ) { }
 
   ngOnInit(): void {
+    this.getProductsRentados()
     this._userService.getRolUsuario().subscribe((rol) => {
       this.isAdmin = rol === 2;
     });
@@ -102,17 +105,40 @@ export class DashboardComponent implements OnInit {
       this.listProduct = data;
     });
   }
+
   getProductsUser(): Observable<any> {
-    return this._productService.getProductsWithImages().pipe(map((data) => {
-      const dataFiltrada = data.filter((item) => {
-        if (item.PropietarioBicicletas && item.PropietarioBicicletas.length > 0) {
-          return item.PropietarioBicicletas.some((bicicleta: { Estado: boolean }) => bicicleta.Estado === true);
-        }
-        return false;
-      });
-      this.listProductUser = dataFiltrada;
-    }));
+    return forkJoin([
+      this._productService.getProductsWithImages(),
+      this._productService.getRentadas()
+    ]).pipe(
+      map(([allProducts, rentadas]) => {
+        const dataFiltrada = allProducts.filter((item) => {
+          if (item.PropietarioBicicletas && item.PropietarioBicicletas.length > 0) {
+            return item.PropietarioBicicletas.some((bicicleta: { Estado: boolean }) => bicicleta.Estado === true);
+          }
+          return false;
+        });
+
+        this.listProductUser = dataFiltrada;
+
+        // Filtrar los productos que están en rentadas
+        this.filteredProducts = rentadas;
+
+        const notInFilteredProducts = this.listProductUser.filter(
+          product => !this.filteredProducts.some(filteredProduct => filteredProduct.BikeID === product.BikeID)
+        );
+        console.log(notInFilteredProducts);
+        this.listProductUser = notInFilteredProducts;
+      })
+    );
   }
+  getProductsRentados() {
+    this._productService.getRentadas().subscribe((data) => {
+      this.filteredProducts = data;
+      console.log(this.filteredProducts)
+    });
+  }
+
   isProductApproved(product: Product): boolean {
     return product.PropietarioBicicletas[0].Estado === 1;
   }
@@ -149,12 +175,16 @@ export class DashboardComponent implements OnInit {
   verMapa(bicicletaId: number): void {
     this.ubicacionService.getUbicacion(bicicletaId).subscribe(
       (ubicacion) => {
-        console.log('Ubicación de la bicicleta:', ubicacion);
+        const locationID = ubicacion[0].LocationID;
         this.router.navigate(['/mapa', bicicletaId]);
       },
       (error) => {
         console.error('Error al obtener la ubicación de la bicicleta:', error);
       }
     );
+  }
+
+  onReserve(product: Product): void {
+    localStorage.setItem('productoSeleccionado', JSON.stringify(product));
   }
 }

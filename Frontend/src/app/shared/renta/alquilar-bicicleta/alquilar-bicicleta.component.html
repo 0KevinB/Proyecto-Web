@@ -38,8 +38,6 @@
                         <small class="form-text text-muted">(EJ 1.50).</small>
                     </div>
                 </div>
-
-
                 <div class="col-4 py-2">
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
@@ -54,10 +52,15 @@
                 </div>
             </div>
 
+            <app-ubicacion></app-ubicacion>
+            <div class="mapa">
+                <app-mapa></app-mapa>
+            </div>
             <div class="row">
                 <button class="btn btn-danger" type="button" (click)="guardarBicicleta()">Guardar</button>
             </div>
         </form>
     </div>
-    <app-footer></app-footer>
+
 </div>
+<app-footer></app-footer>
