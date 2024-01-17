@@ -6,3 +6,6 @@
 
  ## Instrucciones para levantar el proyecto
  Abre en la terminal la carpeta, ve hacia el FrontEnd e ingresa 'npm install'
+ En otra terminal corra el BackEnd yendo asi mismo hacia su ruta y escriba: 'npm run dev'
+ La base de datos se llama 'proyecto-web'
+ 
