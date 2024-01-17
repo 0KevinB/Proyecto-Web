@@ -43,7 +43,7 @@ const addToCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const fechaInicio = new Date();
         // Calcular la fecha final como la fecha actual más las horas seleccionadas
         const fechaFinalizacion = new Date(fechaInicio);
-        fechaFinalizacion.setHours(fechaFinalizacion.getHours() + CantidadHoras);
+        fechaFinalizacion.setMinutes(fechaFinalizacion.getMinutes() + CantidadHoras);
         // Obtener la LocationID de la tabla intermedia Bicicleta_Ubicacion
         const ubicacionBicicleta = yield Bicicleta_Ubicacion_1.default.findOne({
             where: { BikeID: BikeID },
@@ -67,13 +67,18 @@ const addToCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             BikeID: BikeID,
             FechaInicio: fechaInicio,
             FechaFin: fechaFinalizacion,
-            EstadoAlquiler: 'Pendiente',
+            EstadoAlquiler: 'En renta',
             MontoTotal: PrecioTotal,
             LocationID: LocationID,
         });
-        console.log('back - Carrito', newCartItem);
-        console.log('back - Alquiler', newRental);
-        res.status(201).json({ carrito: newCartItem, alquiler: newRental });
+        // Configurar la verificación automática después de la fecha de finalización
+        const rentalId = newRental.RentalID;
+        const tiempoDeEspera = newRental.FechaFin.getTime() - new Date().getTime();
+        console.log('Datos a enviar para actualizar: ', rentalId, tiempoDeEspera);
+        setTimeout(() => {
+            actualizarEstadoBicicleta(rentalId);
+        }, tiempoDeEspera);
+        res.status(201).json({ alquiler: newRental });
     }
     catch (error) {
         console.error(error);
@@ -81,36 +86,21 @@ const addToCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.addToCarrito = addToCarrito;
-// Agregar un producto al carrito
-/*
-export const addToCarrito = async (req: Request, res: Response) => {
+// Función para cambiar el estado de la bicicleta automáticamente
+const actualizarEstadoBicicleta = (rentalId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { Cedula, Producto, CantidadHoras, PrecioTotal } = req.body;
-        const { BikeID } = Producto;
-
-        // Calcular la fecha actual
-        const fechaInicio = new Date();
-
-        // Calcular la fecha final como la fecha actual más las horas seleccionadas
-        const fechaFinalizacion = new Date(fechaInicio);
-        fechaFinalizacion.setHours(fechaFinalizacion.getHours() + CantidadHoras);
-
-        const newCartItem = await Carrito.create({
-            Cedula: Cedula,
-            BikeID: BikeID,
-            HorasSeleccionadas: CantidadHoras,
-            FechaInicio: fechaInicio,
-            FechaFinalizacion: fechaFinalizacion,
-            PrecioTotal: PrecioTotal,
-        });
-        console.log('back', newCartItem);
-        res.status(201).json(newCartItem);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+        const rental = yield alquiler_1.default.findByPk(rentalId);
+        // Verifica si la fecha actual es posterior a la fecha de finalización
+        if (rental && new Date() > rental.FechaFin) {
+            // Cambia el estado de la bicicleta a "Disponible"
+            const rentalId = rental.RentalID;
+            yield alquiler_1.default.update({ EstadoAlquiler: 'Finalizada' }, { where: { RentalID: rentalId } });
+        }
     }
-};
-*/
+    catch (error) {
+        console.error('Error al actualizar el estado de la bicicleta:', error);
+    }
+});
 const removeFromCarrito = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const carritoId = req.params.carritoId;
