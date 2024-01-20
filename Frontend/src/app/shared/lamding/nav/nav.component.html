@@ -24,13 +24,13 @@
         <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
           <a class="dropdown-item" href="/perfil">Perfil</a>
           <a class="dropdown-item" [routerLink]="['/carrito']">Carrito</a>
-          <button class="dropdown-item bg-danger text-white" (click)="logout()">Logout</button>
+          <button class="dropdown-item bg-danger text-white" (click)="logout()">Cerrar Sesión</button>
         </div>
       </div>
     </ng-container>
     <ng-template #showLoginButtons>
-      <button type="button" class="btn btn-outline-danger me-2 text-white" [routerLink]="['/login']">Login</button>
-      <button type="button" class="btn btn-danger" [routerLink]="['/register']">Sign-up</button>
+      <button type="button" class="btn btn-outline-danger me-2 text-white" [routerLink]="['/login']">Iniciar Sesión</button>
+      <button type="button" class="btn btn-danger" [routerLink]="['/register']">Registrarse</button>
     </ng-template>
   </div>
 

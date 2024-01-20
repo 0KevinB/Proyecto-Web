@@ -22,6 +22,8 @@ const Bicicleta_Ubicacion_1 = __importDefault(require("../models/Bicicleta_Ubica
 const ubicacion_1 = __importDefault(require("../models/ubicacion"));
 const alquiler_1 = __importDefault(require("../models/alquiler"));
 const sequelize_1 = require("sequelize");
+const Carrito_1 = __importDefault(require("../models/Carrito"));
+const usuario_1 = __importDefault(require("../models/usuario"));
 const app = (0, express_1.default)();
 // Obtener todas las bicicletas
 const obtenerBicicletaPorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -125,16 +127,15 @@ const eliminarBicicleta = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         const bicicleta = yield bicicleta_1.default.findByPk(BikeID);
         if (bicicleta) {
-            // Verificar que Bicicleta.sequelize no sea undefined antes de usarlo
             if (bicicleta_1.default.sequelize) {
-                // Inicia una transacción manualmente
                 const t = yield bicicleta_1.default.sequelize.transaction();
                 try {
                     // Elimina la bicicleta de la tabla propietarioBicicleta dentro de la transacción
                     yield propietarioBicicletas_1.default.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
-                    // Luego, elimina la bicicleta de la tabla Bicicleta
+                    yield Bicicleta_Ubicacion_1.default.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
+                    yield alquiler_1.default.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
+                    yield Carrito_1.default.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
                     yield bicicleta.destroy({ transaction: t });
-                    // Hace commit de la transacción si todo fue exitoso
                     yield t.commit();
                     res.status(204).send();
                 }
@@ -165,7 +166,7 @@ const aprobarBicicleta = (req, res) => __awaiter(void 0, void 0, void 0, functio
         return res.status(400).json({ error: 'ID de bicicleta no proporcionada' });
     }
     try {
-        const bicicleta = yield propietarioBicicletas_1.default.findByPk(productId);
+        const bicicleta = yield propietarioBicicletas_1.default.findOne({ where: { BikeID: productId } });
         if (bicicleta) {
             // Verificar que PropietarioBicicletas.sequelize no sea undefined antes de usarlo
             if (propietarioBicicletas_1.default.sequelize) {
@@ -201,6 +202,11 @@ exports.aprobarBicicleta = aprobarBicicleta;
 const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
+    // Obtener información del usuario
+    const usuario = yield usuario_1.default.findOne({ where: { Cedula } });
+    if (!usuario) {
+        return res.status(404).json({ msg: 'Usuario no encontrado' });
+    }
     try {
         // Crear la bicicleta
         const nuevaBicicleta = yield bicicleta_1.default.create({
@@ -213,11 +219,13 @@ const agregarBicicletaAUsuario = (req, res) => __awaiter(void 0, void 0, void 0,
         });
         // Obtener el ID de la bicicleta
         const bikeID = nuevaBicicleta.get('BikeID');
+        const nuevoEstado = usuario.getDataValue('RolID') === 2 ? true : false;
         // Asociar la bicicleta al usuario a través de la tabla intermedia
         yield propietarioBicicletas_1.default.create({
             Cedula,
             BikeID: bikeID,
             imagenReferencia: req.file ? req.file.filename : null,
+            Estado: nuevoEstado
         });
         res.status(201).json(nuevaBicicleta);
     }

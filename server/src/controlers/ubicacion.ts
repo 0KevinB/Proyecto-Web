@@ -27,7 +27,6 @@ export const obtenerUbicacion = async (req: Request, res: Response) => {
 export const obtenerUbicacionPorBicicletaId = async (req: Request, res: Response) => {
     try {
         const { bikeId } = req.params; // Supongo que el BikeID está en los parámetros de la solicitud
-
         const ubicaciones: any[] = await Bicicleta_Ubicacion.findAll({
             where: { BikeID: bikeId },
             include: [{
@@ -38,7 +37,6 @@ export const obtenerUbicacionPorBicicletaId = async (req: Request, res: Response
 
         // Obtén solo las ubicaciones de la relación
         const ubicacionesFiltradas = ubicaciones.map((ubicacionBicicleta: any) => ubicacionBicicleta.Ubicacion);
-
         res.status(200).json(ubicacionesFiltradas);
     } catch (error) {
         console.error(error);
@@ -50,20 +48,16 @@ export const actualizarUbicacion = async (req: Request, res: Response) => {
     try {
         const { ubicacionId } = req.params;
         const { NombreUbicacion, Direccion } = req.body;
-
         const ubicacion = await Ubicacion.findByPk(ubicacionId);
-
         if (!ubicacion) {
             return res.status(404).json({ error: 'Ubicación no encontrada' });
         }
-
         // Actualiza la ubicación con los nuevos datos
         await ubicacion.update({
             NombreUbicacion,
             Direccion,
             // Otros campos que puedas tener en la ubicación
         });
-
         res.status(200).json({ mensaje: 'Ubicación actualizada correctamente' });
     } catch (error) {
         console.error(error);

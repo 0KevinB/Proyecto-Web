@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
@@ -22,6 +22,8 @@ import { Ubicacion } from 'src/app/interfaces/ubicacion';
 })
 
 export class AlquilarBicicletaComponent {
+  @ViewChild(UbicacionComponent) ubicacionComponent: UbicacionComponent | undefined;
+
   bicicletaForm: FormGroup | any;
   cedulaUsuario: string | null = null;
   ubicacionData: FormGroup | any;

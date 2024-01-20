@@ -52,12 +52,12 @@
                 </div>
             </div>
 
-            <app-ubicacion></app-ubicacion>
+            <app-ubicacion #ubicacionForm></app-ubicacion>
             <div class="mapa">
                 <app-mapa></app-mapa>
             </div>
             <div class="row">
-                <button class="btn btn-danger" type="button" (click)="guardarBicicleta()">Guardar</button>
+                <button class="btn btn-danger" type="button" [disabled]="!ubicacionForm.ubicacionForm.valid" (click)="guardarBicicleta()">Guardar</button>
             </div>
         </form>
     </div>
