@@ -8,6 +8,8 @@ import Bicicleta_Ubicacion from '../models/Bicicleta_Ubicacion';
 import Ubicacion from '../models/ubicacion';
 import Alquiler from '../models/alquiler';
 import { Op } from 'sequelize';
+import Carrito from '../models/Carrito';
+import Usuario from '../models/usuario';
 
 
 const app = express();
@@ -113,16 +115,15 @@ export const eliminarBicicleta = async (req: Request, res: Response) => {
     try {
         const bicicleta = await Bicicleta.findByPk(BikeID);
         if (bicicleta) {
-            // Verificar que Bicicleta.sequelize no sea undefined antes de usarlo
             if (Bicicleta.sequelize) {
-                // Inicia una transacción manualmente
                 const t = await Bicicleta.sequelize.transaction();
                 try {
                     // Elimina la bicicleta de la tabla propietarioBicicleta dentro de la transacción
                     await PropietarioBicicletas.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
-                    // Luego, elimina la bicicleta de la tabla Bicicleta
+                    await Bicicleta_Ubicacion.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
+                    await Alquiler.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
+                    await Carrito.destroy({ where: { BikeID: bicicleta.getDataValue('BikeID') }, transaction: t });
                     await bicicleta.destroy({ transaction: t });
-                    // Hace commit de la transacción si todo fue exitoso
                     await t.commit();
                     res.status(204).send();
                 } catch (error) {
@@ -149,7 +150,7 @@ export const aprobarBicicleta = async (req: Request, res: Response) => {
         return res.status(400).json({ error: 'ID de bicicleta no proporcionada' });
     }
     try {
-        const bicicleta = await PropietarioBicicletas.findByPk(productId);
+        const bicicleta = await PropietarioBicicletas.findOne({ where: { BikeID: productId } });
         if (bicicleta) {
             // Verificar que PropietarioBicicletas.sequelize no sea undefined antes de usarlo
             if (PropietarioBicicletas.sequelize) {
@@ -182,6 +183,12 @@ export const aprobarBicicleta = async (req: Request, res: Response) => {
 export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
+    // Obtener información del usuario
+    const usuario = await Usuario.findOne({ where: { Cedula } });
+
+    if (!usuario) {
+        return res.status(404).json({ msg: 'Usuario no encontrado' });
+    }
 
     try {
         // Crear la bicicleta
@@ -197,11 +204,15 @@ export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
         // Obtener el ID de la bicicleta
         const bikeID = nuevaBicicleta.get('BikeID');
 
+        const nuevoEstado = usuario.getDataValue('RolID') === 2 ? true : false;
+
+
         // Asociar la bicicleta al usuario a través de la tabla intermedia
         await PropietarioBicicletas.create({
             Cedula,
             BikeID: bikeID,
             imagenReferencia: req.file ? req.file.filename : null,
+            Estado: nuevoEstado
         });
 
         res.status(201).json(nuevaBicicleta);
@@ -241,8 +252,6 @@ export const agregarUbicacionABicicleta = async (req: Request, res: Response) =>
         res.status(500).json({ msg: 'Ocurrió un error al agregar ubicación a la bicicleta' });
     }
 };
-
-
 
 
 export let verImagen = async (req: Request, res: Response) => {

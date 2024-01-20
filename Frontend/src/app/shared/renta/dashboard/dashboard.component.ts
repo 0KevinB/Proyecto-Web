@@ -32,7 +32,9 @@ export class DashboardComponent implements OnInit {
     { nombre: 'Todas', checked: true },
   ];
   isAdmin: boolean = false;
+  editMode: boolean = false;
   selectedFilter: string = 'Todas';
+  bicicletaEditada: { BikeID: number; Modelo: string; Tipo: string; Estado: string; imagenReferencia: any; PrecioPorHora: number; Descripcion: string; PropietarioBicicletas: any; CantidadHoras: number; FechaInicio: Date; FechaFinalizacion: Date; } | any;
   constructor(
     private _productService: ProductService,
     private _userService: UserService,
@@ -163,6 +165,7 @@ export class DashboardComponent implements OnInit {
       this.notificationService.notify('El ID del producto es indefinido o nulo.', 2000);
     }
   }
+
   approveBicycle(bikeId: number) {
     if (bikeId !== undefined) {
       this._productService.approveProduct(bikeId).subscribe(() => {
@@ -186,5 +189,37 @@ export class DashboardComponent implements OnInit {
 
   onReserve(product: Product): void {
     localStorage.setItem('productoSeleccionado', JSON.stringify(product));
+  }
+
+  editarBicicleta(product: Product): void {
+    this.editMode = true;
+    this.bicicletaEditada = { ...product };
+  }
+
+  guardarCambios(): void {
+    if (this.bicicletaEditada && this.bicicletaEditada.BikeID) {
+      this._productService.updateProduct(this.bicicletaEditada.BikeID, this.bicicletaEditada)
+        .subscribe(
+          response => {
+            console.log('Bicicleta actualizada con éxito:', response);
+            // Puedes realizar otras acciones después de la actualización, como recargar la lista de bicicletas, etc.
+            this.getProducts();
+            this.bicicletaEditada = null; // Limpiar la bicicleta editada después de guardar cambios
+            this.notificationService.notify('Bicicleta actualizada correctamente', 2000);
+            this.cancelarEdicion();
+          },
+          error => {
+            console.error('Error al actualizar bicicleta:', error);
+            // Puedes manejar el error según tus necesidades
+            this.notificationService.notify('Error al actualizar la bicicleta', 2000);
+          }
+        );
+    } else {
+      this.notificationService.notify('La bicicleta a editar no tiene un ID válido', 2000);
+    }
+  }
+  cancelarEdicion(): void {
+    this.editMode = false;
+    this.bicicletaEditada = null;
   }
 }

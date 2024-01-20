@@ -35,17 +35,75 @@
                         <p>{{ product.Descripcion || 'N/A' }}</p>
                         <p>Estado: {{ product.Estado || 'N/A' }}</p>
                         <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
+
+                        <!-- Botones para Aprobar, Eliminar y Editar -->
                         <button class="btn btn-success col-6" (click)="approveBicycle(product.BikeID)">
                             Aprobar
                         </button>
                         <button class="btn btn-danger col-6" (click)="deleteProduct(product.BikeID)">
                             Eliminar
                         </button>
-                        <button class="btn btn-primary col-12" (click)="verMapa(product.BikeID)">
+                        <button class="btn btn-primary col-6 mt-2" (click)="editarBicicleta(product)">
+                            Editar
+                        </button>
+
+                        <!-- Botón para Ver ubicación -->
+                        <button class="btn btn-secondary col-6 mt-2" (click)="verMapa(product.BikeID)">
                             Ver ubicación
                         </button>
                     </div>
                 </div>
+
+
+                <div class="card catalogo mt-3" *ngIf="editMode && bicicletaEditada.BikeID === product.BikeID">
+                    <form (submit)="guardarCambios()" class="p-3">
+                        <div class="form-group">
+                            <label for="modelo">Modelo:</label>
+                            <input [(ngModel)]="bicicletaEditada.Modelo" name="modelo" type="text" class="form-control"
+                                id="modelo">
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcion">Descripción:</label>
+                            <textarea [(ngModel)]="bicicletaEditada.Descripcion" name="descripcion" class="form-control"
+                                id="descripcion"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="estado">Estado:</label>
+                            <select [(ngModel)]="bicicletaEditada.Estado" name="estado" class="form-control" id="estado"
+                                required>
+                                <option value="Muy bueno">Muy bueno</option>
+                                <option value="Bueno">Bueno</option>
+                                <option value="Regular">Regular</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="precioPorHora">Precio por Hora:</label>
+                            <input [(ngModel)]="bicicletaEditada.PrecioPorHora" name="precioPorHora" type="text"
+                                class="form-control" id="precioPorHora" required pattern="[0-9]+(\.[0-9]+)?">
+                            <small class="form-text text-muted">(Ejemplo: 1.50)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo">Tipo:</label>
+                            <select [(ngModel)]="bicicletaEditada.Tipo" name="tipo" class="form-control" id="tipo"
+                                required>
+                                <option value="Eléctrica">Eléctrica</option>
+                                <option value="Tradicional">Tradicional</option>
+                                <option value="Montaña">Montaña</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success mt-3">
+                                Guardar Cambios
+                            </button>
+                            <button type="button" class="btn btn-secondary mt-3" (click)="cancelarEdicion()">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+
+
                 <div class="fixed-container">
                     <h3 class="text-center">Bicicletas cerca de tu zona
                         <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
@@ -56,6 +114,7 @@
         </div>
     </div>
 </div>
+
 
 <ng-template #userDashboard>
     <div class="container">
