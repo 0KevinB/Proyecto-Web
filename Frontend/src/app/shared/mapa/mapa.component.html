@@ -19,7 +19,7 @@
       </div>
     </div>
   </nav>
-  <ng-container *ngIf="isAdmin">
+  <ng-container *ngIf="isAdmin && currentRoute != 'mapa'">
     <div class="container" *ngIf="!modoEdicion">
       <h2>Detalles de Ubicación</h2>
       <p><strong>Nombre de la Ubicación:</strong> {{ ubicacionForm.get('NombreUbicacion').value }}</p>

@@ -49,6 +49,14 @@ export class CarritoService {
     );
   }
 
+  getAlquilerByBikeID(bikeId: any): Observable<any> {
+    const url = `${this.myAppUrl}${this.myApiUrl}alquilerBI/${bikeId}`;
+    return this.http.get<any>(url).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+
   getAlquiler(): Observable<any> {
     const url = `${this.myAppUrl}${this.myApiUrl}alquiler`;
     console.log(url);

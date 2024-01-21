@@ -17,6 +17,9 @@
                     <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
                         <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
                     </label>
+                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Rentadas')">
+                        <input type="radio" name="options" id="option5" autocomplete="off"> Rentadas
+                    </label>
                 </div>
                 <div>
                     <h3 class="text-center">¿Quieres rentar tu bicicleta?
@@ -35,8 +38,17 @@
                         <p>{{ product.Descripcion || 'N/A' }}</p>
                         <p>Estado: {{ product.Estado || 'N/A' }}</p>
                         <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
+                        <div *ngIf="detallesRenta">
+                            <h2>Detalles de la Renta</h2>
+                            <div *ngFor="let detalle of detallesRenta" 
+                            [ngClass]="{'bg-green': esFechaMenor(detalle.FechaFin), 
+                                'bg-red': !esFechaMenor(detalle.FechaFin)}">
 
-                        <!-- Botones para Aprobar, Eliminar y Editar -->
+                                <p>BikeID: {{ detalle.BikeID }}</p>
+                                <p>Fecha de Inicio: {{ detalle.FechaInicio | date:'short' }}</p>
+                                <p>Fecha de Fin: {{ detalle.FechaFin | date:'short' }}</p>
+                            </div>
+                        </div>
                         <button class="btn btn-success col-6" (click)="approveBicycle(product.BikeID)">
                             Aprobar
                         </button>
@@ -46,15 +58,12 @@
                         <button class="btn btn-primary col-6 mt-2" (click)="editarBicicleta(product)">
                             Editar
                         </button>
-
                         <!-- Botón para Ver ubicación -->
                         <button class="btn btn-secondary col-6 mt-2" (click)="verMapa(product.BikeID)">
                             Ver ubicación
                         </button>
                     </div>
                 </div>
-
-
                 <div class="card catalogo mt-3" *ngIf="editMode && bicicletaEditada.BikeID === product.BikeID">
                     <form (submit)="guardarCambios()" class="p-3">
                         <div class="form-group">
@@ -101,9 +110,6 @@
                         </div>
                     </form>
                 </div>
-
-
-
                 <div class="fixed-container">
                     <h3 class="text-center">Bicicletas cerca de tu zona
                         <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!

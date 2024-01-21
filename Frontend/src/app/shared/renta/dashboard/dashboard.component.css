@@ -10,6 +10,15 @@
 
 }
 
+/* En tu hoja de estilos CSS */
+.bg-green {
+    background-color: lightgreen;
+}
+
+.bg-red {
+    background-color: lightcoral;
+}
+
 .card {
     border-color: black;
 }
