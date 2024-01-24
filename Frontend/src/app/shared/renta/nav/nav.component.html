@@ -1,26 +1,30 @@
-<nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between 
-    py-3 mb-4 me border-bottom bg-dark ">
-  <div class="col-md-3  mb-2 mb-md-0">
-    <a href="/catalogo" class="d-inline-flex link-body-emphasis text-decoration-none ">
-      <img src="../../../assets/img/nodo.png" aria-label="Bootstrap" class="bi my-auto mx-5" width="45" role="img"
-        alt="">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">
+      <img src="assets/img/nodo.png" aria-label="Bootstrap" class="bi" width="45" role="img" alt="">
     </a>
-  </div>
-  <form class="form-inline me-4">
-    <input class="form-control form-control-lg" type="text" placeholder="Buscar" aria-label="filterPost"
-      name="filterPost" [(ngModel)]="filterPost" (input)="onSearchChange()">
-  </form>
-  <div class="me-0"></div>
-
-  <div class="dropdown me-4">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false">
-      Cuenta
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="/perfil">Perfil</a>
-      <a class="dropdown-item" [routerLink]="['/carrito']">Carrito</a>
-      <button class="dropdown-item bg-danger text-white" (click)="Logout()">Logout</button>
+    <div class="collapse navbar-collapse justify-content-end col-10" id="navbarNav">
+      <form class="form-inline mx-auto my-2 my-lg-0">
+        <input class="form-control form-control-lg input-grande" type="text" placeholder="Buscar" aria-label="filterPost"
+         name="filterPost" [(ngModel)]="filterPost" (input)="onSearchChange()">
+      </form>
+    </div>
+    <div class="collapse navbar-collapse justify-content-left" id="navbarNav">
+      <div class="dropdown mt-2 mt-md-0">
+        <button class="btn btn-outline-primary me-3 text-white border border-danger custom-btn-outline custom-text-black custom-btn-ancho" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        Cuenta
+      </button>
+        <div class="dropdown-menu dropdown-menu-end bg-dark" aria-labelledby="dropdownMenuButton" style="width: 200px; margin-right: 10px;">
+          <a class="dropdown-item text-light border border-dark bg-secondary" href="/perfil">Perfil</a>
+          <a class="dropdown-item text-light border border-dark bg-secondary" [routerLink]="['/carrito']">Carrito</a>
+          <button class="dropdown-item text-light border border-dark bg-danger" (click)="Logout()">Cerrar Sesión</button>
+        </div>
+      </div>
     </div>
   </div>
 </nav>

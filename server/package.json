@@ -4,14 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon dist/index.js",
-    "typescript": "tsc --watch",
+    "typ": "tsc --watch",
     "copy-static": "xcopy /E /I src\\img dist\\ && xcopy /E /I src\\ dist\\"
-    
-  }
-,  
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -30,6 +27,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/multer": "^1.4.11",

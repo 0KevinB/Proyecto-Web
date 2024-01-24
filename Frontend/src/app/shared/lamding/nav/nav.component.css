@@ -1,4 +1,12 @@
-* a{
-    text-decoration: none;
-    color: white;
+
+.btn-grow-on-hover {
+  transition: font-size 0.3s; /* Agrega una transición suave */
 }
+
+.btn-grow-on-hover:hover {
+  font-size: 125%; /* Ajusta el tamaño según tus necesidades */
+}
+.custom-btn-ancho {
+  width: 150px; /* Ajusta el ancho según tus necesidades */
+}
+

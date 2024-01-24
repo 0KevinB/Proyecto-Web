@@ -1,37 +1,48 @@
-<nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between 
-    py-3 mb-4 border-bottom bg-dark">
-  <div class="col-md-3  mb-2 mb-md-0">
-    <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none ">
-      <img src="../../../assets/img/nodo.png" aria-label="Bootstrap" class="bi my-auto mx-5" width="45" role="img"
-        alt="">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand col-4" href="/">
+      <img src="assets/img/nodo.png" aria-label="Bootstrap" class="bi" width="45" role="img" alt="">
     </a>
-  </div>
-  <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-    <li><a [routerLink]="['/catalogo']" class="nav-link px-2 link-danger text-white">Catálogo</a></li>
-    <li><a href="#" class="nav-link px-2 link-danger text-white">Features</a></li>
-    <li><a href="#" class="nav-link px-2 link-danger text-white">Pricing</a></li>
-    <li><a href="#" class="nav-link px-2 link-danger text-white">FAQs</a></li>
-    <li><a href="#" class="nav-link px-2 link-danger text-white">About</a></li>
-  </ul>
-
-  <div class="col-md-3 text-end me-3">
-    <ng-container *ngIf="userLoginOn; else showLoginButtons">
-      <div class="dropdown me-4">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item btn-grow-on-hover"><a [routerLink]="['Inicio']" class="nav-link text-light">Inicio</a></li>
+          <li class="nav-item btn-grow-on-hover"><a [routerLink]="['/nosotros']" class="nav-link text-light">Nosotros</a></li>
+          <li class="nav-item btn-grow-on-hover"><a [routerLink]="['/foro']" class="nav-link text-light">Foro</a></li>
+          <li class="nav-item btn-grow-on-hover"><a [routerLink]="['/preguntas']" class="nav-link text-light">Preguntas Frecuentes</a></li>
+          <li class="nav-item btn-grow-on-hover"><a [routerLink]="['/contactos']" class="nav-link text-light">Contactos</a></li>
+      </ul>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end col-4" id="navbarNav" >
+      <ng-container *ngIf="userLoginOn; else showLoginButtons">
+        <div class="dropdown me-4">
+          <button class="btn btn-outline-primary me-3 text-white border border-danger custom-btn-outline custom-text-black custom-btn-ancho" type="button" id="dropdownMenuButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           Cuenta
-        </button>
-        <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="/perfil">Perfil</a>
-          <a class="dropdown-item" [routerLink]="['/carrito']">Carrito</a>
-          <button class="dropdown-item bg-danger text-white" (click)="logout()">Cerrar Sesión</button>
+          </button>
+          <div class="dropdown-menu dropdown-menu-end bg-dark" aria-labelledby="dropdownMenuButton" style="width: 200px; margin-right: 10px;">
+            <a class="dropdown-item text-light border border-dark bg-secondary" [routerLink]="['/perfil']">Perfil</a>
+            <a class="dropdown-item text-light border border-dark bg-secondary" [routerLink]="['/carrito']">Carrito</a>
+            <button class="dropdown-item text-light border border-dark bg-danger" (click)="logout()">Cerrar Sesión</button>
+          </div>
         </div>
-      </div>
-    </ng-container>
-    <ng-template #showLoginButtons>
-      <button type="button" class="btn btn-outline-danger me-2 text-white" [routerLink]="['/login']">Iniciar Sesión</button>
-      <button type="button" class="btn btn-danger" [routerLink]="['/register']">Registrarse</button>
-    </ng-template>
+      </ng-container>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ng-template #showLoginButtons>
+        <ul class="navbar-nav">
+          <li class="navbar-nav">
+            <button  type="button" class="btn btn-outline-primary me-2 text-white border border-danger custom-btn-outline custom-text-black" [routerLink]="['/login']">Iniciar Sesión</button>
+          </li>
+          <br>
+          <li class="navbar-nav">
+            <button  type="button" class="btn btn-outline-primary me-2 text-white border border-danger custom-btn-outline custom-text-black" [routerLink]="['/register']">Registrarse</button>
+          </li>
+        </ul>
+      </ng-template>
+    </div>
   </div>
-
 </nav>

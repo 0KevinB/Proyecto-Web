@@ -52,7 +52,7 @@ const obtenerBicicletasEnRenta = (req, res) => __awaiter(void 0, void 0, void 0,
                 {
                     model: alquiler_1.default,
                     where: {
-                        EstadoAlquiler: 'En renta',
+                        EstadoAlquiler: 'En renta', // Filtrar por alquileres que están actualmente en curso
                         FechaInicio: {
                             [sequelize_1.Op.lte]: fechaActual, // La fecha de inicio debe ser menor o igual a la fecha actual
                         },
