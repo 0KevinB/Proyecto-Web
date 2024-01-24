@@ -40,13 +40,13 @@
                         <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
                         <div *ngIf="detallesRenta">
                             <h2>Detalles de la Renta</h2>
-                            <div *ngFor="let detalle of detallesRenta" 
-                            [ngClass]="{'bg-green': esFechaMenor(detalle.FechaFin), 
-                                'bg-red': !esFechaMenor(detalle.FechaFin)}">
+                            <!--<div *ngFor="let detalle of detallesRenta" -->
+                            <div [ngClass]="{'bg-green': esFechaMenor(detallesRenta[detallesRenta.length-1].FechaFin), 
+                                'bg-red': !esFechaMenor(detallesRenta[detallesRenta.length-1].FechaFin)}">
 
-                                <p>BikeID: {{ detalle.BikeID }}</p>
-                                <p>Fecha de Inicio: {{ detalle.FechaInicio | date:'short' }}</p>
-                                <p>Fecha de Fin: {{ detalle.FechaFin | date:'short' }}</p>
+                                <p>BikeID: {{ detallesRenta[detallesRenta.length-1].BikeID }}</p>
+                                <p>Fecha de Inicio: {{ detallesRenta[detallesRenta.length-1].FechaInicio | date:'short' }}</p>
+                                <p>Fecha de Fin: {{ detallesRenta[detallesRenta.length-1].FechaFin | date:'short' }}</p>
                             </div>
                         </div>
                         <button class="btn btn-success col-6" (click)="approveBicycle(product.BikeID)">

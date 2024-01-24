@@ -132,7 +132,6 @@ export class DashboardComponent implements OnInit {
         const notInFilteredProducts = this.listProductUser.filter(
           product => !this.filteredProducts.some(filteredProduct => filteredProduct.BikeID === product.BikeID)
         );
-        console.log('notInFilteredProducts', notInFilteredProducts);
         this.listProductUser = notInFilteredProducts;
       })
     );
@@ -146,18 +145,14 @@ export class DashboardComponent implements OnInit {
         this.carritoService.getAlquilerByBikeID(bikeId).subscribe(
           (data: any) => {
             this.detallesRenta = data;
-            // Manejar los detalles de renta para cada bicicleta
-            console.log('Detalles de renta para la bicicleta con ID', bikeId, ':', this.detallesRenta);
           },
           (error) => {
-            console.error('Error al obtener detalles de renta', error);
+            this.notificationService.notify('Error al obtener detalles de renta');
           }
         );
       });
     });
   }
-
-
 
   isProductApproved(product: Product): boolean {
     return product.PropietarioBicicletas[0].Estado === 1;
