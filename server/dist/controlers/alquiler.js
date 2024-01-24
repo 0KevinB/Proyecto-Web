@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAlquiler = exports.getAlquilerByCedula = void 0;
+exports.getAlquiler = exports.getAlquilerByBikeID = exports.getAlquilerByCedula = void 0;
 const alquiler_1 = __importDefault(require("../models/alquiler"));
 // Controlador para obtener el estado de alquiler por cédula
 const getAlquilerByCedula = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,6 +34,26 @@ const getAlquilerByCedula = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getAlquilerByCedula = getAlquilerByCedula;
+const getAlquilerByBikeID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('Que pasa');
+    try {
+        const bikeId = req.params.bikeId;
+        console.log(req.params);
+        const alquiler = yield alquiler_1.default.findAll({
+            where: { BikeID: bikeId },
+        });
+        if (!alquiler) {
+            return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
+        }
+        // Retornar el estado de alquiler
+        res.json(alquiler);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+exports.getAlquilerByBikeID = getAlquilerByBikeID;
 const getAlquiler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('Llegaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ', req.params, req.body);
     try {

@@ -47,7 +47,7 @@ export const obtenerUbicacionPorBicicletaId = async (req: Request, res: Response
 export const actualizarUbicacion = async (req: Request, res: Response) => {
     try {
         const { ubicacionId } = req.params;
-        const { NombreUbicacion, Direccion } = req.body;
+        const { NombreUbicacion, Direccion, Latitud, Longitud } = req.body;
         const ubicacion = await Ubicacion.findByPk(ubicacionId);
         if (!ubicacion) {
             return res.status(404).json({ error: 'Ubicación no encontrada' });
@@ -56,6 +56,8 @@ export const actualizarUbicacion = async (req: Request, res: Response) => {
         await ubicacion.update({
             NombreUbicacion,
             Direccion,
+            Latitud,
+            Longitud
             // Otros campos que puedas tener en la ubicación
         });
         res.status(200).json({ mensaje: 'Ubicación actualizada correctamente' });

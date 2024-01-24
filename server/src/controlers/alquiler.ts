@@ -24,6 +24,27 @@ export const getAlquilerByCedula = async (req: Request, res: Response) => {
     }
 };
 
+export const getAlquilerByBikeID = async (req: Request, res: Response) => {
+    console.log('Que pasa')
+    try {
+        const bikeId = req.params.bikeId;
+        console.log(req.params)
+        const alquiler = await Alquiler.findAll({
+            where: { BikeID: bikeId },
+        });
+
+        if (!alquiler) {
+            return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
+        }
+
+        // Retornar el estado de alquiler
+        res.json(alquiler);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
 export const getAlquiler = async (req: Request, res: Response) => {
     console.log('Llegaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ', req.params, req.body)
     try {

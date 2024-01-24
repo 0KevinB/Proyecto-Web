@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PlacesService } from '../../services/places.service';
-import { icon, Map, marker, tileLayer } from 'leaflet';
+import { icon, Map, marker, tileLayer, Marker } from 'leaflet';
 import { Ubicacion } from 'src/app/interfaces/ubicacion';
 import { CommonModule } from '@angular/common';
 import { LatLngExpression } from 'leaflet';
@@ -9,6 +9,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-mapa',
@@ -27,7 +28,8 @@ export class MapaComponent implements OnInit {
   ubicacionForm: FormGroup | any;
   modoEdicion: boolean = false;
   ubicacion: Partial<Ubicacion> = {};
-
+  marcadorActual: Marker | null = null;
+  latlng: any
   constructor(
     private PlacesService: PlacesService,
     private _ubicacionService: UbicacionService,
@@ -104,12 +106,33 @@ export class MapaComponent implements OnInit {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(this.map);
 
-      // Verifica si los clics en el mapa están funcionando
       this.map.on('click', (e: any) => {
-        this._ubicacionService.obtenerUbicacionAlClic(e.latlng);
+        const currentRoute = this.router.url;
+
+        if (!currentRoute.startsWith('/mapa') || this.isAdmin) {
+          if (this.router.url !== '/mapa') {
+
+            if (this.marcadorActual) {
+              this.map.removeLayer(this.marcadorActual);
+            }
+            this.latlng = e.latlng;
+
+            this.marcadorActual = new Marker(this.latlng, {
+              icon: L.icon({
+                iconUrl: './assets/img/pinblue.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+              }),
+            });
+            this.marcadorActual.addTo(this.map);
+            this._ubicacionService.obtenerUbicacionAlClic(this.latlng);
+            console.log('Data', this.latlng)
+          }
+        }
       });
     }, 2000);
   }
+
   marcadores() {
     setTimeout(() => {
       for (let i = 0; i < this.listUbicacion.length; i++) {
@@ -146,7 +169,12 @@ export class MapaComponent implements OnInit {
 
   saveChanges(): void {
     if (this.ubicacionForm.valid) {
+      this.ubicacionForm.patchValue({
+        Latitud: this.latlng.lat,
+        Longitud: this.latlng.lng,
+      });
       const data = this.ubicacionForm.value;
+      console.log('Nuevos datos: ', data);
       this._ubicacionService.updateUbicacionDetails(this.listUbicacion[0].LocationID, data)
         .subscribe(
           () => {
