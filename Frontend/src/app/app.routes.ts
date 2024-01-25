@@ -1,3 +1,4 @@
+import { ReporteComponent } from './shared/lamding/reporte/reporte.component';
 import { Routes } from '@angular/router';
 import { LoginComponent } from './shared/login/login.component';
 import { DashboardComponent } from './shared/lamding/dashboard/dashboard.component';
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'foro', component: DashdosComponent },
   { path: 'preguntas', component: DashtresComponent },
   { path: 'contactos', component: DashcuatroComponent },
+  { path: 'reporte', component: ReporteComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'forgot-password', redirectTo: '/forgot-password', pathMatch: 'full' },
   { path: 'reset-password', component: NewpasswordComponent },
