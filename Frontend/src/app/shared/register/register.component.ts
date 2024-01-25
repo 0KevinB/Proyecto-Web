@@ -7,7 +7,7 @@ import { FooterComponent } from "../footer/footer.component";
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interfaces/user';
 import { NotificationService } from 'src/app/services/notification.service';
-import { NavComponent } from "../renta/nav/nav.component";
+import { NavComponent } from "src/app/shared/lamding/nav/nav.component";
 
 
 @Component({

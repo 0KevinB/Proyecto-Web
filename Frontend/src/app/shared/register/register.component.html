@@ -1,7 +1,10 @@
-<div class="container mt-4 my-10 mx-auto">
-  <div class="row justify-content-center">
-    <div class="col-md-10 mx-auto">
-      <div class="row g-0">
+<app-nav></app-nav>
+<section class="vh-100  fondo">
+  <div class="container h-100 p-4 ">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+
+        <div class="row g-0">
         <div class="col-md-10 mx-auto col-lg-5 d-none d-md-block my-5 pe-5">
           <!-- Agrega aquí tu imagen o contenido visual -->
           <img src="assets/img/nodo.png" [routerLink]="['/']" alt="visual content" class="img-fluid" />
@@ -9,7 +12,8 @@
         <div class="col-md-10 mx-auto col-lg-7 d-flex align-items-center bg-dark">
           <div class="card-body p-4 p-lg-5 text-white">
             <form [formGroup]="FormUser" (ngSubmit)="onSubmit()" >
-              <h1 class="h3 mb-3 fw-normal">Registro de Usuario</h1>
+              <h1 class="h1 fw-bold mb-0 text-center">Registro de Usuario</h1>
+              <br>
               <!-- Nombres -->
               <div class="mb-12">
                 <div class="col-md-10 mx-auto py-1.5">
@@ -262,7 +266,7 @@
                 </div>
               </div>
               <div class="col-md-10 mx-auto py-1.5 d-grid">
-                <button class="btn btn-primary" type="submit" [disabled]="FormUser.invalid">Crear</button>
+                <button class="btn btn-primary" type="button" [disabled]="FormUser.invalid">Crear</button>
               </div>
             </form>
           </div>

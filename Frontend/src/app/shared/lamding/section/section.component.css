@@ -40,3 +40,8 @@
 .text-justify {
   text-align: justify;
 }
+
+.bg-custom {
+  background-color: #c5c0c0; /* Color personalizado: amarillo */
+  color: #000000; /* Color de texto personalizado: negro */
+}
