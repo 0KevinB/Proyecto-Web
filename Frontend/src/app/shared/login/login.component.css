@@ -1,9 +1,10 @@
+
 form {
-    margin: 20px;
+    margin: 3px;
 }
 
 .fondo {
-    background: url(../../../assets/img/bg-login.png), lightgray 50% / cover no-repeat;
+    background: url(../../../assets/img/bg-login.png), rgb(12, 12, 12) 50% / cover no-repeat;
     margin: 0;
     padding: 0;
 }
@@ -12,3 +13,15 @@ form {
     margin: 0;
     padding: 0;
 }
+
+.btn-grow-on-hover {
+  transition: font-size 0.3s; /* Agrega una transición suave */
+}
+
+.btn-grow-on-hover:hover {
+  font-size: 150%; /* Ajusta el tamaño según tus necesidades */
+}
+.custom-btn-ancho {
+  width: 200px; /* Ajusta el ancho según tus necesidades */
+}
+

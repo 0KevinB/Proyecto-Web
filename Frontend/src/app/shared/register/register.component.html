@@ -1,141 +1,278 @@
-<div>
+<app-nav></app-nav>
+<section class="vh-100  fondo">
+  <div class="container h-100 p-4 ">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
 
-  <header class="my-4 text-center">
-    <img src="../../../assets/img/nodo1.png" [routerLink]="['/']" class="col-6" alt="">
-  </header>
-  <hr>
+        <div class="row g-0">
+        <div class="col-md-10 mx-auto col-lg-5 d-none d-md-block my-5 pe-5">
+          <!-- Agrega aquí tu imagen o contenido visual -->
+          <img src="assets/img/nodo.png" [routerLink]="['/']" alt="visual content" class="img-fluid" />
+        </div>
+        <div class="col-md-10 mx-auto col-lg-7 d-flex align-items-center bg-dark">
+          <div class="card-body p-4 p-lg-5 text-white">
+            <form [formGroup]="FormUser" (ngSubmit)="onSubmit()" >
+              <h1 class="h1 fw-bold mb-0 text-center">Registro de Usuario</h1>
+              <br>
+              <!-- Nombres -->
+              <div class="mb-12">
+                <div class="col-md-10 mx-auto py-1.5">
+                  <label for="inputNombres" class="form-label">Nombres</label>
+                  <input type="text" class="form-control" formControlName="nombre" placeholder="Ingrese su nombre" />
+                </div>
+                <!-- Alerta Nombres -->
+                <div class="col-md-10 mx-auto py-1.5">
+                  <div *ngIf="
+                      FormUser.get('nombre')?.invalid &&
+                      FormUser.get('nombre')?.touched
+                    " class="alert alert-danger">
+                    <div *ngIf="FormUser.get('nombre')?.errors?.['required']">
+                      El nombre es obligatorio
+                    </div>
+                    <div *ngIf="FormUser.get('nombre')?.errors?.['pattern']">
+                      El nombre debe contener solo letras
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-  <div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
+              <!-- Apellidos -->
+              <div class="mb-12">
+                <div class="col-md-10 mx-auto py-1.5">
+                  <label for="inputApellidos" class="form-label">Apellidos</label>
+                  <input type="text" class="form-control" formControlName="apellidos"
+                    placeholder="Ingrese sus apellidos" />
+                </div>
+                <!-- Alerta Apellidos -->
+                <div class="col-md-10 mx-auto py-1.5">
+                  <div *ngIf="
+                      FormUser.get('apellidos')?.invalid &&
+                      FormUser.get('apellidos')?.touched
+                    " class="alert alert-danger">
+                    <div *ngIf="FormUser.get('apellidos')?.errors?.['required']">
+                      El apellido es obligatorio
+                    </div>
+                    <div *ngIf="FormUser.get('apellidos')?.errors?.['pattern']">
+                      El apellido debe contener solo letras
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        <form [formGroup]="myForm" (ngSubmit)="onSubmit()" autocomplete="off">
-
-          <!-- Nombres y Apellidos -->
-          <div class="row form-row">
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputNombres">Nombres</label>
-              <input type="text" class="form-control" formControlName="nombre" placeholder="Ingrese su nombre">
-
-            </div>
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputApellidos">Apellidos</label>
-              <input type="text" class="form-control" formControlName="apellidos" placeholder="Ingrese sus apellidos">
-              <!-- Agrega la validación de apellidos según tus requisitos -->
-            </div>
+              <!-- Teléfono-->
+              <div class="mb-12">
+                <div class="col-md-10 mx-auto py-1.5">
+                  <label for="inputTelefono" class="form-label">Teléfono</label>
+                  <input type="text" class="form-control" formControlName="telefono"
+                    placeholder="Ingrese su teléfono" />
+                </div>
+                <!-- Alerta Teléfono -->
+                <div class="col-md-10 mx-auto py-1.5">
+                  <div *ngIf="
+                      FormUser.get('telefono')?.invalid &&
+                      FormUser.get('telefono')?.touched
+                    " class="alert alert-danger">
+                    <div *ngIf="FormUser.get('telefono')?.errors?.['required']">
+                      El teléfono es obligatorio
+                    </div>
+                    <div *ngIf="FormUser.get('telefono')?.errors?.['pattern']">
+                      El teléfono debe contener solo números
+                    </div>
+                    <div *ngIf="FormUser.get('telefono')?.errors?.['minlength']">
+                      El teléfono debe contener 10 dígitos
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-12">
+                  <div class="col-md-10 mx-auto py-1.5">
+                    <label for="inputCedula" class="form-label">Cedula</label>
+                    <input type="text" class="form-control" formControlName="cedula" placeholder="Ingrese su cedula" />
+                  </div>
+                </div>
+                <!-- Alerta cedula-->
+                <div class="col-md-10 mx-auto py-1.5">
+                  <div *ngIf="
+                      FormUser.get('cedula')?.invalid &&
+                      FormUser.get('cedula')?.touched
+                    " class="alert alert-danger">
+                    <div *ngIf="FormUser.get('cedula')?.errors?.['required']">
+                      La cédula es obligatoria
+                    </div>
+                    <div *ngIf="FormUser.get('cedula')?.errors?.['pattern']">
+                      La cédula debe contener solo números
+                    </div>
+                  </div>
+                </div>
+                <!-- Correo Electrónico< -->
+                <div class="mb-12">
+                  <div class="col-md-10 mx-auto py-1.5">
+                    <label for="inputEmail" class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" formControlName="CorreoElectronico"
+                      placeholder="Ingrese su correo electrónico" />
+                  </div>
+                </div>
+                <!-- Alerta Correo Electrónico<-->
+                <div class="col-md-10 mx-auto py-1.5">
+                  <div *ngIf="
+                        FormUser.get('CorreoElectronico')?.invalid &&
+                        FormUser.get('CorreoElectronico')?.touched
+                      " class="alert alert-danger">
+                    <div *ngIf="FormUser.get('CorreoElectronico')?.errors?.['required']">
+                      La CorreoElectronico es obligatoria
+                    </div>
+                    <div *ngIf="FormUser.get('CorreoElectronico')?.errors?.['email']">
+                      El correo electrónico debe contener un formato válido
+                    </div>
+                  </div>
+                </div>
+                <!-- Confirmación de Correo Electronico  -->
+                <div class="mb-12">
+                  <div class="col-md-10 mx-auto py-1.5">
+                    <label for="inputEmailConfirm" class="form-label">Confirmar Correo Electrónico</label>
+                    <input type="email" class="form-control" formControlName="emailConfirm"
+                      placeholder="Confirme su correo electrónico" />
+                  </div>
+                </div>
+                <!-- Alerta Confirmación Correo Electrónico<-->
+                <div class="col-md-10 mx-auto py-1.5">
+                  <div *ngIf="
+                      FormUser.get('emailConfirm')?.invalid &&
+                      FormUser.get('emailConfirm')?.touched
+                    " class="alert alert-danger">
+                    <div *ngIf="FormUser.get('emailConfirm')?.errors?.['required']">
+                      La confirmación del correo electrónico es obligatoria
+                    </div>
+                    <div *ngIf="FormUser.get('emailConfirm')?.errors?.['pattern']">
+                      El correo electrónico debe contener un formato válido
+                    </div>
+                    <div *ngIf="mismatchedEmailConfirmation == false">
+                      Los correos electrónicos no coinciden. Verifica e intenta nuevamente.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Provincia de residencia -->
+              <div class="mb-12">
+                <div class="col-md-10 mx-auto py-1.5">
+                  <label for="inputProvincia" class="form-label">Provincia de residencia</label>
+                  <select class="form-select" formControlName="provincia">
+                    <option value="" selected>Seleccionar...</option>
+                    <!-- Opciones de provincia -->
+                    <option value="01">Azuay</option>
+                    <option value="02">Bolivar</option>
+                    <option value="03">Cañar</option>
+                    <option value="04">Carchi</option>
+                    <option value="05">Cotopaxi</option>
+                    <option value="06">Chimborazo</option>
+                    <option value="07">El Oro</option>
+                    <option value="08">Esmeraldas</option>
+                    <option value="09">Guayas</option>
+                    <option value="10 mx-auto">Imbabura</option>
+                    <option value="11">Loja</option>
+                    <option value="12">Los Ríos</option>
+                    <option value="13">Manabí</option>
+                    <option value="14">Morona Santiago</option>
+                    <option value="15">Napo</option>
+                    <option value="16">Pastaza</option>
+                    <option value="17">Pichincha</option>
+                    <option value="18">Tungurahua</option>
+                    <option value="19">Zamora Chinchipe</option>
+                    <option value="20">Galápagos</option>
+                    <option value="21">Sucumbíos</option>
+                    <option value="22">Orellana</option>
+                    <option value="23">Santo Domingo de los Tsáchilas</option>
+                    <option value="24">Santa Elena</option>
+                  </select>
+                </div>
+                <!-- Direccion de residencia -->
+                <div class="col-md-10 mx-auto">
+                  <label for="inputCodigoPostal" class="form-label">Direccion</label>
+                  <input type="text" class="form-control" formControlName="Direccion"
+                    placeholder="Ingrese su Direccion" />
+                </div>
+              </div>
+              <!--Alerta Direccion de residencia -->
+              <div class="col-md-10 mx-auto py-1.5">
+                <div *ngIf="
+                    FormUser.get('Direccion')?.invalid &&
+                    FormUser.get('Direccion')?.touched
+                  " class="alert alert-danger">
+                  <div *ngIf="FormUser.get('Direccion')?.errors?.['required']">
+                    La Direccion es obligatoria
+                  </div>
+                  <div *ngIf="FormUser.get('Direccion')?.errors?.['pattern']">
+                    La Direccion debe contener solo letras y números
+                  </div>
+                </div>
+              </div>
+              <!-- Contraseña -->
+              <div class="col-md-10 mx-auto py-1.5">
+                <label for="inputPassword" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" formControlName="Contraseña"
+                  placeholder="Ingrese su contraseña" />
+              </div>
+              <!-- Alerta Contraceña<-->
+              <div class="col-md-10 mx-auto py-1.5">
+                <div *ngIf="
+                    FormUser.get('Contraseña')?.invalid &&
+                    FormUser.get('Contraseña')?.touched
+                  " class="alert alert-danger">
+                  <div *ngIf="FormUser.get('Contraseña')?.errors?.['required']">
+                    La campo es obligatoria
+                  </div>
+                  <div *ngIf="FormUser.get('Contraseña')?.errors?.['pattern']">
+                    Minimo 8 caracteres, al menos una letra mayúscula, una letra
+                    minúscula y un número y caracter especial
+                  </div>
+                </div>
+              </div>
+              <!-- Confirmación de Contraseña -->
+              <div class="col-md-10 mx-auto py-1.5">
+                <label for="inputPasswordConfirm" class="form-label">Confirmar Contraseña</label>
+                <input type="password" class="form-control" formControlName="passwordConfirm"
+                  placeholder="Confirme su contraseña" />
+              </div>
+              <!-- Alerta Confirmación Contraceña<-->
+              <div class="col-md-10 mx-auto py-1.5">
+                <div *ngIf="FormUser.get('passwordConfirm')?.invalid && FormUser.get('passwordConfirm')?.touched" class="alert alert-danger">
+                  <div *ngIf="FormUser.get('passwordConfirm')?.errors?.['required']">
+                    La confirmación de la contraseña es obligatoria
+                  </div>
+                  <div *ngIf="FormUser.get('passwordConfirm')?.errors?.['pattern']">
+                    Mínimo 8 caracteres, al menos una letra mayúscula, una letra minúscula y un número y caracter especial
+                  </div>
+                  <div *ngIf="mismatchedPasswordConfirmation" class="alert alert-danger">
+                    Las contraseñas no coinciden. Verifica e intenta nuevamente.
+                  </div>
+                </div>
+              </div>
+              <!-- Términos y Condiciones -->
+              <div class="form-check col-md-10 mx-auto py-2">
+                <input class="form-check-input" type="checkbox" formControlName="terminos" id="gridCheck" />
+                <label class="form-check-label" for="gridCheck">
+                  He leído y acepto los
+                  <a href="#">términos y condiciones de uso</a>
+                </label>
+              </div>
+              <!-- Alerta Términos y Condiciones -->
+              <div class="col-md-10 mx-auto py-1.5">
+                <div *ngIf="
+                    FormUser.get('terminos')?.invalid &&
+                    FormUser.get('terminos')?.touched
+                  " class="alert alert-danger">
+                  <div *ngIf="FormUser.get('terminos')?.errors?.['required']">
+                    Debe aceptar los términos y condiciones
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-10 mx-auto py-1.5 d-grid">
+                <button class="btn btn-primary" type="button" [disabled]="FormUser.invalid">Crear</button>
+              </div>
+            </form>
           </div>
-
-          <!-- Teléfono y Cedula/RUC -->
-          <div class="row form-row">
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputTelefono">Teléfono</label>
-              <input type="text" class="form-control" formControlName="telefono" placeholder="Ingrese su teléfono">
-              <!-- Agrega la validación de teléfono según tus requisitos -->
-            </div>
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputCedula">Cedula/RUC</label>
-              <input type="text" class="form-control" formControlName="cedula" placeholder="Ingrese su cédula/RUC">
-
-            </div>
-          </div>
-
-          <!-- Email y Contraseña -->
-          <div class="row form-row">
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputEmail">Correo Electrónico</label>
-              <input type="email" class="form-control" formControlName="CorreoElectronico"
-                placeholder="Ingrese su correo electrónico">
-
-            </div>
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputPassword">Contraseña</label>
-              <input type="password" class="form-control" formControlName="Contraseña"
-                placeholder="Ingrese su contraseña">
-
-            </div>
-          </div>
-
-          <!-- Confirmación de Email y Contraseña -->
-          <div class="row form-row">
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputEmailConfirm">Confirmar Correo Electrónico</label>
-              <input type="email" class="form-control" formControlName="emailConfirm"
-                placeholder="Confirme su correo electrónico">
-
-            </div>
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputPasswordConfirm">Confirmar Contraseña</label>
-              <input type="password" class="form-control" formControlName="passwordConfirm"
-                placeholder="Confirme su contraseña">
-
-            </div>
-          </div>
-
-          <!-- Provincia, Ciudad y Código Postal -->
-          <div class="row form-row">
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputProvincia">Provincia de residencia</label>
-              <select class="form-control" formControlName="provincia">
-                <option value="" selected>Seleccionar...</option>
-                <option value="01">Azuay</option>
-                <option value="02">Bolivar</option>
-                <option value="03">Cañar</option>
-                <option value="04">Carchi</option>
-                <option value="05">Cotopaxi</option>
-                <option value="06">Chimborazo</option>
-                <option value="07">El Oro</option>
-                <option value="08">Esmeraldas</option>
-                <option value="09">Guayas</option>
-                <option value="10">Imbabura</option>
-                <option value="11">Loja</option>
-                <option value="12">Los Ríos</option>
-                <option value="13">Manabí</option>
-                <option value="14">Morona Santiago</option>
-                <option value="15">Napo</option>
-                <option value="16">Pastaza</option>
-                <option value="17">Pichincha</option>
-                <option value="18">Tungurahua</option>
-                <option value="19">Zamora Chinchipe</option>
-                <option value="20">Galápagos</option>
-                <option value="21">Sucumbíos</option>
-                <option value="22">Orellana</option>
-                <option value="23">Santo Domingo de los Tsáchilas</option>
-                <option value="24">Santa Elena</option>
-              </select>
-
-            </div>
-            <div class="form-group col-md-6 py-1">
-              <label class="form-label" for="inputCodigoPostal">Código Postal</label>
-              <input type="text" class="form-control" formControlName="Direccion"
-                placeholder="Ingrese su código postal">
-
-            </div>
-          </div>
-
-
-
-          <!-- Términos y Condiciones -->
-          <div class="form-group my-3 ms-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" formControlName="terminos" id="gridCheck">
-              <label class="form-check-label" for="gridCheck">
-                He leído y acepto los <a href="#">términos y condiciones de uso</a>
-              </label>
-
-            </div>
-          </div>
-
-          <div class="d-grid">
-            <button class="btn btn-primary btn-dark" type="submit">
-              Crear
-            </button>
-          </div>
-
-        </form>
+        </div>
       </div>
     </div>
   </div>
-
-  <app-footer>
-  </app-footer>
 </div>
+<app-footer></app-footer>
