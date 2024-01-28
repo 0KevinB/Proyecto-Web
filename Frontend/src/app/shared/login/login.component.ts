@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ import { NotificationService } from 'src/app/services/notification.service';
   styleUrls: ['./login.component.css'],
   imports: [RouterLink, LoginComponent, NavComponent,
     NewpasswordComponent, RegisterComponent, CommonModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,NavComponent,FooterComponent
   ]
 })
 

@@ -1,3 +1,4 @@
+import { ReporteComponent } from './shared/lamding/reporte/reporte.component';
 import { Routes } from '@angular/router';
 import { LoginComponent } from './shared/login/login.component';
 import { DashboardComponent } from './shared/lamding/dashboard/dashboard.component';
@@ -10,12 +11,21 @@ import { authGuard } from './utils/auth.guard';
 import { CarritoComponent } from './shared/renta/carrito/carrito.component';
 import { PerfilComponent } from './shared/perfil/perfil.component';
 import { MapaComponent } from './shared/mapa/mapa.component';
+import { DashunoComponent } from './shared/lamding/dashuno/dashuno.component';
+import { DashdosComponent } from './shared/lamding/dashdos/dashdos.component';
+import { DashtresComponent } from './shared/lamding/dashtres/dashtres.component';
+import { DashcuatroComponent } from './shared/lamding/dashcuatro/dashcuatro.component';
 
 
 export const routes: Routes = [
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
   { path: 'inicio', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'nosotros', component: DashunoComponent },
+  { path: 'foro', component: DashdosComponent },
+  { path: 'preguntas', component: DashtresComponent },
+  { path: 'contactos', component: DashcuatroComponent },
+  { path: 'reporte', component: ReporteComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'forgot-password', redirectTo: '/forgot-password', pathMatch: 'full' },
   { path: 'reset-password', component: NewpasswordComponent },
