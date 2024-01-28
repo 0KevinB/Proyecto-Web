@@ -75,11 +75,9 @@ export class PerfilComponent implements OnInit {
     localStorage.removeItem('token')
     this.router.navigate(['/inicio']);
   }
-
   onGetAlquilerByCedula(): void {
     this.carritoService.getAlquilerByCedula(this.cedulaUsuario).subscribe(
       (historialPagos: any[]) => {
-        // Agregar el campo 'Modelo' a cada objeto en historialPagos
         historialPagos.forEach(pago => {
           const bikeId = pago.BikeID;
           this.productService.getProductById(bikeId).subscribe(
@@ -91,9 +89,7 @@ export class PerfilComponent implements OnInit {
             }
           );
         });
-
         this.historialPagos = historialPagos;
-        console.log('historialPagos', this.historialPagos);
       },
       error => {
         console.error('Error al obtener el historial de pagos:', error);

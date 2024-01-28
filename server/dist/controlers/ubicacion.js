@@ -58,7 +58,7 @@ exports.obtenerUbicacionPorBicicletaId = obtenerUbicacionPorBicicletaId;
 const actualizarUbicacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { ubicacionId } = req.params;
-        const { NombreUbicacion, Direccion } = req.body;
+        const { NombreUbicacion, Direccion, Latitud, Longitud } = req.body;
         const ubicacion = yield ubicacion_1.default.findByPk(ubicacionId);
         if (!ubicacion) {
             return res.status(404).json({ error: 'Ubicación no encontrada' });
@@ -67,6 +67,8 @@ const actualizarUbicacion = (req, res) => __awaiter(void 0, void 0, void 0, func
         yield ubicacion.update({
             NombreUbicacion,
             Direccion,
+            Latitud,
+            Longitud
             // Otros campos que puedas tener en la ubicación
         });
         res.status(200).json({ mensaje: 'Ubicación actualizada correctamente' });

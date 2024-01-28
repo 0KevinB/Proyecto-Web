@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   filteredProducts: Product[] = [];
   serverBaseUrl = 'http://localhost:3001';
   token: string | null = null;
+  detallesRenta: any;
   opciones = [
     { nombre: 'Tradicional', checked: false },
     { nombre: 'Electrica', checked: false },
@@ -46,7 +47,6 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getProductsRentados()
     this._userService.getRolUsuario().subscribe((rol) => {
       this.isAdmin = rol === 2;
     });
@@ -60,12 +60,15 @@ export class DashboardComponent implements OnInit {
       this.applyFilter();
     });
   }
+
   filterBicycles(filterOption: string): void {
     this.selectedFilter = filterOption;
     if (this.isAdmin) {
       this.filteredProducts = this.listProduct.filter((product) => {
         if (filterOption === 'Todas') {
           return true;
+        } else if (filterOption === 'Rentadas') {
+          return this.getProductsRentados()
         } else {
           return product.Tipo.toLowerCase() === filterOption.toLowerCase();
         }
@@ -80,6 +83,7 @@ export class DashboardComponent implements OnInit {
       });
     }
   }
+
   applyFilterOnInit() {
     if (this.isAdmin) {
       this.filteredProducts = this.listProduct.filter((product) => {
@@ -91,6 +95,7 @@ export class DashboardComponent implements OnInit {
       });
     }
   }
+
   applyFilter() {
     if (this.isAdmin) {
       this.filteredProducts = this.listProduct.filter((product) => {
@@ -102,6 +107,7 @@ export class DashboardComponent implements OnInit {
       });
     }
   }
+
   getProducts() {
     this._productService.getProductsWithImages().subscribe((data) => {
       this.listProduct = data;
@@ -122,39 +128,49 @@ export class DashboardComponent implements OnInit {
         });
 
         this.listProductUser = dataFiltrada;
-
-        // Filtrar los productos que están en rentadas
         this.filteredProducts = rentadas;
-
         const notInFilteredProducts = this.listProductUser.filter(
           product => !this.filteredProducts.some(filteredProduct => filteredProduct.BikeID === product.BikeID)
         );
-        console.log(notInFilteredProducts);
         this.listProductUser = notInFilteredProducts;
       })
     );
   }
+
   getProductsRentados() {
     this._productService.getRentadas().subscribe((data) => {
       this.filteredProducts = data;
-      console.log(this.filteredProducts)
+      this.filteredProducts.forEach((product) => {
+        const bikeId = product.BikeID;
+        this.carritoService.getAlquilerByBikeID(bikeId).subscribe(
+          (data: any) => {
+            this.detallesRenta = data;
+          },
+          (error) => {
+            this.notificationService.notify('Error al obtener detalles de renta');
+          }
+        );
+      });
     });
   }
 
   isProductApproved(product: Product): boolean {
     return product.PropietarioBicicletas[0].Estado === 1;
   }
+
   getImageUrl(imageName: string): string {
     const token = localStorage.getItem('token');
     const tokenParam = token ? `?token=${token}` : '';
     return `${this.serverBaseUrl}/api/products/bikes/imagen/${imageName}${tokenParam}`;
   }
+
   createProduct(newProduct: Product) {
     this._productService.createProduct(newProduct).subscribe(createdProduct => {
       // Lógica adicional si es necesario
       this.getProducts(); // Recargar la lista después de crear un nuevo producto
     });
   }
+
   deleteProduct(productId: number) {
     if (productId !== undefined && productId !== null) {
       this._productService.deleteProduct(productId).subscribe(() => {
@@ -175,6 +191,7 @@ export class DashboardComponent implements OnInit {
       this.notificationService.notify('El ID del producto es indefinido o nulo.', 2000);
     }
   }
+
   verMapa(bicicletaId: number): void {
     this.ubicacionService.getUbicacion(bicicletaId).subscribe(
       (ubicacion) => {
@@ -218,8 +235,15 @@ export class DashboardComponent implements OnInit {
       this.notificationService.notify('La bicicleta a editar no tiene un ID válido', 2000);
     }
   }
+
   cancelarEdicion(): void {
     this.editMode = false;
     this.bicicletaEditada = null;
+  }
+
+  esFechaMenor(fechaFin: string): boolean {
+    const fechaFinDate = new Date(fechaFin);
+    const fechaActual = new Date();
+    return fechaFinDate.getTime() > fechaActual.getTime();
   }
 }

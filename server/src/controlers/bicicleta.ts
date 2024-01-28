@@ -180,7 +180,7 @@ export const aprobarBicicleta = async (req: Request, res: Response) => {
     }
 };
 
-export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {
+export const agregarBicicletaAUsuario = async (req: Request, res: Response) => {    
     const { Cedula } = req.params;
     const { Modelo, Tipo, Estado, PrecioPorHora, Descripcion } = req.body;
     // Obtener información del usuario
