@@ -1,50 +1,43 @@
-<nav class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between 
-    py-3 mb-4 me border-bottom bg-dark ">
-    <div class="col-md-3  mb-2 mb-md-0">
-        <a href="/catalogo" class="d-inline-flex link-body-emphasis text-decoration-none ">
-            <img src="../../../assets/img/nodo.png" aria-label="Bootstrap" class="bi my-auto mx-5" width="45" role="img"
-                alt="">
-        </a>
-    </div>
-    <div class="me-0"></div>
-
-    <div class="dropdown me-4">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Cuenta
-        </button>
-        <div class="dropdown-menu text-black bg-dark" aria-labelledby="dropdownMenuButton">
-            <button class="dropdown-item bg-danger text-white" (click)="Logout()">Logout</button>
-        </div>
-    </div>
-</nav>
-
+<app-nav></app-nav>
 <div class="container">
-    <h2>Carrito de Compras</h2>
     <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ producto.Modelo || 'N/A' }}</h5>
-            <div class="product-details">
-                <p><strong>Tipo:</strong> {{ producto.Tipo || 'N/A' }}</p>
-                <p><strong>Estado:</strong> {{ producto.Estado || 'N/A' }}</p>
-                <p><strong>Precio por Hora:</strong> {{ producto.PrecioPorHora || 'N/A' }}</p>
-                <img *ngIf="producto.PropietarioBicicletas?.length > 0"
-                    [src]="getImageUrl(producto.PropietarioBicicletas[0]?.imagenReferencia)"
-                    alt="Imagen de la bicicleta">
-                <p>{{ producto.Descripcion}}</p>
+            <div class="row g-0">
+                <div class="col-6">
+                    <img *ngIf="producto.PropietarioBicicletas?.length > 0"
+                        [src]="getImageUrl(producto.PropietarioBicicletas[0]?.imagenReferencia)"
+                        alt="Imagen de la bicicleta">
+                </div>
+
+                <div class="product-details col-6">
+                    <h1 class="">{{ producto.Modelo || 'N/A' }}</h1>
+                    <p><strong>Tipo:</strong> {{ producto.Tipo || 'N/A' }}</p>
+                    <p><strong>Estado:</strong> {{ producto.Estado || 'N/A' }}</p>
+                    <p><strong>Precio por Hora:</strong> {{ producto.PrecioPorHora || 'N/A' }}</p>
+                    <p>{{ producto.Descripcion}}</p>
+
+                    <form [formGroup]="carritoForm">
+                        <div class="form-group">
+                            <br>
+                            <label for="cantidadHoras my-5">Cantidad de Horas:</label>
+                            <input type="number" id="cantidadHoras" formControlName="cantidadHoras" class="form-control mt-2"
+                                min="1" required>
+                        </div>
+                        <a href="/catalogo">
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success my-3 col-3 btn-lg"
+                                    (click)="onAddToCart()">Rentar </button>
+                            </div>
+
+                        </a>
+                    </form>
+                </div>
+
             </div>
+
+
         </div>
     </div>
 
-    <form [formGroup]="carritoForm">
-        <div class="form-group">
-            <label for="cantidadHoras">Cantidad de Horas:</label>
-            <input type="number" id="cantidadHoras" formControlName="cantidadHoras" class="form-control" min="1"
-                required>
-        </div>
-        <a href="/catalogo">
-            <button type="button" class="btn btn-success my-3" (click)="onAddToCart()">Rentar </button>
-        </a>
-    </form>
 </div>
 <app-footer></app-footer>

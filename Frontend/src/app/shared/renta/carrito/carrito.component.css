@@ -1,9 +1,4 @@
-.product-details {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f4f4f4;
-    border: 1px solid #ddd;
-}
+
 .product-details img{
-    height: 125px;
+    height: 250px;
 }

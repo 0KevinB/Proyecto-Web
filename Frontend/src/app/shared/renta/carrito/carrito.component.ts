@@ -7,13 +7,14 @@ import { Product } from 'src/app/interfaces/product';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { UserService } from 'src/app/services/user.service';
 import { FooterComponent } from "../../footer/footer.component";
+import { NavComponent } from "../../nav/nav.component";
 
 @Component({
     selector: 'app-carrito',
     standalone: true,
     templateUrl: './carrito.component.html',
     styleUrl: './carrito.component.css',
-    imports: [ReactiveFormsModule, CommonModule, FooterComponent]
+    imports: [ReactiveFormsModule, CommonModule, FooterComponent, NavComponent]
 })
 export class CarritoComponent implements OnInit {
   carritoForm: FormGroup | any;

@@ -13,11 +13,11 @@ import { NavComponent } from "../nav/nav.component";
 import { FooterComponent } from "../footer/footer.component";
 
 @Component({
-    selector: 'app-perfil',
-    standalone: true,
-    templateUrl: './perfil.component.html',
-    styleUrl: './perfil.component.css',
-    imports: [CommonModule, FormsModule, NavComponent, FooterComponent]
+  selector: 'app-perfil',
+  standalone: true,
+  templateUrl: './perfil.component.html',
+  styleUrl: './perfil.component.css',
+  imports: [CommonModule, FormsModule, NavComponent, FooterComponent]
 })
 export class PerfilComponent implements OnInit {
   user: User = {};
@@ -30,6 +30,7 @@ export class PerfilComponent implements OnInit {
   alquileres: Alquiler[] = []
   detallesRenta: any;
   porcentaje: any;
+  mostrarMas: boolean = false;
 
   constructor(
     private userService: UserService,
@@ -37,6 +38,8 @@ export class PerfilComponent implements OnInit {
     private router: Router,
     private carritoService: CarritoService,
     private productService: ProductService,
+
+
   ) { }
 
   ngOnInit(): void {
@@ -91,10 +94,6 @@ export class PerfilComponent implements OnInit {
       }
     );
   }
-  Logout() {
-    localStorage.removeItem('token')
-    this.router.navigate(['/inicio']);
-  }
   onGetAlquilerByCedula(): void {
     this.carritoService.getAlquilerByCedula(this.cedulaUsuario).subscribe(
       (historialPagos: any[]) => {
@@ -111,6 +110,7 @@ export class PerfilComponent implements OnInit {
           );
         });
         this.historialPagos = historialPagos;
+        this.historialPagos = this.historialPagos.reverse();
         this.rentaActual = historialPagos.filter(pago => new Date(pago.FechaFin) > fechaActual);
 
       },

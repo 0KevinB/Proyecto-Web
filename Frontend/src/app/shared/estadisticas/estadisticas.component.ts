@@ -8,13 +8,16 @@ import { NavComponent } from '../nav/nav.component';
 import { Alquiler } from 'src/app/interfaces/alquiler';
 import { Chart } from 'chart.js/auto';
 import { User } from 'src/app/interfaces/user';
+import { FooterComponent } from "../footer/footer.component";
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
   templateUrl: './estadisticas.component.html',
   styleUrl: './estadisticas.component.css',
-  imports: [NavComponent]
+  imports: [NavComponent, FooterComponent, CommonModule, RouterLink]
 })
 export class EstadisticasComponent {
   listProduct: Product[] = [];
@@ -37,12 +40,17 @@ export class EstadisticasComponent {
     private _productService: ProductService,
     private _userService: UserService,
     private notificationService: NotificationService,
-    private carritoService: CarritoService
+    private carritoService: CarritoService,
+    private router: Router,
+
   ) { }
 
   ngOnInit(): void {
     this._userService.getRolUsuario().subscribe((rol) => {
       this.isAdmin = rol === 2;
+      if (!this.isAdmin) {
+        this.router.navigate(['/inicio']);
+      }
     });
     this.getProducts()
     this.getProductsRentados();
@@ -214,6 +222,4 @@ export class EstadisticasComponent {
       }
     });
   }
-
-
 }
