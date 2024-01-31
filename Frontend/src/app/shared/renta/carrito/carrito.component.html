@@ -18,14 +18,24 @@
         </div>
     </div>
 </nav>
+
 <div class="container">
     <h2>Carrito de Compras</h2>
-    <div *ngFor="let item of carrito" class="card mb-3">
+    <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">{{ item.Modelo || 'N/A' }}</h5>
-            <p class="card-text">Cantidad de Horas: {{ item.CantidadHoras || 0 }}</p>
+            <h5 class="card-title">{{ producto.Modelo || 'N/A' }}</h5>
+            <div class="product-details">
+                <p><strong>Tipo:</strong> {{ producto.Tipo || 'N/A' }}</p>
+                <p><strong>Estado:</strong> {{ producto.Estado || 'N/A' }}</p>
+                <p><strong>Precio por Hora:</strong> {{ producto.PrecioPorHora || 'N/A' }}</p>
+                <img *ngIf="producto.PropietarioBicicletas?.length > 0"
+                    [src]="getImageUrl(producto.PropietarioBicicletas[0]?.imagenReferencia)"
+                    alt="Imagen de la bicicleta">
+                <p>{{ producto.Descripcion}}</p>
+            </div>
         </div>
     </div>
+
     <form [formGroup]="carritoForm">
         <div class="form-group">
             <label for="cantidadHoras">Cantidad de Horas:</label>
@@ -33,7 +43,8 @@
                 required>
         </div>
         <a href="/catalogo">
-            <button type="button" class="btn btn-primary" (click)="onAddToCart()">Agregar </button>
+            <button type="button" class="btn btn-success my-3" (click)="onAddToCart()">Rentar </button>
         </a>
     </form>
 </div>
+<app-footer></app-footer>

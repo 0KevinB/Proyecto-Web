@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit {
   isAdmin: boolean = false;
   editMode: boolean = false;
   selectedFilter: string = 'Todas';
+  filterPost = '';
   bicicletaEditada: { BikeID: number; Modelo: string; Tipo: string; Estado: string; imagenReferencia: any; PrecioPorHora: number; Descripcion: string; PropietarioBicicletas: any; CantidadHoras: number; FechaInicio: Date; FechaFinalizacion: Date; } | any;
   constructor(
     private _productService: ProductService,
@@ -245,5 +246,9 @@ export class DashboardComponent implements OnInit {
     const fechaFinDate = new Date(fechaFin);
     const fechaActual = new Date();
     return fechaFinDate.getTime() > fechaActual.getTime();
+  }
+
+  onSearchChange(): void {
+    this._filterService.setFilter(this.filterPost);
   }
 }

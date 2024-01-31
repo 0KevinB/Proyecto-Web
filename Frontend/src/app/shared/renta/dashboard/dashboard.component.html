@@ -1,182 +1,196 @@
 <!-- dashboard.component.html -->
 <div *ngIf="isAdmin; else userDashboard">
     <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2>Catálogo de Bicicletas</h2>
-                <div class="btn-group btn-group-toggle py-3 px-2" data-toggle="buttons">
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
-                    </label>
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Tradicional')">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> Tradicional
-                    </label>
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Eléctrica')">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> Eléctrica
-                    </label>
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
-                        <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
-                    </label>
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Rentadas')">
-                        <input type="radio" name="options" id="option5" autocomplete="off"> Rentadas
-                    </label>
-                </div>
-                <div>
-                    <h3 class="text-center">¿Quieres rentar tu bicicleta?
-                        <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
-                            <mat-icon class="custom-icon">motorcycle</mat-icon></a>
-                    </h3>
-                </div>
-            </div>
-            <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
-                <div class="card catalogo">
-                    <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0"
-                        [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)"
-                        alt="Imagen de la bicicleta">
-                    <div class="card-body">
-                        <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
-                        <p>{{ product.Descripcion || 'N/A' }}</p>
-                        <p>Estado: {{ product.Estado || 'N/A' }}</p>
-                        <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
-                        <div *ngIf="detallesRenta">
-                            <h2>Detalles de la Renta</h2>
-                            <!--<div *ngFor="let detalle of detallesRenta" -->
-                            <div [ngClass]="{'bg-green': esFechaMenor(detallesRenta[detallesRenta.length-1].FechaFin), 
-                                'bg-red': !esFechaMenor(detallesRenta[detallesRenta.length-1].FechaFin)}">
+        <div class="col-12 my-3">
+            <h2 class="text-center">Catálogo de Bicicletas</h2>
 
-                                <p>BikeID: {{ detallesRenta[detallesRenta.length-1].BikeID }}</p>
-                                <p>Fecha de Inicio: {{ detallesRenta[detallesRenta.length-1].FechaInicio | date:'short' }}</p>
-                                <p>Fecha de Fin: {{ detallesRenta[detallesRenta.length-1].FechaFin | date:'short' }}</p>
-                            </div>
-                        </div>
-                        <button class="btn btn-success col-6" (click)="approveBicycle(product.BikeID)">
-                            Aprobar
-                        </button>
-                        <button class="btn btn-danger col-6" (click)="deleteProduct(product.BikeID)">
-                            Eliminar
-                        </button>
-                        <button class="btn btn-primary col-6 mt-2" (click)="editarBicicleta(product)">
-                            Editar
-                        </button>
-                        <!-- Botón para Ver ubicación -->
-                        <button class="btn btn-secondary col-6 mt-2" (click)="verMapa(product.BikeID)">
-                            Ver ubicación
-                        </button>
-                    </div>
-                </div>
-                <div class="card catalogo mt-3" *ngIf="editMode && bicicletaEditada.BikeID === product.BikeID">
-                    <form (submit)="guardarCambios()" class="p-3">
-                        <div class="form-group">
-                            <label for="modelo">Modelo:</label>
-                            <input [(ngModel)]="bicicletaEditada.Modelo" name="modelo" type="text" class="form-control"
-                                id="modelo">
-                        </div>
-                        <div class="form-group">
-                            <label for="descripcion">Descripción:</label>
-                            <textarea [(ngModel)]="bicicletaEditada.Descripcion" name="descripcion" class="form-control"
-                                id="descripcion"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="estado">Estado:</label>
-                            <select [(ngModel)]="bicicletaEditada.Estado" name="estado" class="form-control" id="estado"
-                                required>
-                                <option value="Muy bueno">Muy bueno</option>
-                                <option value="Bueno">Bueno</option>
-                                <option value="Regular">Regular</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="precioPorHora">Precio por Hora:</label>
-                            <input [(ngModel)]="bicicletaEditada.PrecioPorHora" name="precioPorHora" type="text"
-                                class="form-control" id="precioPorHora" required pattern="[0-9]+(\.[0-9]+)?">
-                            <small class="form-text text-muted">(Ejemplo: 1.50)</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipo">Tipo:</label>
-                            <select [(ngModel)]="bicicletaEditada.Tipo" name="tipo" class="form-control" id="tipo"
-                                required>
-                                <option value="Eléctrica">Eléctrica</option>
-                                <option value="Tradicional">Tradicional</option>
-                                <option value="Montaña">Montaña</option>
-                            </select>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-success mt-3">
-                                Guardar Cambios
-                            </button>
-                            <button type="button" class="btn btn-secondary mt-3" (click)="cancelarEdicion()">
-                                Cancelar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="fixed-container">
-                    <h3 class="text-center">Bicicletas cerca de tu zona
-                        <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
-                            <mat-icon class="custom-icon">map</mat-icon></a>
-                    </h3>
-                </div>
+            <div class="d-flex justify-content-between align-items-end">
+                <div></div>
+                <input class="col-3 text-end align-items-end buscadoor" type="text" placeholder="Buscar"
+                    aria-label="filterPost" name="filterPost" [(ngModel)]="filterPost" (input)="onSearchChange()">
+            </div>
+            <div class="btn-group btn-group-toggle py-3 px-2 d-flex flex-wrap" data-toggle="buttons">
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
+                </label>
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Tradicional')">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> Tradicional
+                </label>
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Eléctrica')">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Eléctrica
+                </label>
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
+                    <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
+                </label>
+                <label class="btn btn-outline-secondary">
+                    <input type="radio" name="options" id="option5" autocomplete="off"
+                        (click)="filterBicycles('Rentadas')"> Rentadas
+                </label>
+            </div>
+            <div>
+                <h3 class="text-center">¿Quieres rentar tu bicicleta?
+                    <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
+                        <mat-icon class="custom-icon">motorcycle</mat-icon></a>
+                </h3>
             </div>
         </div>
+        <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
+            <div class="card catalogo">
+                <img *ngIf="product.PropietarioBicicletas && product.PropietarioBicicletas.length > 0"
+                    [src]="getImageUrl(product.PropietarioBicicletas[0].imagenReferencia)" alt="Imagen de la bicicleta">
+                <div class="card-body">
+                    <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
+                    <p>{{ product.Descripcion || 'N/A' }}</p>
+                    <p>Estado: {{ product.Estado || 'N/A' }}</p>
+                    <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
+                    <div *ngIf="detallesRenta">
+                        <h2>Detalles de la Renta</h2>
+                        <!--<div *ngFor="let detalle of detallesRenta" -->
+                        <div [ngClass]="{'bg-green': esFechaMenor(detallesRenta[detallesRenta.length-1].FechaFin), 
+                                'bg-red': !esFechaMenor(detallesRenta[detallesRenta.length-1].FechaFin)}">
+
+                            <p>BikeID: {{ detallesRenta[detallesRenta.length-1].BikeID }}</p>
+                            <p>Fecha de Inicio: {{ detallesRenta[detallesRenta.length-1].FechaInicio | date:'short'
+                                }}</p>
+                            <p>Fecha de Fin: {{ detallesRenta[detallesRenta.length-1].FechaFin | date:'short' }}</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-success col-6" (click)="approveBicycle(product.BikeID)">
+                        Aprobar
+                    </button>
+                    <button class="btn btn-danger col-6" (click)="deleteProduct(product.BikeID)">
+                        Eliminar
+                    </button>
+                    <button class="btn btn-primary col-6 mt-2" (click)="editarBicicleta(product)">
+                        Editar
+                    </button>
+                    <!-- Botón para Ver ubicación -->
+                    <button class="btn btn-secondary col-6 mt-2" (click)="verMapa(product.BikeID)">
+                        Ver ubicación
+                    </button>
+                </div>
+            </div>
+            <div class="card catalogo mt-3" *ngIf="editMode && bicicletaEditada.BikeID === product.BikeID">
+                <form (submit)="guardarCambios()" class="p-3">
+                    <div class="form-group">
+                        <label for="modelo">Modelo:</label>
+                        <input [(ngModel)]="bicicletaEditada.Modelo" name="modelo" type="text" class="form-control"
+                            id="modelo">
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción:</label>
+                        <textarea [(ngModel)]="bicicletaEditada.Descripcion" name="descripcion" class="form-control"
+                            id="descripcion"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="estado">Estado:</label>
+                        <select [(ngModel)]="bicicletaEditada.Estado" name="estado" class="form-control" id="estado"
+                            required>
+                            <option value="Muy bueno">Muy bueno</option>
+                            <option value="Bueno">Bueno</option>
+                            <option value="Regular">Regular</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="precioPorHora">Precio por Hora:</label>
+                        <input [(ngModel)]="bicicletaEditada.PrecioPorHora" name="precioPorHora" type="text"
+                            class="form-control" id="precioPorHora" required pattern="[0-9]+(\.[0-9]+)?">
+                        <small class="form-text text-muted">(Ejemplo: 1.50)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo:</label>
+                        <select [(ngModel)]="bicicletaEditada.Tipo" name="tipo" class="form-control" id="tipo" required>
+                            <option value="Eléctrica">Eléctrica</option>
+                            <option value="Tradicional">Tradicional</option>
+                            <option value="Montaña">Montaña</option>
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success mt-3">
+                            Guardar Cambios
+                        </button>
+                        <button type="button" class="btn btn-secondary mt-3" (click)="cancelarEdicion()">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="fixed-container">
+                <h3 class="text-center">Bicicletas cerca de tu zona
+                    <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
+                        <mat-icon class="custom-icon">map</mat-icon></a>
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="text-end me-5">
+        <h3 class="">Bicicletas cerca de tu zona
+            <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
+                <mat-icon class="custom-icon">map</mat-icon></a>
+        </h3>
     </div>
 </div>
 
 
 <ng-template #userDashboard>
+
     <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h2>Catálogo de Bicicletas</h2>
-                <div class="btn-group btn-group-toggle py-3 px-2" data-toggle="buttons">
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
-                    </label>
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Tradicional')">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> Tradicional
-                    </label>
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Eléctrica')">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> Eléctrica
-                    </label>
-                    <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
-                        <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
-                    </label>
-                </div>
-                <div>
-                    <h3 class="text-center">¿Quieres rentar tu bicicleta?
-                        <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
-                            <mat-icon class="custom-icon">motorcycle</mat-icon></a>
-                    </h3>
-                </div>
+        <div class="col-12 my-3">
+            <h2 class="text-center">Catálogo de Bicicletas</h2>
+
+            <div class="d-flex justify-content-between align-items-end">
+                <div></div>
+                <input class="col-3 text-end align-items-end buscadoor" type="text" placeholder="Buscar"
+                    aria-label="filterPost" name="filterPost" [(ngModel)]="filterPost" (input)="onSearchChange()">
             </div>
-            <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
-                <ng-container *ngIf="product.PropietarioBicicletas[0].Estado == 1">
-                    <div class="card catalogo">
-                        <img *ngIf="product.PropietarioBicicletas?.length > 0"
-                            [src]="getImageUrl(product.PropietarioBicicletas[0]?.imagenReferencia)"
-                            alt="Imagen de la bicicleta">
-                        <div class="card-body">
-                            <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
-                            <p>{{ product.Descripcion || 'N/A' }}</p>
-                            <p>{{ product.Tipo || 'N/A' }}</p>
-                            <p>Estado: {{ product.Estado || 'N/A' }}</p>
-                            <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
-                            <button class="btn btn-primary col-6" (click)="verMapa(product.BikeID)">
-                                Ver en el Mapa
-                            </button>
-                            <button class="btn btn-danger col-6" (click)="onReserve(product)"
-                                [routerLink]="[ '/carrito' ]">
-                                Reservar
-                            </button>
-                        </div>
-                    </div>
-                </ng-container>
-                <div class="fixed-container">
-                    <h3 class="text-center">Bicicletas cerca de tu zona
-                        <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
-                            <mat-icon class="custom-icon">map</mat-icon></a>
-                    </h3>
-                </div>
+            <div class="btn-group btn-group-toggle py-3 px-2 d-flex flex-wrap" data-toggle="buttons">
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Todas')">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Todas
+                </label>
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Tradicional')">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> Tradicional
+                </label>
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Eléctrica')">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Eléctrica
+                </label>
+                <label class="btn btn-outline-secondary" (click)="filterBicycles('Montaña')">
+                    <input type="radio" name="options" id="option4" autocomplete="off"> Montaña
+                </label>
+            </div>
+            <div>
+                <h3 class="text-center">¿Quieres rentar tu bicicleta?
+                    <a class="text-black" [routerLink]="[ '/agregar-bicicleta' ]"> ¡Adelante!
+                        <mat-icon class="custom-icon">motorcycle</mat-icon></a>
+                </h3>
             </div>
         </div>
+        <div *ngFor="let product of filteredProducts" class="col-md-4 mb-4 tarjeta">
+            <ng-container *ngIf="product.PropietarioBicicletas[0].Estado == 1">
+                <div class="card catalogo">
+                    <img *ngIf="product.PropietarioBicicletas?.length > 0"
+                        [src]="getImageUrl(product.PropietarioBicicletas[0]?.imagenReferencia)"
+                        alt="Imagen de la bicicleta">
+                    <div class="card-body">
+                        <h4><a>{{ product.Modelo || 'N/A' }}</a></h4>
+                        <p>{{ product.Descripcion || 'N/A' }}</p>
+                        <p>{{ product.Tipo || 'N/A' }}</p>
+                        <p>Estado: {{ product.Estado || 'N/A' }}</p>
+                        <p>Precio por Hora: {{ product.PrecioPorHora | currency }}</p>
+                        <button class="btn btn-primary col-6" (click)="verMapa(product.BikeID)">
+                            Ver en el Mapa
+                        </button>
+                        <button class="btn btn-danger col-6" (click)="onReserve(product)" [routerLink]="[ '/carrito' ]">
+                            Reservar
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="text-end me-5">
+        <h3 class="">Bicicletas cerca de tu zona
+            <a class="text-black" [routerLink]="[ '/mapa' ]"> ¡Ver!
+                <mat-icon class="custom-icon">map</mat-icon></a>
+        </h3>
     </div>
 </ng-template>

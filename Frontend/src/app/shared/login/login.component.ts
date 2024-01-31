@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { NavComponent } from "../lamding/nav/nav.component";
+import { NavComponent } from "../nav/nav.component";
 import { NewpasswordComponent } from "../forgot-password/newpassword/newpassword.component";
 import { RegisterComponent } from 'src/app/shared/register/register.component';
 import { User } from 'src/app/interfaces/user';

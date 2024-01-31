@@ -6,20 +6,21 @@ import { CarritoItem } from 'src/app/interfaces/CarritoItem';
 import { Product } from 'src/app/interfaces/product';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { UserService } from 'src/app/services/user.service';
+import { FooterComponent } from "../../footer/footer.component";
 
 @Component({
-  selector: 'app-carrito',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './carrito.component.html',
-  styleUrl: './carrito.component.css'
+    selector: 'app-carrito',
+    standalone: true,
+    templateUrl: './carrito.component.html',
+    styleUrl: './carrito.component.css',
+    imports: [ReactiveFormsModule, CommonModule, FooterComponent]
 })
 export class CarritoComponent implements OnInit {
   carritoForm: FormGroup | any;
-  carrito: Product[] = [];
   cedula: string | any;
   producto: Product | any;
-  productoReserva: any;
+  serverBaseUrl = 'http://localhost:3001';
+
   constructor(
     private fb: FormBuilder,
     private carritoService: CarritoService,
@@ -36,6 +37,7 @@ export class CarritoComponent implements OnInit {
     });
 
     this.producto = this.carritoService.getProductoSeleccionado();
+    console.log(this.producto)
   }
 
   onAddToCart(): void {
@@ -52,5 +54,10 @@ export class CarritoComponent implements OnInit {
   Logout() {
     localStorage.removeItem('token')
     this.router.navigate(['/inicio']);
+  }
+  getImageUrl(imageName: string): string {
+    const token = localStorage.getItem('token');
+    const tokenParam = token ? `?token=${token}` : '';
+    return `${this.serverBaseUrl}/api/products/bikes/imagen/${imageName}${tokenParam}`;
   }
 }

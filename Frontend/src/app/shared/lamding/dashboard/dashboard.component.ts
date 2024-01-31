@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { NavComponent } from "../nav/nav.component";
+import { NavComponent } from "../../nav/nav.component";
 import { HttpClientModule } from '@angular/common/http'
 import { LoginComponent } from "../../login/login.component";
 import { SectionComponent } from "../section/section.component";

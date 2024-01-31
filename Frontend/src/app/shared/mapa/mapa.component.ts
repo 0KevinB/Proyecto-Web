@@ -10,13 +10,14 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { UserService } from 'src/app/services/user.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import * as L from 'leaflet';
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
-  selector: 'app-mapa',
-  standalone: true,
-  templateUrl: './mapa.component.html',
-  styleUrl: './mapa.component.css',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule]
+    selector: 'app-mapa',
+    standalone: true,
+    templateUrl: './mapa.component.html',
+    styleUrl: './mapa.component.css',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, FooterComponent]
 })
 export class MapaComponent implements OnInit {
   listUbicacion: Ubicacion[] = [];
@@ -131,8 +132,8 @@ export class MapaComponent implements OnInit {
         }
       });
     }, 2000);
+    this.marcadores();
   }
-
   marcadores() {
     setTimeout(() => {
       for (let i = 0; i < this.listUbicacion.length; i++) {
@@ -166,7 +167,6 @@ export class MapaComponent implements OnInit {
     localStorage.removeItem('token')
     this.router.navigate(['/inicio']);
   }
-
   saveChanges(): void {
     if (this.ubicacionForm.valid) {
       this.ubicacionForm.patchValue({

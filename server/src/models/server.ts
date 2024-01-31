@@ -11,8 +11,6 @@ import Ubicacion from "./ubicacion"
 import Alquiler from "./alquiler"
 import Transaccion from "./transaccion"
 import PropietarioBicicletas from "./propietarioBicicletas"
-import Mantenimiento from "./mantenimiento"
-import ControlCalidad from "./controlCalidad"
 import Bicicleta_Ubicacion from "./Bicicleta_Ubicacion"
 import Carrito from "./Carrito";
 
@@ -62,8 +60,6 @@ export class Server {
             await Alquiler.sync({ alter: true });
             await Transaccion.sync({ alter: true });
             await PropietarioBicicletas.sync({ alter: true });
-            await Mantenimiento.sync({ alter: true })
-            await ControlCalidad.sync({ alter: true });
             await Carrito.sync({ alter: true });
             console.log("Connect");
         } catch (error) {

@@ -4,7 +4,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { product_add } from 'src/app/interfaces/product_add.';
-import { NavComponent } from "../../renta/nav/nav.component";
+import { NavComponent } from "../../nav/nav.component";
 import { FooterComponent } from "../../footer/footer.component";
 import { Router, RouterLink } from '@angular/router';
 import { NotificationService } from 'src/app/services/notification.service';

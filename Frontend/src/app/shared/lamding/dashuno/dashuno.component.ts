@@ -5,7 +5,7 @@ import { FooterComponent } from '../../footer/footer.component';
 import { NewpasswordComponent } from '../../forgot-password/newpassword/newpassword.component';
 import { LoginComponent } from '../../login/login.component';
 import { HeaderComponent } from '../header/header.component';
-import { NavComponent } from '../nav/nav.component';
+import { NavComponent } from '../../nav/nav.component';
 
 import { SectionunoComponent } from '../sectionuno/sectionuno.component';
 

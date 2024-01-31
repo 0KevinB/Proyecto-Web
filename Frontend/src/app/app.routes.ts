@@ -15,6 +15,7 @@ import { DashunoComponent } from './shared/lamding/dashuno/dashuno.component';
 import { DashdosComponent } from './shared/lamding/dashdos/dashdos.component';
 import { DashtresComponent } from './shared/lamding/dashtres/dashtres.component';
 import { DashcuatroComponent } from './shared/lamding/dashcuatro/dashcuatro.component';
+import { EstadisticasComponent } from './shared/estadisticas/estadisticas.component';
 
 
 export const routes: Routes = [
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'carrito', component: CarritoComponent, canActivate: [authGuard] },
   { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
   { path: 'mapa', component: MapaComponent, canActivate: [authGuard] },
+  { path: 'estadisticas', component: EstadisticasComponent, canActivate: [authGuard] },
   { path: 'mapa/:bicicletaId', component: MapaComponent, canActivate: [authGuard] },
   { path: 'agregar-bicicleta', component: AlquilarBicicletaComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/inicio', pathMatch: 'full' }
