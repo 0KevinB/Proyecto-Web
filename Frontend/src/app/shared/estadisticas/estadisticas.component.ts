@@ -30,7 +30,8 @@ export class EstadisticasComponent {
   ];
   isAdmin: boolean = false;
   editMode: boolean = false;
-  usuarios: User[] = []
+  usuarios: any[] = []
+  usuariosCreadosPorFecha: any[] = [];
   public chart: Chart | any;
   constructor(
     private _productService: ProductService,
@@ -50,7 +51,7 @@ export class EstadisticasComponent {
 
     this._userService.getUsers().subscribe((data) => {
       this.usuarios = data
-      this.generateLineChart();
+      this.procesarUsuariosPorFecha();
     });
   }
   porcentajeEléctricas = 0
@@ -117,6 +118,7 @@ export class EstadisticasComponent {
       (data: any) => {
         this.detallesRenta = data;
         this.alquileres = this.detallesRenta.alquileres
+        console.log(this.detallesRenta)
         this.getGanancias()
         this.getProducts()
       },
@@ -158,41 +160,60 @@ export class EstadisticasComponent {
     });
   }
 
+  procesarUsuariosPorFecha() {
+    // Agrupar usuarios por fecha de creación
+    const usuariosPorFecha = this.usuarios.reduce((result, usuario) => {
+      const fechaCreacion = new Date(usuario.createdAt).toLocaleDateString();
+      if (!result[fechaCreacion]) {
+        result[fechaCreacion] = 0;
+      }
+      result[fechaCreacion]++;
+      return result;
+    }, {});
+
+    // Convertir a un formato adecuado para el gráfico de línea
+    this.usuariosCreadosPorFecha = Object.keys(usuariosPorFecha).map((fecha) => {
+      console.log(fecha, usuariosPorFecha[fecha]);
+      return { fecha, cantidad: usuariosPorFecha[fecha] };
+    });
+
+    // Ordenar por fecha
+    this.usuariosCreadosPorFecha.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+
+    // Generar el gráfico de línea
+    this.generateLineChart();
+  }
+
   generateLineChart() {
     const canvas: any = document.getElementById('lineChart');
     const ctx = canvas.getContext('2d');
-    console.log(this.usuarios);
-
-    const labels = this.usuarios.map(user => user.createAt ? new Date(user.createAt).toLocaleDateString() : '');
-    const data = this.usuarios.map(() => 1); // 1 para contar la cantidad de registros por fecha
 
     const lineChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: labels,
+        labels: this.usuariosCreadosPorFecha.map((info) => info.fecha),
         datasets: [{
-          label: 'Cantidad de registros',
-          data: data,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2,
-          fill: false,
+          label: 'Usuarios Creados',
+          data: this.usuariosCreadosPorFecha.map((info) => info.cantidad),
+          borderColor: 'blue',
+          fill: false
         }]
       },
       options: {
         scales: {
           x: {
-            type: 'time',
+            // type: 'time', // Comentado para aceptar etiquetas de cadena en lugar de fechas
             time: {
-              unit: 'day',
-            },
+              unit: 'day'
+            }
           },
           y: {
             beginAtZero: true
           }
         }
       }
-
     });
   }
+
 
 }

@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import Alquiler from '../models/alquiler';
 import Bicicleta from '../models/bicicleta';
+import PropietarioBicicletas from '../models/propietarioBicicletas';
 
 // Controlador para obtener el estado de alquiler por cédula
 export const getAlquilerByCedula = async (req: Request, res: Response) => {
@@ -83,16 +84,19 @@ export const getAlquiler = async (req: Request, res: Response) => {
         // Obtener información detallada de la bicicleta más rentable
         const bicicletaMasRentableInfo = await Bicicleta.findByPk(bicicletaMasRentable);
 
-        // Retornar la bicicleta más rentable junto con el estado de alquiler
+        // Obtener la imagen de referencia de PropietarioBicicletas
+        const propietarioBicicletaInfo = await PropietarioBicicletas.findOne({
+            where: { BikeID: bicicletaMasRentable },
+        });
+
+        // Retornar la bicicleta más rentable junto con el estado de alquiler y la imagen de referencia
         res.json({
             alquileres: alquileres,
-            bicicletaMasRentable: bicicletaMasRentableInfo,
-            montoMasAlto: montoMasAlto
+            bicicletaMasRentable: {
+                ...(bicicletaMasRentableInfo?.toJSON() || {}),
+                imagenReferencia: propietarioBicicletaInfo?.getDataValue('imagenReferencia') || null,
+            },
+            montoMasAlto: montoMasAlto,
         });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error interno del servidor' });
-    }
-};
-
-
+    } catch (err) { }
+}

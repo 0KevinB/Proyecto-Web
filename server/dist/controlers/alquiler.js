@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAlquiler = exports.getAlquilerByBikeID = exports.getAlquilerByCedula = void 0;
 const alquiler_1 = __importDefault(require("../models/alquiler"));
 const bicicleta_1 = __importDefault(require("../models/bicicleta"));
+const propietarioBicicletas_1 = __importDefault(require("../models/propietarioBicicletas"));
 // Controlador para obtener el estado de alquiler por cédula
 const getAlquilerByCedula = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -83,16 +84,17 @@ const getAlquiler = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         // Obtener información detallada de la bicicleta más rentable
         const bicicletaMasRentableInfo = yield bicicleta_1.default.findByPk(bicicletaMasRentable);
-        // Retornar la bicicleta más rentable junto con el estado de alquiler
+        // Obtener la imagen de referencia de PropietarioBicicletas
+        const propietarioBicicletaInfo = yield propietarioBicicletas_1.default.findOne({
+            where: { BikeID: bicicletaMasRentable },
+        });
+        // Retornar la bicicleta más rentable junto con el estado de alquiler y la imagen de referencia
         res.json({
             alquileres: alquileres,
-            bicicletaMasRentable: bicicletaMasRentableInfo,
-            montoMasAlto: montoMasAlto
+            bicicletaMasRentable: Object.assign(Object.assign({}, ((bicicletaMasRentableInfo === null || bicicletaMasRentableInfo === void 0 ? void 0 : bicicletaMasRentableInfo.toJSON()) || {})), { imagenReferencia: (propietarioBicicletaInfo === null || propietarioBicicletaInfo === void 0 ? void 0 : propietarioBicicletaInfo.getDataValue('imagenReferencia')) || null }),
+            montoMasAlto: montoMasAlto,
         });
     }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error interno del servidor' });
-    }
+    catch (err) { }
 });
 exports.getAlquiler = getAlquiler;
