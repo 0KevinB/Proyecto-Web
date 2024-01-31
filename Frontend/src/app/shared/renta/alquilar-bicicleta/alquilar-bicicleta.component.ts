@@ -51,7 +51,6 @@ export class AlquilarBicicletaComponent {
 
     this.ubicacionService.ubicacion$.subscribe((data) => {
       this.ubicacionData = data;
-      console.log('iniittttt', this.ubicacionData);
     });
   }
 

@@ -59,7 +59,6 @@ export class CarritoService {
 
   getAlquiler(): Observable<any> {
     const url = `${this.myAppUrl}${this.myApiUrl}alquiler`;
-    console.log(url);
     return this.http.get<any>(url).pipe(
       catchError(this.handleError)
     );

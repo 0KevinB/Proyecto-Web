@@ -45,7 +45,6 @@ export class ProductService {
 
   // Obtener todos los productos
   getRentadas(): Observable<Product[]> {
-    console.log("Product renta")
     return this.http.get<Product[]>(`${this.myAppUrl}${this.myApiUrl}rentadas`);
   }
 

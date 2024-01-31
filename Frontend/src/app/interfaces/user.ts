@@ -8,6 +8,6 @@ export interface User{
     Telefono? : string;
     Estado?: Boolean;
     RolID? : Number;
-    createAt?: Date;
+    createAt?: Date ;
     updateAt?: Date;
 }

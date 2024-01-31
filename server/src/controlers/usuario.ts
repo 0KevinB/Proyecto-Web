@@ -185,3 +185,14 @@ export const getUserDetails = async (req: Request, res: Response) => {
         res.status(500).json({ msg: 'Ocurrió un error al obtener los detalles del usuario' });
     }
 };
+
+export const getUsers = async (req: Request, res: Response) => {
+    try {
+        const user = await Usuario.findAll({});
+
+        res.json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Ocurrió un error al obtener los detalles del usuario' });
+    }
+};

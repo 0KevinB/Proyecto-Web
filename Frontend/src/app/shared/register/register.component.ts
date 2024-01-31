@@ -9,11 +9,11 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { NavComponent } from "../nav/nav.component";
 
 @Component({
-    selector: 'app-register',
-    standalone: true,
-    templateUrl: './register.component.html',
-    styleUrl: './register.component.css',
-    imports: [CommonModule, ReactiveFormsModule, RouterLink, FooterComponent, NavComponent]
+  selector: 'app-register',
+  standalone: true,
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css',
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FooterComponent, NavComponent]
 })
 
 export class RegisterComponent {
@@ -22,13 +22,13 @@ export class RegisterComponent {
     nombre: ['', [Validators.required, Validators.minLength(3)]],
     apellidos: ['', [Validators.required, Validators.minLength(3)]],
     CorreoElectronico: ['', [Validators.required, Validators.email]],
-    telefono: ['', [Validators.required,Validators.minLength(10),Validators.pattern(/^[0-9]\d*$/)]],
-    emailConfirm: ['', [Validators.required,Validators.email]],
-    Contraseña: ['', [Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/), Validators.minLength(8)]],
-    passwordConfirm: ['', [Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/), Validators.minLength(8)]],
+    telefono: ['', [Validators.required, Validators.minLength(10), Validators.pattern(/^[0-9]\d*$/)]],
+    emailConfirm: ['', [Validators.required, Validators.email]],
+    Contraseña: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/), Validators.minLength(8)]],
+    passwordConfirm: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/), Validators.minLength(8)]],
     provincia: ['', [Validators.required]],
     terminos: ['', [Validators.required]],
-    Direccion: ['', [Validators.required,Validators.maxLength(255)]],
+    Direccion: ['', [Validators.required, Validators.maxLength(255)]],
     cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]{10}$/)]],
 
   });

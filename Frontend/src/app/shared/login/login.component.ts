@@ -61,7 +61,6 @@ export class LoginComponent implements OnInit {
         CorreoElectronico: this.CorreoElectronico,
         Contraseña: this.Contraseña
       }
-      console.log('Datos a enviar:', user);
 
       this.loading = true;
       this._userService.login(user).subscribe({

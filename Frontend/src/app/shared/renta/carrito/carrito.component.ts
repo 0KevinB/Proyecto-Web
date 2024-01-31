@@ -37,7 +37,6 @@ export class CarritoComponent implements OnInit {
     });
 
     this.producto = this.carritoService.getProductoSeleccionado();
-    console.log(this.producto)
   }
 
   onAddToCart(): void {

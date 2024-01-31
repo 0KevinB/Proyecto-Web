@@ -13,11 +13,11 @@ import * as L from 'leaflet';
 import { FooterComponent } from "../footer/footer.component";
 
 @Component({
-    selector: 'app-mapa',
-    standalone: true,
-    templateUrl: './mapa.component.html',
-    styleUrl: './mapa.component.css',
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, FooterComponent]
+  selector: 'app-mapa',
+  standalone: true,
+  templateUrl: './mapa.component.html',
+  styleUrl: './mapa.component.css',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, FooterComponent]
 })
 export class MapaComponent implements OnInit {
   listUbicacion: Ubicacion[] = [];
@@ -59,7 +59,6 @@ export class MapaComponent implements OnInit {
               Latitud: this.listUbicacion[0].Latitud,
               Longitud: this.listUbicacion[0].Longitud,
             });
-            console.log(this.listUbicacion[0])
           },
           (error) => {
             this.notificationService.notify(
@@ -127,7 +126,6 @@ export class MapaComponent implements OnInit {
             });
             this.marcadorActual.addTo(this.map);
             this._ubicacionService.obtenerUbicacionAlClic(this.latlng);
-            console.log('Data', this.latlng)
           }
         }
       });
@@ -174,14 +172,13 @@ export class MapaComponent implements OnInit {
         Longitud: this.latlng.lng,
       });
       const data = this.ubicacionForm.value;
-      console.log('Nuevos datos: ', data);
       this._ubicacionService.updateUbicacionDetails(this.listUbicacion[0].LocationID, data)
         .subscribe(
           () => {
-            console.log('Ubicación actualizada correctamente');
+            this.notificationService.notify('Ubicación actualizada correctamente');
           },
           (error) => {
-            console.error('Error al actualizar la ubicación:', error);
+            this.notificationService.notify('Error al actualizar la ubicación:');
           }
         );
     }

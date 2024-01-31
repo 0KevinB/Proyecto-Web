@@ -57,7 +57,6 @@ export class DashboardComponent implements OnInit {
     });
     this.token = localStorage.getItem('token');
     this._filterService.filter$.subscribe((data) => {
-      console.log(data);
       this.applyFilter();
     });
   }
@@ -219,16 +218,13 @@ export class DashboardComponent implements OnInit {
       this._productService.updateProduct(this.bicicletaEditada.BikeID, this.bicicletaEditada)
         .subscribe(
           response => {
-            console.log('Bicicleta actualizada con éxito:', response);
-            // Puedes realizar otras acciones después de la actualización, como recargar la lista de bicicletas, etc.
             this.getProducts();
-            this.bicicletaEditada = null; // Limpiar la bicicleta editada después de guardar cambios
+            this.bicicletaEditada = null; 
             this.notificationService.notify('Bicicleta actualizada correctamente', 2000);
             this.cancelarEdicion();
           },
           error => {
             console.error('Error al actualizar bicicleta:', error);
-            // Puedes manejar el error según tus necesidades
             this.notificationService.notify('Error al actualizar la bicicleta', 2000);
           }
         );

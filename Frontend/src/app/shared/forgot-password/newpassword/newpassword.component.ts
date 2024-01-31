@@ -49,9 +49,6 @@ export class NewpasswordComponent {
         // Puedes mostrar un mensaje de error al usuario
         return;
       }
-      console.log('onSubmit triggered');
-      console.log('Form Values:', formValues);
-      console.log('Token:', this.token);
 
       this.loading = true;
 

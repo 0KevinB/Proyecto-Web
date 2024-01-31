@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserDetails = exports.updateUserInfo = exports.resetPassword = exports.forgotPassword = exports.login = exports.newUser = void 0;
+exports.getUsers = exports.getUserDetails = exports.updateUserInfo = exports.resetPassword = exports.forgotPassword = exports.login = exports.newUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -181,3 +181,14 @@ const getUserDetails = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getUserDetails = getUserDetails;
+const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield usuario_1.default.findAll({});
+        res.json(user);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Ocurrió un error al obtener los detalles del usuario' });
+    }
+});
+exports.getUsers = getUsers;

@@ -61,7 +61,6 @@ export class PerfilComponent implements OnInit {
       (data: any) => {
         this.detallesRenta = data;
         this.alquileres = this.detallesRenta.alquileres
-        console.log(this.detallesRenta)
       },
       (error) => {
         this.notificationService.notify('Error al obtener detalles de renta');
@@ -124,7 +123,6 @@ export class PerfilComponent implements OnInit {
     this.productService.getProductById(bikeId).subscribe(
       (bicicleta: any) => {
         this.bicicletaSeleccionada = bicicleta;
-        console.log('biciclet', this.bicicletaSeleccionada);
       },
       error => {
         console.error('Error al obtener la información de la bicicleta:', error);
@@ -140,8 +138,6 @@ export class PerfilComponent implements OnInit {
     const tiempoTranscurrido = fechaActual.getTime() - fechaInicioObj.getTime();
     const porcentajeTranscurrido = (tiempoTranscurrido / duracionTotal) * 100;
     this.porcentaje = porcentajeTranscurrido.toFixed(2);
-    console.log('porcentaje',this.porcentaje)
-
     return porcentajeTranscurrido.toFixed(2);
   }
 
