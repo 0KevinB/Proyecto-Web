@@ -18,17 +18,19 @@ import { NavComponent } from "../nav/nav.component";
 
 export class RegisterComponent {
   public myForm: FormGroup = this.fb.group({
-    nombre: ['', [Validators.required, Validators.minLength(2)]],
-    apellidos: ['', [Validators.required, Validators.minLength(2)]],
-    CorreoElectronico: ['', [Validators.required]],
-    telefono: ['', [Validators.required, Validators.minLength(10)]],
-    emailConfirm: ['', [Validators.required]],
-    Contraseña: ['', [Validators.required, Validators.minLength(6)]],
-    passwordConfirm: ['', [Validators.required]],
+
+    nombre: ['', [Validators.required, Validators.minLength(3)]],
+    apellidos: ['', [Validators.required, Validators.minLength(3)]],
+    CorreoElectronico: ['', [Validators.required, Validators.email]],
+    telefono: ['', [Validators.required,Validators.minLength(10),Validators.pattern(/^[0-9]\d*$/)]],
+    emailConfirm: ['', [Validators.required,Validators.email]],
+    Contraseña: ['', [Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/), Validators.minLength(8)]],
+    passwordConfirm: ['', [Validators.required,Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/), Validators.minLength(8)]],
     provincia: ['', [Validators.required]],
     terminos: ['', [Validators.required]],
-    Direccion: ['', [Validators.required]],
-    cedula: ['', [Validators.required]],
+    Direccion: ['', [Validators.required,Validators.maxLength(255)]],
+    cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^[0-9]{10}$/)]],
+
   });
 
   constructor(
