@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAlquiler = exports.getAlquilerByBikeID = exports.getAlquilerByCedula = void 0;
 const alquiler_1 = __importDefault(require("../models/alquiler"));
+const bicicleta_1 = __importDefault(require("../models/bicicleta"));
 // Controlador para obtener el estado de alquiler por cédula
 const getAlquilerByCedula = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -55,14 +56,39 @@ const getAlquilerByBikeID = (req, res) => __awaiter(void 0, void 0, void 0, func
 });
 exports.getAlquilerByBikeID = getAlquilerByBikeID;
 const getAlquiler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('Llegaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ', req.params, req.body);
     try {
-        const alquiler = yield alquiler_1.default.findAll();
-        if (!alquiler || alquiler.length === 0) {
+        const alquileres = yield alquiler_1.default.findAll();
+        if (!alquileres || alquileres.length === 0) {
             return res.status(404).json({ message: 'Alquiler no encontrado para la cédula proporcionada' });
         }
-        // Retornar el estado de alquiler
-        res.json(alquiler);
+        // Calcular la bicicleta más rentable
+        let bicicletas = {};
+        alquileres.forEach((alquiler) => {
+            const bikeID = alquiler.getDataValue('BikeID');
+            const montoTotal = parseFloat(alquiler.getDataValue('MontoTotal'));
+            if (bicicletas[bikeID] === undefined) {
+                bicicletas[bikeID] = 0;
+            }
+            bicicletas[bikeID] += montoTotal;
+        });
+        let bicicletaMasRentable = null;
+        let montoMasAlto = 0;
+        for (const bikeID in bicicletas) {
+            if (bicicletas.hasOwnProperty(bikeID)) {
+                if (bicicletas[bikeID] > montoMasAlto) {
+                    montoMasAlto = bicicletas[bikeID];
+                    bicicletaMasRentable = parseInt(bikeID, 10);
+                }
+            }
+        }
+        // Obtener información detallada de la bicicleta más rentable
+        const bicicletaMasRentableInfo = yield bicicleta_1.default.findByPk(bicicletaMasRentable);
+        // Retornar la bicicleta más rentable junto con el estado de alquiler
+        res.json({
+            alquileres: alquileres,
+            bicicletaMasRentable: bicicletaMasRentableInfo,
+            montoMasAlto: montoMasAlto
+        });
     }
     catch (error) {
         console.error(error);

@@ -7,13 +7,17 @@ import { UserService } from 'src/app/services/user.service';
 import { Router, RouterLink } from '@angular/router';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { ProductService } from 'src/app/services/product.service';
+import { Alquiler } from 'src/app/interfaces/alquiler';
+import { catchError, forkJoin, switchMap, throwError } from 'rxjs';
+import { NavComponent } from "../nav/nav.component";
+import { FooterComponent } from "../footer/footer.component";
 
 @Component({
-  selector: 'app-perfil',
-  standalone: true,
-  imports: [CommonModule, FormsModule,],
-  templateUrl: './perfil.component.html',
-  styleUrl: './perfil.component.css'
+    selector: 'app-perfil',
+    standalone: true,
+    templateUrl: './perfil.component.html',
+    styleUrl: './perfil.component.css',
+    imports: [CommonModule, FormsModule, NavComponent, FooterComponent]
 })
 export class PerfilComponent implements OnInit {
   user: User = {};
@@ -21,7 +25,11 @@ export class PerfilComponent implements OnInit {
   cedulaUsuario: string | null = null;
   editMode = false;
   historialPagos: any[] = [];
+  rentaActual: any[] = [];
   bicicletaSeleccionada: any = [];
+  alquileres: Alquiler[] = []
+  detallesRenta: any;
+  porcentaje: any;
 
   constructor(
     private userService: UserService,
@@ -45,13 +53,26 @@ export class PerfilComponent implements OnInit {
       }
     );
     this.onGetAlquilerByCedula()
+    this.getAlquiler();
+  }
+
+  getAlquiler() {
+    this.carritoService.getAlquiler().subscribe(
+      (data: any) => {
+        this.detallesRenta = data;
+        this.alquileres = this.detallesRenta.alquileres
+        console.log(this.detallesRenta)
+      },
+      (error) => {
+        this.notificationService.notify('Error al obtener detalles de renta');
+      }
+    );
   }
 
   enableEditMode(): void {
     this.editedUser = { ...this.user };
     this.editMode = true;
   }
-
   saveChanges(): void {
     this.userService.updateUserDetails(this.cedulaUsuario, this.editedUser).subscribe(
       () => {
@@ -78,6 +99,7 @@ export class PerfilComponent implements OnInit {
   onGetAlquilerByCedula(): void {
     this.carritoService.getAlquilerByCedula(this.cedulaUsuario).subscribe(
       (historialPagos: any[]) => {
+        const fechaActual = new Date();
         historialPagos.forEach(pago => {
           const bikeId = pago.BikeID;
           this.productService.getProductById(bikeId).subscribe(
@@ -90,6 +112,8 @@ export class PerfilComponent implements OnInit {
           );
         });
         this.historialPagos = historialPagos;
+        this.rentaActual = historialPagos.filter(pago => new Date(pago.FechaFin) > fechaActual);
+
       },
       error => {
         console.error('Error al obtener el historial de pagos:', error);
@@ -106,6 +130,19 @@ export class PerfilComponent implements OnInit {
         console.error('Error al obtener la información de la bicicleta:', error);
       }
     );
+  }
+
+  calcularPorcentajeTranscurrido(fechaInicio: string, fechaFin: string): string {
+    const fechaInicioObj = new Date(fechaInicio);
+    const fechaFinObj = new Date(fechaFin);
+    const fechaActual = new Date();
+    const duracionTotal = fechaFinObj.getTime() - fechaInicioObj.getTime();
+    const tiempoTranscurrido = fechaActual.getTime() - fechaInicioObj.getTime();
+    const porcentajeTranscurrido = (tiempoTranscurrido / duracionTotal) * 100;
+    this.porcentaje = porcentajeTranscurrido.toFixed(2);
+    console.log('porcentaje',this.porcentaje)
+
+    return porcentajeTranscurrido.toFixed(2);
   }
 
 }
