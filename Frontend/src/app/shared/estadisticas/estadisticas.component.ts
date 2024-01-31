@@ -1,18 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Product } from 'src/app/interfaces/product';
 import { ProductService } from 'src/app/services/product.service';
 import { UserService } from 'src/app/services/user.service';
-import { FilterService } from 'src/app/services/filter.service';
-import { Observable, forkJoin, map, switchMap } from 'rxjs';
-import { FormsModule } from '@angular/forms';
 import { NotificationService } from 'src/app/services/notification.service';
-import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
-import { UbicacionService } from 'src/app/services/ubicacion.service';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { NavComponent } from '../nav/nav.component';
 import { Alquiler } from 'src/app/interfaces/alquiler';
+import { Chart } from 'chart.js/auto';
 
 @Component({
   selector: 'app-estadisticas',
@@ -31,21 +25,15 @@ export class EstadisticasComponent {
   opciones = [
     { nombre: 'Tradicional', checked: false },
     { nombre: 'Electrica', checked: false },
-    { nombre: 'Montaña', checked: false },
-    { nombre: 'Todas', checked: true },
+    { nombre: 'Montaña', checked: false }
   ];
   isAdmin: boolean = false;
   editMode: boolean = false;
-  selectedFilter: string = 'Todas';
-  filterPost = '';
-  bicicletaEditada: { BikeID: number; Modelo: string; Tipo: string; Estado: string; imagenReferencia: any; PrecioPorHora: number; Descripcion: string; PropietarioBicicletas: any; CantidadHoras: number; FechaInicio: Date; FechaFinalizacion: Date; } | any;
+  public chart: Chart | any;
   constructor(
     private _productService: ProductService,
     private _userService: UserService,
-    private _filterService: FilterService,
     private notificationService: NotificationService,
-    private ubicacionService: UbicacionService,
-    private router: Router,
     private carritoService: CarritoService
   ) { }
 
@@ -57,7 +45,7 @@ export class EstadisticasComponent {
     this.getProductsRentados();
     this.getAlquiler();
     this.token = localStorage.getItem('token');
-    
+
   }
 
   getProducts() {
@@ -75,14 +63,16 @@ export class EstadisticasComponent {
 
     const porcentajeRentadas = (bicicletasRentadas / totalBicicletas) * 100;
     this.porcentaje = porcentajeRentadas.toFixed(2)
-    console.log('porcentaje',this.porcentaje)
+    console.log('porcentaje', this.porcentaje)
   }
-  productosRentados  = 0
+
+  productosRentados = 0
   getProductsRentados() {
     this._productService.getRentadas().subscribe((data) => {
       this.detallesRenta = data;
       this.productosRentados = this.detallesRenta.length
       this.calcularPorcentajeBicicletasRentadas();
+
     },
       (error) => {
         this.notificationService.notify('Error al obtener detalles de renta');
@@ -96,8 +86,9 @@ export class EstadisticasComponent {
       (data: any) => {
         this.detallesRenta = data;
         this.alquileres = this.detallesRenta.alquileres
+        console.log(this.detallesRenta)
+        console.log(this.alquileres)
         this.getGanancias()
-
       },
       (error) => {
         this.notificationService.notify('Error al obtener detalles de renta');
@@ -118,4 +109,7 @@ export class EstadisticasComponent {
     const tokenParam = token ? `?token=${token}` : '';
     return `${this.serverBaseUrl}/api/products/bikes/imagen/${imageName}${tokenParam}`;
   }
+
+
+
 }
